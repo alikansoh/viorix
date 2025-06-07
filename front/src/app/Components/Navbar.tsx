@@ -25,7 +25,7 @@ export default function Navbar() {
             <Image
               src="/logo.png"
               alt="Viorix Logo"
-              className="w-27 h-27  md:w-30 md:h-30"
+              className="w-25 h-25  md:w-30 md:h-30"
               priority
               width={96}
               height={96}
