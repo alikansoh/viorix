@@ -18,7 +18,7 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 w-full bg-white shadow z-50">
-      <div className="relative flex items-center justify-between md:justify-end h-24 px-4 md:px-8">
+      <div className="relative flex items-center justify-between md:justify-end h-30 px-4 md:px-8">
         {/* Logo: Centered absolutely on mobile, static left on desktop */}
         <div className="absolute left-1/2 transform -translate-x-1/2 md:static md:transform-none md:ml-20">
           <Link href="/" className="flex items-center">
