@@ -60,7 +60,7 @@ export default function Navbar() {
             className="text-gray-700"
             aria-label="Toggle menu"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <X size={27} /> : <Menu size={27} />}
           </button>
         </div>
       </div>
