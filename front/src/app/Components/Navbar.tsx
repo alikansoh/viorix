@@ -19,9 +19,9 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 w-full bg-white shadow z-50">
-      <div className="relative flex items-center justify-between md:justify-end h-25 md:h-30 px-4 md:px-8">
-        {/* Logo: Centered absolutely on mobile, static left on desktop */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 md:static md:transform-none md:ml-20">
+      <div className="flex items-center justify-between h-25 md:h-30 px-4 md:px-8">
+        {/* Logo: Left side both mobile and desktop */}
+        <div className="flex-shrink-0">
           <Link href="/" className="flex items-center">
             <Image
               src="/logo.png"
@@ -53,7 +53,7 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* Mobile Menu Toggle Button */}
+        {/* Mobile Menu Toggle Button on right */}
         <div className="md:hidden">
           <button
             onClick={() => setIsOpen(!isOpen)}
