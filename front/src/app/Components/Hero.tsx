@@ -76,7 +76,7 @@ const Hero = () => {
     className="rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.1)]"
   >
     <Image
-      src="/hero.jpg" // Replace with your actual image path
+      src="/hero.jpg" 
       alt="Hero Image"
       width={500}
       height={500}
