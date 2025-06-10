@@ -87,33 +87,7 @@ const Services = () => {
         Our Services
       </h2>
 
-      {/* Services Cards */}
-      <div className="flex flex-col md:flex-row justify-center items-center gap-10 max-w-6xl mx-auto">
-        {services.map((service, index) => (
-          <motion.div
-            key={index}
-            className="bg-white p-6 rounded-2xl shadow-md w-full md:w-1/3 text-center hover:shadow-xl transition"
-            initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 0.1, delay: index * 0.2, ease: "easeOut" }}
-            viewport={{ once: true }}
-          >
-            <div className="w-full h-58 flex items-center justify-center mb-4">
-              <Image
-                src={service.image}
-                alt={service.title}
-                width={170}
-                height={170}
-                className="object-contain"
-              />
-            </div>
-            <h3 className="text-xl font-semibold text-[#0047AB] mb-2 mt-5">
-              {service.title}
-            </h3>
-            <p className="text-gray-600">{service.description}</p>
-          </motion.div>
-        ))}
-      </div>
+    
 
       {/* Dynamic Section + Tabs */}
       <div className="mt-12 max-w-5xl mx-auto px-4 md:flex md:items-start md:gap-12 border border-gray-200 rounded-xl shadow-md bg-white py-8">
