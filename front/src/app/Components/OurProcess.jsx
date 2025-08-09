@@ -20,7 +20,16 @@ const steps = [
     duration: '1-2 Days',
     deliverables: ['Project Brief', 'Requirements Document', 'Timeline'],
     color: 'from-blue-500 to-cyan-500',
-    bgColor: 'from-blue-50 to-cyan-50'
+    bgColor: 'from-blue-50 to-cyan-50',
+    schema: {
+      "@type": "Action",
+      "name": "Discovery Call",
+      "description": "Initial consultation to understand project requirements and goals",
+      "result": {
+        "@type": "Thing",
+        "name": "Project Brief and Requirements Document"
+      }
+    }
   },
   {
     title: 'Planning & Strategy',
@@ -29,7 +38,16 @@ const steps = [
     duration: '3-5 Days',
     deliverables: ['Project Roadmap', 'Sitemap', 'Technical Specification'],
     color: 'from-purple-500 to-indigo-500',
-    bgColor: 'from-purple-50 to-indigo-50'
+    bgColor: 'from-purple-50 to-indigo-50',
+    schema: {
+      "@type": "Action",
+      "name": "Planning & Strategy",
+      "description": "Strategic planning phase including roadmap and technical specifications",
+      "result": {
+        "@type": "Thing",
+        "name": "Project Roadmap and Technical Specification"
+      }
+    }
   },
   {
     title: 'Design & Development',
@@ -38,7 +56,16 @@ const steps = [
     duration: '2-4 Weeks',
     deliverables: ['UI/UX Design', 'Responsive Code', 'Quality Testing'],
     color: 'from-emerald-500 to-teal-500',
-    bgColor: 'from-emerald-50 to-teal-50'
+    bgColor: 'from-emerald-50 to-teal-50',
+    schema: {
+      "@type": "Action",
+      "name": "Design & Development",
+      "description": "Custom website design and development with responsive code",
+      "result": {
+        "@type": "Thing",
+        "name": "Custom Website with Responsive Design"
+      }
+    }
   },
   {
     title: 'Testing & Launch',
@@ -47,7 +74,16 @@ const steps = [
     duration: '3-5 Days',
     deliverables: ['Performance Testing', 'Security Audit', 'Live Deployment'],
     color: 'from-orange-500 to-red-500',
-    bgColor: 'from-orange-50 to-red-50'
+    bgColor: 'from-orange-50 to-red-50',
+    schema: {
+      "@type": "Action",
+      "name": "Testing & Launch",
+      "description": "Comprehensive testing and secure deployment of the website",
+      "result": {
+        "@type": "Thing",
+        "name": "Live Website with Performance Optimization"
+      }
+    }
   },
   {
     title: 'Ongoing Support',
@@ -56,7 +92,16 @@ const steps = [
     duration: 'Ongoing',
     deliverables: ['24/7 Monitoring', 'Regular Updates', 'Analytics Reports'],
     color: 'from-pink-500 to-rose-500',
-    bgColor: 'from-pink-50 to-rose-50'
+    bgColor: 'from-pink-50 to-rose-50',
+    schema: {
+      "@type": "Action",
+      "name": "Ongoing Support",
+      "description": "Continuous maintenance, monitoring, and optimization services",
+      "result": {
+        "@type": "Thing",
+        "name": "Website Maintenance and Support Services"
+      }
+    }
   },
 ];
 
@@ -66,12 +111,79 @@ export default function OurSimpleProcess() {
   const stepRefs = useRef([]);
   const containerRef = useRef(null);
 
+  // Structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Web Development Process",
+    "description": "A comprehensive 5-step web development process from discovery to ongoing support",
+    "image": "https://example.com/process-image.jpg", // Replace with actual image URL
+    "totalTime": "PT4W", // 4 weeks total time
+    "supply": [
+      {
+        "@type": "HowToSupply",
+        "name": "Project Requirements"
+      },
+      {
+        "@type": "HowToSupply", 
+        "name": "Design Assets"
+      }
+    ],
+    "tool": [
+      {
+        "@type": "HowToTool",
+        "name": "Development Framework"
+      },
+      {
+        "@type": "HowToTool",
+        "name": "Testing Tools"
+      }
+    ],
+    "step": steps.map((step, index) => ({
+      "@type": "HowToStep",
+      "position": index + 1,
+      "name": step.title,
+      "text": step.description,
+      "url": `#step-${index + 1}`,
+      "image": `https://example.com/step-${index + 1}-image.jpg` // Replace with actual images
+    }))
+  };
+
+  useEffect(() => {
+    // Add structured data to document head
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(structuredData);
+    script.id = 'process-structured-data';
+    
+    // Remove existing script if present
+    const existingScript = document.getElementById('process-structured-data');
+    if (existingScript) {
+      document.head.removeChild(existingScript);
+    }
+    
+    document.head.appendChild(script);
+
+    // Cleanup on unmount
+    return () => {
+      const scriptToRemove = document.getElementById('process-structured-data');
+      if (scriptToRemove) {
+        document.head.removeChild(scriptToRemove);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     const observers = stepRefs.current.map((ref, index) => {
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
             setActiveStep(index);
+            
+            // Update URL hash for better SEO and navigation
+            if (window.history.replaceState) {
+              window.history.replaceState(null, null, `#step-${index + 1}`);
+            }
           }
         },
         {
@@ -89,294 +201,362 @@ export default function OurSimpleProcess() {
     };
   }, []);
 
+  // Handle keyboard navigation for accessibility
+  const handleKeyPress = (event, index) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setActiveStep(index);
+      stepRefs.current[index]?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <section className="py-12 sm:py-16 lg:py-20 xl:py-24 relative overflow-hidden" id="process" ref={containerRef}>
-      {/* Enhanced Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-white to-blue-50/30"></div>
-        <div className="absolute top-10 sm:top-20 left-5 sm:left-10 w-48 sm:w-72 h-48 sm:h-72 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 sm:bottom-20 right-5 sm:right-10 w-64 sm:w-96 h-64 sm:h-96 bg-gradient-to-r from-cyan-400/10 to-teal-400/10 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-        {/* Header */}
-        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-200/50 rounded-full text-xs sm:text-sm font-medium text-[#0047AB] mb-3 sm:mb-4">
-            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
-            <span>Streamlined Process</span>
-          </div>
-          
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-center mb-4 sm:mb-6 bg-gradient-to-r from-[#0047AB] via-[#0066CC] to-[#00B4D8] bg-clip-text text-transparent leading-tight px-2">
-            Our Simple Process
-          </h2>
-          
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-2">
-            From initial concept to final launch, we follow a proven methodology 
-            that ensures <span className="font-semibold text-[#0047AB]">quality</span>, 
-            <span className="font-semibold text-[#0047AB]"> transparency</span>, and 
-            <span className="font-semibold text-[#0047AB]"> results</span>.
-          </p>
-
-          {/* Progress Indicator */}
-          <div className="flex items-center justify-center gap-1 sm:gap-2 mt-6 sm:mt-8">
-            {steps.map((_, index) => (
-              <div
-                key={index}
-                className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
-                  activeStep === index 
-                    ? 'w-6 sm:w-8 bg-gradient-to-r from-[#0047AB] to-[#00B4D8]' 
-                    : 'w-1.5 sm:w-2 bg-gray-300'
-                }`}
-                style={{ transform: activeStep === index ? 'scale(1.2)' : 'scale(1)' }}
-              />
-            ))}
-          </div>
+    <>
+      {/* SEO Meta tags would typically be in the Head component */}
+      <section 
+        className="py-12 sm:py-16 lg:py-20 xl:py-24 relative overflow-hidden" 
+        id="process" 
+        ref={containerRef}
+        role="main"
+        aria-labelledby="process-heading"
+        itemScope
+        itemType="https://schema.org/HowTo"
+      >
+        {/* Enhanced Background */}
+        <div className="absolute inset-0" aria-hidden="true">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-white to-blue-50/30"></div>
+          <div className="absolute top-10 sm:top-20 left-5 sm:left-10 w-48 sm:w-72 h-48 sm:h-72 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 sm:bottom-20 right-5 sm:right-10 w-64 sm:w-96 h-64 sm:h-96 bg-gradient-to-r from-cyan-400/10 to-teal-400/10 rounded-full blur-3xl"></div>
         </div>
 
-        {/* Steps Container */}
-        <div className="max-w-6xl mx-auto relative">
-          <div className="flex">
-            {/* Left Side - Desktop Icons */}
-            <div className="hidden lg:flex flex-col relative w-24 xl:w-32">
-              {/* Vertical Progress Line */}
-              <div 
-                className="absolute left-8 xl:left-12 top-16 w-0.5 xl:w-1 bg-gradient-to-b from-[#0047AB]/20 via-[#00B4D8]/40 to-[#0047AB]/20 rounded-full" 
-                style={{ height: 'calc(100% - 8rem)' }}
-              ></div>
-              
-              {/* Desktop Icons */}
-              {steps.map((step, index) => (
-                <div
-                  key={index}
-                  className="relative"
-                  style={{ 
-                    height: index === steps.length - 1 ? 'auto' : '200px',
-                    paddingTop: '20px'
-                  }}
-                >
-                  <div
-                    className={`relative z-10 w-16 h-16 xl:w-20 xl:h-20 rounded-full flex items-center justify-center transition-all duration-700 mx-auto ${
-                      activeStep === index
-                        ? 'bg-gradient-to-r from-[#0047AB] to-[#00B4D8] shadow-xl shadow-blue-500/30'
-                        : 'bg-white/90 border-2 border-gray-200 shadow-lg hover:shadow-xl'
-                    }`}
-                    style={{
-                      transform: `scale(${activeStep === index ? 1.1 : 0.9}) rotate(${activeStep === index ? 360 : 0}deg)`,
-                      color: activeStep === index ? 'white' : '#0047AB',
-                      animation: activeStep === index ? 'iconBounce 0.8s ease-out, iconGlow 2s ease-in-out infinite' : 'none'
-                    }}
-                  >
-                    {React.cloneElement(step.icon, {
-                      className: `w-6 h-6 xl:w-7 xl:h-7 transition-all duration-500 ${activeStep === index ? 'text-white animate-pulse' : 'text-[#0047AB]'}`,
-                      style: {
-                        animation: activeStep === index ? 'iconFloat 3s ease-in-out infinite' : 'none'
-                      }
-                    })}
-                    
-                    {/* Smaller Step Number for Desktop */}
-                    <div className="absolute -top-1 -right-1 xl:-top-2 xl:-right-2">
-                      <div className="w-4 h-4 xl:w-5 xl:h-5 rounded-full bg-gradient-to-r from-[#0047AB] to-[#00B4D8] flex items-center justify-center shadow-md">
-                        <span className="font-bold text-white text-xs">
-                          {index + 1}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {/* Pulse effect for active step */}
-                    {activeStep === index && (
-                      <>
-                        <div
-                          className="absolute inset-0 rounded-full bg-gradient-to-r from-[#0047AB] to-[#00B4D8] opacity-20"
-                          style={{
-                            animation: 'pulse 2s ease-in-out infinite'
-                          }}
-                        />
-                        <div
-                          className="absolute inset-0 rounded-full border-2 border-white/50"
-                          style={{
-                            animation: 'ripple 2s ease-out infinite'
-                          }}
-                        />
-                      </>
-                    )}
-                  </div>
-                </div>
-              ))}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+          {/* Header */}
+          <header className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-200/50 rounded-full text-xs sm:text-sm font-medium text-[#0047AB] mb-3 sm:mb-4">
+              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
+              <span>Streamlined Process</span>
             </div>
+            
+            <h1 
+              id="process-heading"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-center mb-4 sm:mb-6 bg-gradient-to-r from-[#0047AB] via-[#0066CC] to-[#00B4D8] bg-clip-text text-transparent leading-tight px-2"
+              itemProp="name"
+            >
+              Our Simple Process
+            </h1>
+            
+            <p 
+              className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-2"
+              itemProp="description"
+            >
+              From initial concept to final launch, we follow a proven methodology 
+              that ensures <span className="font-semibold text-[#0047AB]">quality</span>, 
+              <span className="font-semibold text-[#0047AB]"> transparency</span>, and 
+              <span className="font-semibold text-[#0047AB]"> results</span>.
+            </p>
 
-            {/* Right Side - Step Content */}
-            <div className="flex-1 lg:pl-8 xl:pl-12">
+            {/* Progress Indicator */}
+            <nav className="flex items-center justify-center gap-1 sm:gap-2 mt-6 sm:mt-8" aria-label="Process steps progress">
               {steps.map((step, index) => (
-                <div
+                <button
                   key={index}
-                  ref={el => stepRefs.current[index] = el}
-                  className="group relative mb-8 sm:mb-12 lg:mb-16 last:mb-0"
-                  onMouseEnter={() => setHoveredStep(index)}
-                  onMouseLeave={() => setHoveredStep(null)}
-                >
+                  className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                    activeStep === index 
+                      ? 'w-6 sm:w-8 bg-gradient-to-r from-[#0047AB] to-[#00B4D8]' 
+                      : 'w-1.5 sm:w-2 bg-gray-300 hover:bg-gray-400'
+                  }`}
+                  style={{ transform: activeStep === index ? 'scale(1.2)' : 'scale(1)' }}
+                  onClick={() => {
+                    setActiveStep(index);
+                    stepRefs.current[index]?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  aria-label={`Go to step ${index + 1}: ${step.title}`}
+                  aria-current={activeStep === index ? 'step' : 'false'}
+                />
+              ))}
+            </nav>
+          </header>
+
+          {/* Steps Container */}
+          <div className="max-w-6xl mx-auto relative">
+            <div className="flex">
+              {/* Left Side - Desktop Icons */}
+              <aside className="hidden lg:flex flex-col relative w-24 xl:w-32" aria-hidden="true">
+                {/* Vertical Progress Line */}
+                <div 
+                  className="absolute left-8 xl:left-12 top-16 w-0.5 xl:w-1 bg-gradient-to-b from-[#0047AB]/20 via-[#00B4D8]/40 to-[#0047AB]/20 rounded-full" 
+                  style={{ height: 'calc(100% - 8rem)' }}
+                />
+                
+                {/* Desktop Icons */}
+                {steps.map((step, index) => (
                   <div
-                    className={`relative p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl border transition-all duration-500 cursor-pointer ${
-                      activeStep === index
-                        ? 'shadow-xl sm:shadow-2xl scale-100 sm:scale-105 border-transparent bg-gradient-to-br from-blue-50/80 to-cyan-50/80 backdrop-blur-sm'
-                        : hoveredStep === index 
-                          ? 'shadow-lg sm:shadow-xl scale-100 sm:scale-102 border-[#00B4D8]/30 bg-white/90 backdrop-blur-sm'
-                          : 'shadow-md sm:shadow-lg border-gray-200/50 bg-white/80 backdrop-blur-sm hover:shadow-lg sm:hover:shadow-xl'
-                    }`}
-                    style={{
-                      transform: hoveredStep === index ? 'translateY(-2px)' : 'translateY(0)'
+                    key={index}
+                    className="relative"
+                    style={{ 
+                      height: index === steps.length - 1 ? 'auto' : '200px',
+                      paddingTop: '20px'
                     }}
                   >
-                    {/* Mobile Icon */}
-                    <div className="lg:hidden mb-4 sm:mb-6">
-                      <div
-                        className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-500 ${
-                          activeStep === index
-                            ? 'bg-gradient-to-r from-[#0047AB] to-[#00B4D8] text-white'
-                            : 'bg-gray-100 text-[#0047AB]'
-                        }`}
-                        style={{
-                          transform: `scale(${activeStep === index ? 1.05 : 1}) rotate(${activeStep === index ? 360 : 0}deg)`,
-                        }}
-                      >
-                        {React.cloneElement(step.icon, {
-                          className: `w-5 h-5 sm:w-7 sm:h-7 ${activeStep === index ? 'text-white' : 'text-[#0047AB]'}`
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Smaller Step number badge for mobile */}
-                    <div className="absolute -top-2 -left-2 lg:hidden">
-                      <div
-                        className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-r from-[#0047AB] to-[#00B4D8] flex items-center justify-center shadow-lg"
-                        style={{ transform: activeStep === index ? 'scale(1.1)' : 'scale(1)' }}
-                      >
-                        <span className="font-bold text-white text-xs">
-                          {index + 1}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 sm:mb-4 gap-2 sm:gap-4">
-                        <h3 className={`text-lg sm:text-xl lg:text-2xl font-bold transition-colors duration-300 flex-1 ${
-                          activeStep === index ? 'text-[#0047AB]' : 'text-gray-800 group-hover:text-[#0047AB]'
-                        }`}>
-                          {step.title}
-                        </h3>
-                        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-                          <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-[#00B4D8]" />
-                          <span className={`text-xs sm:text-sm font-medium px-2 sm:px-3 py-1 rounded-full transition-all duration-300 ${
-                            activeStep === index
-                              ? 'text-white bg-gradient-to-r from-[#0047AB] to-[#00B4D8]'
-                              : 'text-[#0047AB] bg-blue-100'
-                          }`}>
-                            {step.duration}
+                    <div
+                      className={`relative z-10 w-16 h-16 xl:w-20 xl:h-20 rounded-full flex items-center justify-center transition-all duration-700 mx-auto ${
+                        activeStep === index
+                          ? 'bg-gradient-to-r from-[#0047AB] to-[#00B4D8] shadow-xl shadow-blue-500/30'
+                          : 'bg-white/90 border-2 border-gray-200 shadow-lg hover:shadow-xl'
+                      }`}
+                      style={{
+                        transform: `scale(${activeStep === index ? 1.1 : 0.9}) rotate(${activeStep === index ? 360 : 0}deg)`,
+                        color: activeStep === index ? 'white' : '#0047AB',
+                        animation: activeStep === index ? 'iconBounce 0.8s ease-out, iconGlow 2s ease-in-out infinite' : 'none'
+                      }}
+                    >
+                      {React.cloneElement(step.icon, {
+                        className: `w-6 h-6 xl:w-7 xl:h-7 transition-all duration-500 ${activeStep === index ? 'text-white animate-pulse' : 'text-[#0047AB]'}`,
+                        style: {
+                          animation: activeStep === index ? 'iconFloat 3s ease-in-out infinite' : 'none'
+                        },
+                        'aria-hidden': 'true'
+                      })}
+                      
+                      {/* Step Number for Desktop */}
+                      <div className="absolute -top-1 -right-1 xl:-top-2 xl:-right-2">
+                        <div className="w-4 h-4 xl:w-5 xl:h-5 rounded-full bg-gradient-to-r from-[#0047AB] to-[#00B4D8] flex items-center justify-center shadow-md">
+                          <span className="font-bold text-white text-xs">
+                            {index + 1}
                           </span>
                         </div>
                       </div>
-
-                      <p className="text-gray-600 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">
-                        {step.description}
-                      </p>
-
-                      {/* Deliverables - Always visible on mobile, hover/active on desktop */}
-                      <div
-                        className={`mobile-deliverables overflow-hidden transition-all duration-300 opacity-0 max-h-0 ${
-                          hoveredStep === index || activeStep === index
-                            ? 'lg:opacity-100 lg:max-h-48'
-                            : 'lg:opacity-0 lg:max-h-0'
-                        }`}
-                      >
-                        <div className="pt-3 sm:pt-4 border-t border-gray-200/50">
-                          <h4 className="text-xs sm:text-sm font-semibold text-[#0047AB] mb-2 sm:mb-3">Deliverables:</h4>
-                          <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                            {step.deliverables.map((d, idx) => (
-                              <span
-                                key={idx}
-                                className={`text-xs px-2 sm:px-3 py-1 sm:py-1.5 rounded-full transition-all duration-300 ${
-                                  activeStep === index
-                                    ? 'bg-gradient-to-r from-[#0047AB]/10 to-[#00B4D8]/10 border border-[#00B4D8]/50 text-[#0047AB]'
-                                    : 'bg-white/80 border border-[#00B4D8]/30 text-[#0047AB]'
-                                }`}
-                                style={{
-                                  opacity: 1,
-                                  transform: 'translateY(0)',
-                                  transitionDelay: `${idx * 100}ms`
-                                }}
-                              >
-                                {d}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
+                      
+                      {/* Pulse effect for active step */}
+                      {activeStep === index && (
+                        <>
+                          <div
+                            className="absolute inset-0 rounded-full bg-gradient-to-r from-[#0047AB] to-[#00B4D8] opacity-20"
+                            style={{
+                              animation: 'pulse 2s ease-in-out infinite'
+                            }}
+                          />
+                          <div
+                            className="absolute inset-0 rounded-full border-2 border-white/50"
+                            style={{
+                              animation: 'ripple 2s ease-out infinite'
+                            }}
+                          />
+                        </>
+                      )}
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
+                ))}
+              </aside>
 
-          {/* CTA - Mobile Responsive */}
-          <div className="mt-8 sm:mt-12 lg:mt-16 text-center lg:pl-32 xl:pl-44">
-            <div className="p-4 sm:p-6 lg:p-8 bg-gradient-to-r from-[#0047AB]/5 to-[#00B4D8]/5 rounded-xl sm:rounded-2xl border border-[#00B4D8]/20">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#0047AB] mb-3 sm:mb-4">
-                Ready to Get Started?
-              </h3>
-              <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
-                Let's discuss your project and create something amazing together.
-              </p>
-              <button
-                className="group w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#0047AB] to-[#00B4D8] text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:ring-4 focus:ring-blue-300/50 hover:scale-105 active:scale-95"
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="text-sm sm:text-base">Start Your Project</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                </div>
-              </button>
+              {/* Right Side - Step Content */}
+              <main className="flex-1 lg:pl-8 xl:pl-12">
+                <ol className="list-none">
+                  {steps.map((step, index) => (
+                    <li
+                      key={index}
+                      ref={el => stepRefs.current[index] = el}
+                      id={`step-${index + 1}`}
+                      className="group relative mb-8 sm:mb-12 lg:mb-16 last:mb-0"
+                      onMouseEnter={() => setHoveredStep(index)}
+                      onMouseLeave={() => setHoveredStep(null)}
+                      itemScope
+                      itemType="https://schema.org/HowToStep"
+                    >
+                      <article
+                        className={`relative p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl border transition-all duration-500 cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 ${
+                          activeStep === index
+                            ? 'shadow-xl sm:shadow-2xl scale-100 sm:scale-105 border-transparent bg-gradient-to-br from-blue-50/80 to-cyan-50/80 backdrop-blur-sm'
+                            : hoveredStep === index 
+                              ? 'shadow-lg sm:shadow-xl scale-100 sm:scale-102 border-[#00B4D8]/30 bg-white/90 backdrop-blur-sm'
+                              : 'shadow-md sm:shadow-lg border-gray-200/50 bg-white/80 backdrop-blur-sm hover:shadow-lg sm:hover:shadow-xl'
+                        }`}
+                        style={{
+                          transform: hoveredStep === index ? 'translateY(-2px)' : 'translateY(0)'
+                        }}
+                        tabIndex="0"
+                        role="button"
+                        onKeyDown={(e) => handleKeyPress(e, index)}
+                        aria-label={`Step ${index + 1}: ${step.title}`}
+                      >
+                        {/* Mobile Icon */}
+                        <div className="lg:hidden mb-4 sm:mb-6">
+                          <div
+                            className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-500 ${
+                              activeStep === index
+                                ? 'bg-gradient-to-r from-[#0047AB] to-[#00B4D8] text-white'
+                                : 'bg-gray-100 text-[#0047AB]'
+                            }`}
+                            style={{
+                              transform: `scale(${activeStep === index ? 1.05 : 1}) rotate(${activeStep === index ? 360 : 0}deg)`,
+                            }}
+                            aria-hidden="true"
+                          >
+                            {React.cloneElement(step.icon, {
+                              className: `w-5 h-5 sm:w-7 sm:h-7 ${activeStep === index ? 'text-white' : 'text-[#0047AB]'}`,
+                              'aria-hidden': 'true'
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Step number badge for mobile */}
+                        <div className="absolute -top-2 -left-2 lg:hidden">
+                          <div
+                            className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-r from-[#0047AB] to-[#00B4D8] flex items-center justify-center shadow-lg"
+                            style={{ transform: activeStep === index ? 'scale(1.1)' : 'scale(1)' }}
+                          >
+                            <span className="font-bold text-white text-xs" itemProp="position">
+                              {index + 1}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 sm:mb-4 gap-2 sm:gap-4">
+                            <h2 
+                              className={`text-lg sm:text-xl lg:text-2xl font-bold transition-colors duration-300 flex-1 ${
+                                activeStep === index ? 'text-[#0047AB]' : 'text-gray-800 group-hover:text-[#0047AB]'
+                              }`}
+                              itemProp="name"
+                            >
+                              {step.title}
+                            </h2>
+                            <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                              <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-[#00B4D8]" aria-hidden="true" />
+                              <time 
+                                className={`text-xs sm:text-sm font-medium px-2 sm:px-3 py-1 rounded-full transition-all duration-300 ${
+                                  activeStep === index
+                                    ? 'text-white bg-gradient-to-r from-[#0047AB] to-[#00B4D8]'
+                                    : 'text-[#0047AB] bg-blue-100'
+                                }`}
+                                itemProp="totalTime"
+                              >
+                                {step.duration}
+                              </time>
+                            </div>
+                          </div>
+
+                          <p 
+                            className="text-gray-600 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base"
+                            itemProp="text"
+                          >
+                            {step.description}
+                          </p>
+
+                          {/* Deliverables - Always visible on mobile, hover/active on desktop */}
+                          <div
+                            className={`mobile-deliverables overflow-hidden transition-all duration-300 opacity-0 max-h-0 ${
+                              hoveredStep === index || activeStep === index
+                                ? 'lg:opacity-100 lg:max-h-48'
+                                : 'lg:opacity-0 lg:max-h-0'
+                            }`}
+                          >
+                            <div className="pt-3 sm:pt-4 border-t border-gray-200/50">
+                              <h3 className="text-xs sm:text-sm font-semibold text-[#0047AB] mb-2 sm:mb-3">
+                                Deliverables:
+                              </h3>
+                              <ul className="flex flex-wrap gap-1.5 sm:gap-2" role="list">
+                                {step.deliverables.map((deliverable, idx) => (
+                                  <li key={idx} role="listitem">
+                                    <span
+                                      className={`text-xs px-2 sm:px-3 py-1 sm:py-1.5 rounded-full transition-all duration-300 ${
+                                        activeStep === index
+                                          ? 'bg-gradient-to-r from-[#0047AB]/10 to-[#00B4D8]/10 border border-[#00B4D8]/50 text-[#0047AB]'
+                                          : 'bg-white/80 border border-[#00B4D8]/30 text-[#0047AB]'
+                                      }`}
+                                      style={{
+                                        opacity: 1,
+                                        transform: 'translateY(0)',
+                                        transitionDelay: `${idx * 100}ms`
+                                      }}
+                                    >
+                                      {deliverable}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </article>
+                    </li>
+                  ))}
+                </ol>
+              </main>
             </div>
+
+            {/* CTA - Mobile Responsive */}
+            <aside className="mt-8 sm:mt-12 lg:mt-16 text-center lg:pl-32 xl:pl-44">
+              <div className="p-4 sm:p-6 lg:p-8 bg-gradient-to-r from-[#0047AB]/5 to-[#00B4D8]/5 rounded-xl sm:rounded-2xl border border-[#00B4D8]/20">
+                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#0047AB] mb-3 sm:mb-4">
+                  Ready to Get Started?
+                </h2>
+                <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
+                  Let's discuss your project and create something amazing together.
+                </p>
+                <button
+                  className="group w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#0047AB] to-[#00B4D8] text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:ring-4 focus:ring-blue-300/50 hover:scale-105 active:scale-95 focus:outline-none"
+                  type="button"
+                  aria-label="Start your web development project"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
+                    <span className="text-sm sm:text-base">Start Your Project</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
+                  </span>
+                </button>
+              </div>
+            </aside>
           </div>
         </div>
-      </div>
 
-      <style jsx>{`
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 0.3; }
-          50% { transform: scale(1.5); opacity: 0; }
-        }
-        
-        @keyframes iconBounce {
-          0% { transform: scale(0.9) rotate(0deg); }
-          30% { transform: scale(1.15) rotate(180deg); }
-          60% { transform: scale(1.05) rotate(270deg); }
-          100% { transform: scale(1.1) rotate(360deg); }
-        }
-        
-        @keyframes iconGlow {
-          0%, 100% { box-shadow: 0 0 15px rgba(0, 71, 171, 0.3), 0 0 30px rgba(0, 180, 216, 0.2); }
-          50% { box-shadow: 0 0 25px rgba(0, 71, 171, 0.5), 0 0 50px rgba(0, 180, 216, 0.4); }
-        }
-        
-        @keyframes iconFloat {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-2px); }
-        }
-        
-        @keyframes ripple {
-          0% { transform: scale(1); opacity: 1; }
-          100% { transform: scale(1.6); opacity: 0; }
-        }
-
-        /* Mobile-first deliverables visibility */
-        @media (max-width: 1023px) {
-          .mobile-deliverables {
-            opacity: 1 !important;
-            max-height: 200px !important;
+        <style jsx>{`
+          @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.5); opacity: 0; }
           }
-        }
-      `}</style>
-    </section>
+          
+          @keyframes iconBounce {
+            0% { transform: scale(0.9) rotate(0deg); }
+            30% { transform: scale(1.15) rotate(180deg); }
+            60% { transform: scale(1.05) rotate(270deg); }
+            100% { transform: scale(1.1) rotate(360deg); }
+          }
+          
+          @keyframes iconGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(0, 71, 171, 0.3), 0 0 30px rgba(0, 180, 216, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(0, 71, 171, 0.5), 0 0 50px rgba(0, 180, 216, 0.4); }
+          }
+          
+          @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-2px); }
+          }
+          
+          @keyframes ripple {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.6); opacity: 0; }
+          }
+
+          /* Mobile-first deliverables visibility */
+          @media (max-width: 1023px) {
+            .mobile-deliverables {
+              opacity: 1 !important;
+              max-height: 200px !important;
+            }
+          }
+
+          /* Reduced motion for accessibility */
+          @media (prefers-reduced-motion: reduce) {
+            * {
+              animation-duration: 0.01ms !important;
+              animation-iteration-count: 1 !important;
+              transition-duration: 0.01ms !important;
+            }
+          }
+        `}</style>
+      </section>
+    </>
   );
 }
