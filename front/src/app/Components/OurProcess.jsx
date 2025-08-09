@@ -282,11 +282,11 @@ export default function OurSimpleProcess() {
 
                       {/* Deliverables - Always visible on mobile, hover/active on desktop */}
                       <div
-                        className="overflow-hidden transition-all duration-300 lg:opacity-0 lg:max-h-0"
-                        style={{
-                          opacity: window.innerWidth < 1024 ? 1 : (hoveredStep === index || activeStep === index) ? 1 : 0,
-                          maxHeight: window.innerWidth < 1024 ? '200px' : (hoveredStep === index || activeStep === index) ? '200px' : '0'
-                        }}
+                        className={`mobile-deliverables overflow-hidden transition-all duration-300 opacity-0 max-h-0 ${
+                          hoveredStep === index || activeStep === index
+                            ? 'lg:opacity-100 lg:max-h-48'
+                            : 'lg:opacity-0 lg:max-h-0'
+                        }`}
                       >
                         <div className="pt-3 sm:pt-4 border-t border-gray-200/50">
                           <h4 className="text-xs sm:text-sm font-semibold text-[#0047AB] mb-2 sm:mb-3">Deliverables:</h4>
@@ -369,11 +369,10 @@ export default function OurSimpleProcess() {
           100% { transform: scale(1.6); opacity: 0; }
         }
 
+        /* Mobile-first deliverables visibility */
         @media (max-width: 1023px) {
-          .lg\\:opacity-0 {
+          .mobile-deliverables {
             opacity: 1 !important;
-          }
-          .lg\\:max-h-0 {
             max-height: 200px !important;
           }
         }
