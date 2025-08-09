@@ -158,8 +158,8 @@ export default function EnhancedNavbar() {
                         onMouseEnter={() => setShowServices(true)}
                         className={`flex items-center space-x-1 px-4 py-2 rounded-full text-base font-medium tracking-wide transition-all duration-300 ${
                           isActive || isServicesActive
-                            ? 'text-[#2565AD] bg-[#2565AD]/10'
-                            : 'text-gray-700 hover:text-[#0047AB] hover:bg-gray-50'
+                            ? 'text-[#1B365D] bg-[#00BFFF]/10'
+                            : 'text-gray-700 hover:text-[#1B365D] hover:bg-gray-50'
                         }`}
                       >
                         <span>{link.name}</span>
@@ -188,7 +188,7 @@ export default function EnhancedNavbar() {
                                   onMouseEnter={() => setActiveService(idx)}
                                   className={`w-full text-left p-3 rounded-xl transition-all duration-300 group ${
                                     activeService === idx 
-                                      ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg' 
+                                      ? 'bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white shadow-lg' 
                                       : 'hover:bg-gray-50'
                                   }`}
                                 >
@@ -208,7 +208,7 @@ export default function EnhancedNavbar() {
                                 <div className="flex items-center space-x-3 mb-2">
                                   {React.createElement(servicesData[activeService].icon, {
                                     size: 24,
-                                    className: 'text-[#2565AD]'
+                                    className: "text-[#00BFFF]"
                                   })}
                                   <h4 className="text-xl font-bold text-gray-800">
                                     {servicesData[activeService].category}
@@ -220,9 +220,9 @@ export default function EnhancedNavbar() {
                                 {servicesData[activeService].services.map((service, idx) => (
                                   <div 
                                     key={idx}
-                                    className="p-4 rounded-xl border border-gray-100 hover:border-[#2565AD]/30 hover:bg-[#2565AD]/5 transition-all duration-300 group cursor-pointer"
+                                    className="p-4 rounded-xl border border-gray-100 hover:border-[#00BFFF]/30 hover:bg-[#00BFFF]/5 transition-all duration-300 group cursor-pointer"
                                   >
-                                    <h5 className="font-semibold text-gray-800 mb-1 group-hover:text-[#2565AD] transition-colors">
+                                    <h5 className="font-semibold text-gray-800 mb-1 group-hover:text-[#1B365D] transition-colors">
                                       {service.name}
                                     </h5>
                                     <p className="text-sm text-gray-600">{service.desc}</p>
@@ -233,7 +233,7 @@ export default function EnhancedNavbar() {
                               <div className="mt-6 pt-4 border-t border-gray-100">
                                 <a 
                                   href="/services"
-                                  className="inline-flex items-center space-x-2 px-6 py-3 bg-[#2565AD] text-white rounded-full font-semibold hover:bg-[#0047AB] transition-colors duration-300 group"
+                                  className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white rounded-full font-semibold hover:from-[#1B365D] hover:to-[#00BFFF] transition-all duration-300 group"
                                 >
                                   <span>View All Services</span>
                                   <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -258,7 +258,7 @@ export default function EnhancedNavbar() {
                     }`}
                   >
                     {link.name}
-                    <span className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 h-0.5 bg-[#2565AD] transition-all duration-300 ${
+                    <span className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 h-0.5 bg-[#00BFFF] transition-all duration-300 ${
                       isActive ? 'w-6' : 'w-0 group-hover:w-6'
                     }`} />
                   </a>
@@ -275,12 +275,12 @@ export default function EnhancedNavbar() {
                   className="group relative inline-flex items-center justify-center px-8 py-3.5 font-semibold text-white transition-all duration-300 ease-out transform hover:scale-105 focus:scale-105"
                 >
                   {/* Main button background */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#2565AD] via-[#1e5aa8] to-[#0047AB] rounded-full shadow-lg group-hover:shadow-xl transition-all duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#00BFFF] via-[#0099DD] to-[#1B365D] rounded-full shadow-lg group-hover:shadow-xl transition-all duration-300" />
                   
                   {/* Animated border */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse" 
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#00BFFF] via-cyan-400 to-[#1B365D] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse" 
                        style={{ padding: '2px' }}>
-                    <div className="bg-gradient-to-r from-[#2565AD] to-[#0047AB] rounded-full w-full h-full" />
+                    <div className="bg-gradient-to-r from-[#00BFFF] to-[#1B365D] rounded-full w-full h-full" />
                   </div>
                   
                   {/* Shimmer effect */}
@@ -293,8 +293,8 @@ export default function EnhancedNavbar() {
                   </div>
                   
                   {/* Floating particles effect */}
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping" />
-                  <div className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping" style={{ animationDelay: '0.3s' }} />
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-[#00BFFF] rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping" />
+                  <div className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-[#1B365D] rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping" style={{ animationDelay: '0.3s' }} />
                 </a>
               </div>
 
@@ -306,17 +306,17 @@ export default function EnhancedNavbar() {
               >
                 <div className="w-5 h-4 flex flex-col justify-between">
                   <span
-                    className={`w-full h-0.5 bg-gradient-to-r from-[#2565AD] to-[#0047AB] transform transition-all duration-300 ease-out ${
+                    className={`w-full h-0.5 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] transform transition-all duration-300 ease-out ${
                       isOpen ? 'rotate-45 translate-y-1.5 w-6' : 'group-hover:w-6'
                     }`}
                   />
                   <span
-                    className={`w-full h-0.5 bg-gradient-to-r from-[#2565AD] to-[#0047AB] transition-all duration-300 ease-out ${
+                    className={`w-full h-0.5 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] transition-all duration-300 ease-out ${
                       isOpen ? 'opacity-0 scale-0' : 'group-hover:w-6'
                     }`}
                   />
                   <span
-                    className={`w-full h-0.5 bg-gradient-to-r from-[#2565AD] to-[#0047AB] transform transition-all duration-300 ease-out ${
+                    className={`w-full h-0.5 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] transform transition-all duration-300 ease-out ${
                       isOpen ? '-rotate-45 -translate-y-1.5 w-6' : 'group-hover:w-6'
                     }`}
                   />
@@ -338,11 +338,11 @@ export default function EnhancedNavbar() {
           <div className="fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 lg:hidden overflow-y-auto">
             <div className="relative h-full">
               {/* Enhanced Mobile Background */}
-              <div className="absolute top-0 right-0 w-full h-32 bg-gradient-to-bl from-blue-500/20 via-cyan-500/10 to-transparent" />
-              <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-tr from-[#2565AD]/10 via-[#0047AB]/5 to-transparent" />
+              <div className="absolute top-0 right-0 w-full h-32 bg-gradient-to-bl from-[#00BFFF]/20 via-[#1B365D]/10 to-transparent" />
+              <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-tr from-[#1B365D]/10 via-[#00BFFF]/5 to-transparent" />
               
               {/* Enhanced Header with Logo */}
-              <div className="relative flex items-center justify-between p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-cyan-50">
+              <div className="relative flex items-center justify-between p-6 border-b border-gray-100 bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10">
                 <div className="flex items-center space-x-4">
                   {/* Logo in Mobile Menu */}
                   <div className="flex-shrink-0">
@@ -353,7 +353,7 @@ export default function EnhancedNavbar() {
                     />
                   </div>
                   <div>
-                    <div className="text-lg font-bold bg-gradient-to-r from-[#2565AD] to-[#0047AB] bg-clip-text text-transparent">
+                    <div className="text-lg font-bold bg-gradient-to-r from-[#00BFFF] to-[#1B365D] bg-clip-text text-transparent">
                       Viorix Digital Solutions
                     </div>
                     <div className="text-xs text-gray-500 mt-1">Your Digital Partner</div>
@@ -378,8 +378,8 @@ export default function EnhancedNavbar() {
                         onClick={closeMobileMenu}
                         className={`flex items-center justify-between p-4 rounded-2xl font-medium transition-all duration-300 group ${
                           isActive
-                            ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg'
-                            : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-[#0047AB]'
+                            ? 'bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white shadow-lg'
+                            : 'text-gray-700 hover:bg-gradient-to-r hover:from-[#00BFFF]/10 hover:to-[#1B365D]/10 hover:text-[#1B365D]'
                         }`}
                       >
                         <span className="text-lg">{link.name}</span>
@@ -393,14 +393,14 @@ export default function EnhancedNavbar() {
                       
                       {/* Enhanced Mobile Services Submenu */}
                       {link.name === 'Services' && (
-                        <div className="bg-gradient-to-r from-blue-50/50 to-cyan-50/50 rounded-2xl p-4 space-y-2">
+                        <div className="bg-gradient-to-r from-[#00BFFF]/20 to-[#1B365D]/20 rounded-2xl p-4 space-y-2">
                           <div className="text-sm font-semibold text-gray-600 mb-3 px-2">Our Services</div>
                           {servicesData.map((service, idx) => (
                             <a
                               key={idx}
                               href={`/services/${service.category.toLowerCase().replace(/\s+/g, '-')}`}
                               onClick={closeMobileMenu}
-                              className="flex items-center space-x-3 p-3 rounded-xl text-sm bg-white/70 hover:bg-gradient-to-r hover:from-blue-500 hover:to-cyan-500 hover:text-white transition-all duration-300 group shadow-sm"
+                              className="flex items-center space-x-3 p-3 rounded-xl text-sm bg-white/70 hover:bg-gradient-to-r hover:from-[#00BFFF] hover:to-[#1B365D] hover:text-white transition-all duration-300 group shadow-sm"
                             >
                               <service.icon size={16} className="group-hover:text-white" />
                               <span className="font-medium">{service.category}</span>
@@ -410,7 +410,7 @@ export default function EnhancedNavbar() {
                           <a
                             href="/services"
                             onClick={closeMobileMenu}
-                            className="flex items-center justify-center space-x-2 p-3 mt-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300"
+                            className="flex items-center justify-center space-x-2 p-3 mt-2 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300"
                           >
                             <span>View All Services</span>
                             <ArrowRight size={14} />
@@ -423,7 +423,7 @@ export default function EnhancedNavbar() {
               </nav>
 
               {/* Enhanced Mobile CTA */}
-              <div className="relative p-4 border-t border-gray-100 mt-auto bg-gradient-to-r from-blue-50/30 to-cyan-50/30">
+              <div className="relative p-4 border-t border-gray-100 mt-auto bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10">
                 <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4">
                   <div className="text-center mb-4">
                     <div className="text-sm font-semibold text-gray-700">Ready to get started?</div>
@@ -432,7 +432,7 @@ export default function EnhancedNavbar() {
                   <a
                     href="/contact"
                     onClick={closeMobileMenu}
-                    className="flex items-center justify-center space-x-2 w-full py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group"
+                    className="flex items-center justify-center space-x-2 w-full py-4 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group"
                   >
                     <span>Get a Quote</span>
                     <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform duration-300" />
