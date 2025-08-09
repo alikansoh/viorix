@@ -1,8 +1,8 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import { 
   ArrowRight, 
@@ -15,10 +15,36 @@ import {
   Smartphone,
   TrendingUp,
   Zap,
-  Shield,
   CheckCircle,
   Globe
 } from 'lucide-react';
+
+// Animated counter component
+const AnimatedNumber = ({ target, suffix = "", duration = 2000 }) => {
+  const [displayNumber, setDisplayNumber] = useState(0);
+
+  useEffect(() => {
+    let startTime;
+    const animate = (currentTime) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      
+      // Easing function for smooth animation
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(easeOut * target);
+      
+      setDisplayNumber(current);
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    
+    requestAnimationFrame(animate);
+  }, [target, duration]);
+
+  return <span>{displayNumber}{suffix}</span>;
+};
 
 const Hero = () => {
   return (
@@ -38,11 +64,11 @@ const Hero = () => {
             "foundingDate": "2020",
             "address": {
               "@type": "PostalAddress",
-              "addressCountry": "US"
+              "addressCountry": "GB"
             },
             "contactPoint": {
               "@type": "ContactPoint",
-              "telephone": "+1-XXX-XXX-XXXX",
+              "telephone": "+44-XXX-XXX-XXXX",
               "contactType": "customer service",
               "availableLanguage": ["English"]
             },
@@ -67,7 +93,7 @@ const Hero = () => {
             "aggregateRating": {
               "@type": "AggregateRating",
               "ratingValue": "5",
-              "reviewCount": "500"
+              "reviewCount": "250"
             }
           })
         }}
@@ -155,8 +181,7 @@ const Hero = () => {
                   className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/10 to-indigo-600/10 border border-blue-200/50 rounded-full text-sm font-medium text-[#1B365D]"
                 >
                   <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span>Trusted by 500+ Businesses Worldwide</span>
-                  <Globe className="w-4 h-4 text-[#00BFFF]" />
+                  <span>Trusted by UK Businesses</span>
                 </motion.div>
 
                 {/* Enhanced H1 with improved typography */}
@@ -275,91 +300,27 @@ const Hero = () => {
               </motion.div>
             </div>
 
-            {/* Right Side - Enhanced Image with better responsive design */}
+            {/* Right Side - Image without border */}
             <div className="flex-1 flex justify-center lg:justify-end w-full max-w-lg lg:max-w-none">
               <motion.div
-                initial={{ opacity: 0, scale: 0.9, rotateY: -15 }}
-                animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                transition={{ duration: 1, delay: 0.3 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
                 className="relative w-full max-w-[300px] sm:max-w-[400px] md:max-w-[450px] lg:max-w-[500px] xl:max-w-[580px]"
               >
                 <div className="aspect-square w-full relative">
-                  {/* Enhanced gradient border with animation */}
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-r from-[#00BFFF] via-[#0099CC] to-[#1B365D] rounded-3xl p-1 shadow-2xl"
-                    animate={{
-                      rotate: [0, 1, 0, -1, 0],
-                    }}
-                    transition={{
-                      duration: 8,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    <div className="w-full h-full bg-white rounded-3xl overflow-hidden relative">
-                      <Image
-                        src="/hero.jpg"
-                        alt="Professional web development team at Viorix Digital Solutions creating responsive websites, mobile apps, and e-commerce platforms for business growth"
-                        width={580}
-                        height={580}
-                        className="object-cover w-full h-full hover:scale-110 transition-transform duration-700"
-                        priority
-                        sizes="(max-width: 640px) 300px, (max-width: 768px) 400px, (max-width: 1024px) 450px, (max-width: 1280px) 500px, 580px"
-                        itemProp="image"
-                      />
-                      {/* Image overlay gradient */}
-                      <div className="absolute inset-0 bg-gradient-to-tr from-[#00BFFF]/5 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
-                    </div>
-                  </motion.div>
-                  
-                  {/* Enhanced floating badges with better mobile positioning */}
-                  <motion.div 
-                    className="absolute -top-2 -left-2 sm:-top-4 sm:-left-4 bg-white rounded-2xl p-3 sm:p-4 shadow-xl border border-gray-100 backdrop-blur-sm"
-                    animate={{ 
-                      y: [0, -8, 0],
-                      rotate: [0, 3, 0],
-                      scale: [1, 1.05, 1]
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-[#00BFFF]" />
-                  </motion.div>
-                  
-                  <motion.div 
-                    className="absolute -bottom-2 -right-2 sm:-bottom-4 sm:-right-4 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white rounded-2xl p-3 sm:p-4 shadow-xl"
-                    animate={{ 
-                      y: [0, 8, 0],
-                      rotate: [0, -3, 0],
-                      scale: [1.05, 1, 1.05]
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: 2
-                    }}
-                  >
-                    <Star className="w-5 h-5 sm:w-6 sm:h-6" />
-                  </motion.div>
-
-                  {/* Additional decorative elements */}
-                  <motion.div 
-                    className="absolute top-1/4 -right-6 w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full shadow-lg opacity-80"
-                    animate={{ 
-                      scale: [1, 1.2, 1],
-                      rotate: [0, 180, 360]
-                    }}
-                    transition={{
-                      duration: 6,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: 3
-                    }}
-                  ></motion.div>
+                  <div className="w-full h-full rounded-2xl overflow-hidden shadow-2xl">
+                    <Image
+                      src="/hero.jpg"
+                      alt="Professional web development team at Viorix Digital Solutions creating responsive websites, mobile apps, and e-commerce platforms for business growth"
+                      width={580}
+                      height={580}
+                      className="object-cover object-top w-full h-full"
+                      priority
+                      sizes="(max-width: 640px) 300px, (max-width: 768px) 400px, (max-width: 1024px) 450px, (max-width: 1280px) 500px, 580px"
+                      itemProp="image"
+                    />
+                  </div>
                 </div>
               </motion.div>
             </div>
@@ -375,16 +336,16 @@ const Hero = () => {
             {/* Separator */}
             <div className="flex items-center justify-center mb-12">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-              <div className="px-6 text-sm font-medium text-gray-500 bg-white">Trusted Worldwide</div>
+              <div className="px-6 text-sm font-medium text-gray-500 bg-white">Our Track Record</div>
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {[
-                { icon: Users, number: "500+", label: "Happy Clients", sublabel: "Worldwide" },
-                { icon: Award, number: "99%", label: "Success Rate", sublabel: "Project Delivery" },
-                { icon: Headphones, number: "24/7", label: "Support", sublabel: "Always Available" },
-                { icon: null, number: "5.0", label: "Rating", sublabel: "Client Reviews" }
+                { icon: Users, target: 250, suffix: "+", label: "Clients", sublabel: "Served" },
+                { icon: Award, target: 99, suffix: "%", label: "Success Rate", sublabel: "Project Delivery" },
+                { icon: Headphones, target: 24, suffix: "/7", label: "Support", sublabel: "Always Available" },
+                { icon: null, target: 5, suffix: ".0", label: "Rating", sublabel: "Client Reviews" }
               ].map((stat, index) => (
                 <motion.div 
                   key={stat.label}
@@ -411,7 +372,7 @@ const Hero = () => {
                     className="text-2xl sm:text-3xl font-bold text-[#1B365D] mb-1"
                     whileHover={{ scale: 1.1 }}
                   >
-                    {stat.number}
+                    <AnimatedNumber target={stat.target} suffix={stat.suffix} duration={2000 + index * 200} />
                   </motion.div>
                   <div className="text-sm sm:text-base text-gray-700 font-medium">{stat.label}</div>
                   <div className="text-xs sm:text-sm text-gray-500 mt-1">{stat.sublabel}</div>
