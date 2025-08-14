@@ -4,24 +4,24 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Head from "next/head";
-import { 
-  Code, 
-  Smartphone, 
-  Palette, 
-  ArrowRight, 
-  Check, 
+import {
+  Code,
+  Smartphone,
+  Palette,
+  ArrowRight,
+  Check,
   Star,
   Zap,
   Shield,
   Globe,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
 
 // SEO-friendly text highlighting with enhanced styling
 const highlightKeywords = (text) => {
   const keywords = [
     "Front-end",
-    "Back-end", 
+    "Back-end",
     "SEO-Friendly",
     "responsive",
     "mobile apps",
@@ -32,7 +32,7 @@ const highlightKeywords = (text) => {
     "user journeys",
     "performance",
     "intuitive",
-    "seamless"
+    "seamless",
   ];
 
   let highlighted = text;
@@ -41,7 +41,12 @@ const highlightKeywords = (text) => {
     const regex = new RegExp(`(${word})`, "gi");
     highlighted = highlighted.replace(
       regex,
-      '<span class="font-bold text-transparent bg-gradient-to-r from-[#00BFFF] to-[#1B365D] bg-clip-text">$1</span>'
+      <span
+        class="font-bold text-transparent bg-gradient-to-r from-[#00BFFF] to-[#1B365D] bg-clip-text"
+        aria-label="$1"
+      >
+        $1
+      </span>
     );
   });
 
@@ -53,86 +58,90 @@ const generateStructuredData = () => {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Viorix Digital Solutions",
-    "description": "Professional web development, mobile app development, and UI/UX design services",
-    "url": "https://viorix.com",
-    "logo": "https://viorix.com/logo.png",
-    "sameAs": [
+    name: "Viorix Digital Solutions",
+    description:
+      "Professional web development, mobile app development, and UI/UX design services",
+    url: "https://viorix.com",
+    logo: "https://viorix.com/logo.png",
+    sameAs: [
       "https://facebook.com/viorix",
       "https://twitter.com/viorix",
-      "https://linkedin.com/company/viorix"
+      "https://linkedin.com/company/viorix",
     ],
-    "hasOfferCatalog": {
+    hasOfferCatalog: {
       "@type": "OfferCatalog",
-      "name": "Digital Services",
-      "itemListElement": [
+      name: "Digital Services",
+      itemListElement: [
         {
           "@type": "Offer",
-          "itemOffered": {
+          itemOffered: {
             "@type": "Service",
-            "name": "Web Development Services",
-            "description": "Professional front-end and back-end development with SEO optimization and responsive design",
-            "provider": {
+            name: "Web Development Services",
+            description:
+              "Professional front-end and back-end development with SEO optimization and responsive design",
+            provider: {
               "@type": "Organization",
-              "name": "Viorix Digital Solutions"
+              name: "Viorix Digital Solutions",
             },
-            "areaServed": "Worldwide",
-            "hasOfferCatalog": {
+            areaServed: "Worldwide",
+            hasOfferCatalog: {
               "@type": "OfferCatalog",
-              "itemListElement": [
+              itemListElement: [
                 {
                   "@type": "Offer",
-                  "itemOffered": {
+                  itemOffered: {
                     "@type": "Service",
-                    "name": "Responsive Web Design"
-                  }
-                },
-                {
-                  "@type": "Offer", 
-                  "itemOffered": {
-                    "@type": "Service",
-                    "name": "SEO Optimization"
-                  }
+                    name: "Responsive Web Design",
+                  },
                 },
                 {
                   "@type": "Offer",
-                  "itemOffered": {
-                    "@type": "Service", 
-                    "name": "Modern Framework Development"
-                  }
-                }
-              ]
-            }
-          }
+                  itemOffered: {
+                    "@type": "Service",
+                    name: "SEO Optimization",
+                  },
+                },
+                {
+                  "@type": "Offer",
+                  itemOffered: {
+                    "@type": "Service",
+                    name: "Modern Framework Development",
+                  },
+                },
+              ],
+            },
+          },
         },
         {
           "@type": "Offer",
-          "itemOffered": {
+          itemOffered: {
             "@type": "Service",
-            "name": "Mobile App Development Services",
-            "description": "Native iOS and Android mobile application development with cross-platform compatibility",
-            "provider": {
+            name: "Mobile App Development Services",
+            description:
+              "Native iOS and Android mobile application development with cross-platform compatibility",
+            provider: {
               "@type": "Organization",
-              "name": "Viorix Digital Solutions"
+              name: "Viorix Digital Solutions",
             },
-            "areaServed": "Worldwide"
-          }
+            areaServed: "Worldwide",
+          },
         },
         {
-          "@type": "Offer", 
-          "itemOffered": {
+          "@type": "Offer",
+          itemOffered: {
             "@type": "Service",
-            "name": "UI/UX Design Services",
-            "description": "User-centered design and user experience optimization for web and mobile applications",
-            "provider": {
+            name: "UI/UX Design Services",
+            description:
+              "User-centered design and user experience optimization for web and mobile applications",
+            provider: {
               "@type": "Organization",
-              "name": "Viorix Digital Solutions"
+              name: "Viorix Digital Solutions",
             },
-            "areaServed": "Worldwide"
-          }
-        }
-      ]
-    }
+            areaServed: "Worldwide",
+          },
+        },
+      ],
+    },
   };
 };
 
@@ -147,35 +156,51 @@ const Services = () => {
       description: highlightKeywords(
         "Transform your digital presence with our expert Front-end and Back-end development services. We create SEO-Friendly, lightning-fast, and fully responsive websites that drive conversions and enhance your brand's online authority with modern web technologies."
       ),
-      metaDescription: "Professional web development services including front-end, back-end, SEO optimization, and responsive design. Transform your digital presence with expert web development.",
+      metaDescription:
+        "Professional web development services including front-end, back-end, SEO optimization, and responsive design. Transform your digital presence with expert web development.",
       image: "/web.jpg",
-      imageAlt: "Professional web development services - responsive websites and SEO optimization by Viorix Digital Solutions",
+      imageAlt:
+        "Professional web development services - responsive websites and SEO optimization by Viorix Digital Solutions",
       icon: Code,
       features: [
         "Responsive Web Design",
-        "SEO Optimization & Technical SEO", 
+        "SEO Optimization & Technical SEO",
         "Fast Loading Performance",
-        "Modern Web Frameworks (React, Next.js)"
+        "Modern Web Frameworks (React, Next.js)",
       ],
-      keywords: ["web development", "front-end development", "back-end development", "SEO optimization", "responsive design"]
+      keywords: [
+        "web development",
+        "front-end development",
+        "back-end development",
+        "SEO optimization",
+        "responsive design",
+      ],
     },
     "Mobile Development": {
-      heading: "MOBILE APP DEVELOPMENT", 
+      heading: "MOBILE APP DEVELOPMENT",
       subheading: "Native iOS & Android App Development Services",
       description: highlightKeywords(
         "Launch powerful mobile apps that deliver seamless performance across iOS and Android platforms. Our mobile development approach ensures optimal user engagement with intuitive navigation, native performance, and lightning-fast response times."
       ),
-      metaDescription: "Expert mobile app development services for iOS and Android. Native performance, cross-platform compatibility, and app store optimization.",
+      metaDescription:
+        "Expert mobile app development services for iOS and Android. Native performance, cross-platform compatibility, and app store optimization.",
       image: "/mobile.jpg",
-      imageAlt: "Mobile app development services - iOS and Android native apps by Viorix Digital Solutions",
+      imageAlt:
+        "Mobile app development services - iOS and Android native apps by Viorix Digital Solutions",
       icon: Smartphone,
       features: [
         "Cross-Platform Development",
         "Native iOS & Android Performance",
         "App Store Optimization (ASO)",
-        "Real-time Updates & Push Notifications"
+        "Real-time Updates & Push Notifications",
       ],
-      keywords: ["mobile app development", "iOS development", "Android development", "cross-platform apps", "app store optimization"]
+      keywords: [
+        "mobile app development",
+        "iOS development",
+        "Android development",
+        "cross-platform apps",
+        "app store optimization",
+      ],
     },
     "UI/UX Design": {
       heading: "UI/UX DESIGN SERVICES",
@@ -183,17 +208,26 @@ const Services = () => {
       description: highlightKeywords(
         "Elevate user engagement through beautiful interfaces and carefully crafted user journeys. Our UI/UX design philosophy combines aesthetic excellence with conversion optimization and accessibility standards to maximize your business results."
       ),
-      metaDescription: "Professional UI/UX design services focused on user experience, conversion optimization, and accessibility. Beautiful interfaces that drive results.",
-      image: "/ui.jpg", 
-      imageAlt: "UI/UX design services - user experience design and interface optimization by Viorix Digital Solutions",
+      metaDescription:
+        "Professional UI/UX design services focused on user experience, conversion optimization, and accessibility. Beautiful interfaces that drive results.",
+      image: "/ui.jpg",
+      imageAlt:
+        "UI/UX design services - user experience design and interface optimization by Viorix Digital Solutions",
       icon: Palette,
       features: [
         "User-Centered Design Research",
         "Conversion Rate Optimization",
-        "Brand Consistency & Style Guides", 
-        "Accessibility (WCAG) Compliance"
+        "Brand Consistency & Style Guides",
+        "Accessibility (WCAG) Compliance",
       ],
-      keywords: ["UI design", "UX design", "user experience", "user interface", "conversion optimization", "accessibility design"]
+      keywords: [
+        "UI design",
+        "UX design",
+        "user experience",
+        "user interface",
+        "conversion optimization",
+        "accessibility design",
+      ],
     },
   };
 
@@ -201,19 +235,21 @@ const Services = () => {
 
   // Update page title and meta description when active tab changes
   useEffect(() => {
-    if (typeof document !== 'undefined') {
+    if (typeof document !== "undefined") {
       document.title = `${activeTab} Services | Viorix Digital Solutions - ${active.subheading}`;
-      
+
       // Update meta description
-      const metaDescription = document.querySelector('meta[name="description"]');
+      const metaDescription = document.querySelector(
+        'meta[name="description"]'
+      );
       if (metaDescription) {
-        metaDescription.setAttribute('content', active.metaDescription);
+        metaDescription.setAttribute("content", active.metaDescription);
       }
-      
+
       // Update keywords
-      const metaKeywords = document.querySelector('meta[name="keywords"]');  
+      const metaKeywords = document.querySelector('meta[name="keywords"]');
       if (metaKeywords) {
-        metaKeywords.setAttribute('content', active.keywords.join(', '));
+        metaKeywords.setAttribute("content", active.keywords.join(", "));
       }
     }
   }, [activeTab, active]);
@@ -222,35 +258,64 @@ const Services = () => {
     <>
       {/* SEO Head Elements */}
       <Head>
-        <title>Professional Digital Services | Web Development, Mobile Apps & UI/UX Design | Viorix</title>
-        <meta name="description" content="Professional web development, mobile app development, and UI/UX design services. SEO-optimized websites, native mobile apps, and conversion-focused design solutions." />
-        <meta name="keywords" content="web development, mobile app development, UI UX design, SEO optimization, responsive design, digital services, professional web design" />
+        <title>
+          Professional Digital Services | Web Development, Mobile Apps & UI/UX
+          Design | Viorix
+        </title>
+        <meta
+          name="description"
+          content="Professional web development, mobile app development, and UI/UX design services. SEO-optimized websites, native mobile apps, and conversion-focused design solutions."
+        />
+        <meta
+          name="keywords"
+          content="web development, mobile app development, UI UX design, SEO optimization, responsive design, digital services, professional web design"
+        />
         <meta name="author" content="Viorix Digital Solutions" />
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-        
+        <meta
+          name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
+
         {/* Open Graph / Social Media */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Professional Digital Services | Viorix Digital Solutions" />
-        <meta property="og:description" content="Expert web development, mobile app development, and UI/UX design services. Transform your digital presence with professional solutions." />
+        <meta
+          property="og:title"
+          content="Professional Digital Services | Viorix Digital Solutions"
+        />
+        <meta
+          property="og:description"
+          content="Expert web development, mobile app development, and UI/UX design services. Transform your digital presence with professional solutions."
+        />
         <meta property="og:image" content="/viorix-digital-services-og.jpg" />
         <meta property="og:url" content="https://viorix.co.uk/services" />
         <meta property="og:site_name" content="Viorix Digital Solutions" />
-        
+
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Professional Digital Services | Viorix Digital Solutions" />
-        <meta name="twitter:description" content="Expert web development, mobile app development, and UI/UX design services." />
-        <meta name="twitter:image" content="/viorix-digital-services-twitter.jpg" />
-        
+        <meta
+          name="twitter:title"
+          content="Professional Digital Services | Viorix Digital Solutions"
+        />
+        <meta
+          name="twitter:description"
+          content="Expert web development, mobile app development, and UI/UX design services."
+        />
+        <meta
+          name="twitter:image"
+          content="/viorix-digital-services-twitter.jpg"
+        />
+
         {/* Structured Data */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateStructuredData()) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateStructuredData()),
+          }}
         />
-        
+
         {/* Canonical URL */}
         <link rel="canonical" href="https://viorix.co.uk/services" />
-        
+
         {/* Additional SEO meta tags */}
         <meta name="geo.region" content="GB" />
         <meta name="geo.placename" content="United Kingdom" />
@@ -259,7 +324,7 @@ const Services = () => {
       </Head>
 
       {/* Main Services Section with semantic HTML */}
-      <section 
+      <section
         className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 via-white to-blue-50/30"
         aria-label="Professional Digital Services"
         role="main"
@@ -279,9 +344,15 @@ const Services = () => {
               className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500/10 to-indigo-600/10 border border-blue-200/50 rounded-full text-xs sm:text-sm font-bold text-[#1B365D] mb-4 sm:mb-6"
               role="banner"
             >
-              <Star className="w-3 h-3 sm:w-4 sm:h-4 text-[#00BFFF]" aria-hidden="true" />
+              <Star
+                className="w-3 h-3 sm:w-4 sm:h-4 text-[#00BFFF]"
+                aria-hidden="true"
+              />
               <span className="text-xs sm:text-sm">OUR PREMIUM SERVICES</span>
-              <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-[#00BFFF]" aria-hidden="true" />
+              <Zap
+                className="w-3 h-3 sm:w-4 sm:h-4 text-[#00BFFF]"
+                aria-hidden="true"
+              />
             </motion.div>
 
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-3 sm:mb-4 px-2">
@@ -291,7 +362,8 @@ const Services = () => {
               </span>
             </h1>
             <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed px-2">
-              Discover our full range of professional services designed to accelerate your business growth and digital transformation
+              Discover our full range of professional services designed to
+              accelerate your business growth and digital transformation
             </p>
           </motion.header>
 
@@ -319,10 +391,17 @@ const Services = () => {
                   whileTap={{ scale: 0.98 }}
                   role="tab"
                   aria-selected={activeTab === tab}
-                  aria-controls={`${tab.toLowerCase().replace(/\s+/g, '-')}-panel`}
-                  id={`${tab.toLowerCase().replace(/\s+/g, '-')}-tab`}
+                  aria-controls={`${tab
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")}-panel`}
+                  id={`${tab.toLowerCase().replace(/\s+/g, "-")}-tab`}
                 >
-                  <TabIcon className={`w-4 h-4 sm:w-5 sm:h-5 ${activeTab === tab ? 'text-white' : 'text-[#00BFFF]'}`} aria-hidden="true" />
+                  <TabIcon
+                    className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                      activeTab === tab ? "text-white" : "text-[#00BFFF]"
+                    }`}
+                    aria-hidden="true"
+                  />
                   <span className="text-sm sm:text-base">{tab}</span>
                   {activeTab === tab && (
                     <motion.div
@@ -343,8 +422,10 @@ const Services = () => {
             className="bg-white rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl border border-gray-100/50 overflow-hidden backdrop-blur-sm"
             layout
             role="tabpanel"
-            aria-labelledby={`${activeTab.toLowerCase().replace(/\s+/g, '-')}-tab`}
-            id={`${activeTab.toLowerCase().replace(/\s+/g, '-')}-panel`}
+            aria-labelledby={`${activeTab
+              .toLowerCase()
+              .replace(/\s+/g, "-")}-tab`}
+            id={`${activeTab.toLowerCase().replace(/\s+/g, "-")}-panel`}
           >
             <div className="flex flex-col">
               {/* Mobile Image Section with proper alt text */}
@@ -358,20 +439,28 @@ const Services = () => {
                     transition={{ duration: 0.5 }}
                     className="relative w-full h-full"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#00BFFF]/5 via-transparent to-[#1B365D]/5" aria-hidden="true"></div>
-                    
+                    <div
+                      className="absolute inset-0 bg-gradient-to-br from-[#00BFFF]/5 via-transparent to-[#1B365D]/5"
+                      aria-hidden="true"
+                    ></div>
+
                     <Image
                       src={active.image}
                       alt={active.imageAlt}
                       fill
                       className="object-cover"
-                      style={{ objectPosition: 'center' }}
+                      style={{ objectPosition: "center" }}
                       priority={activeTab === "Web Development"}
                       sizes="100vw"
-                      loading={activeTab === "Web Development" ? "eager" : "lazy"}
+                      loading={
+                        activeTab === "Web Development" ? "eager" : "lazy"
+                      }
                     />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" aria-hidden="true"></div>
+                    <div
+                      className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"
+                      aria-hidden="true"
+                    ></div>
 
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
@@ -400,7 +489,10 @@ const Services = () => {
                     <div className="space-y-4 sm:space-y-6">
                       <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
                         <div className="p-2 sm:p-3 bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 rounded-xl sm:rounded-2xl">
-                          <active.icon className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 text-[#1B365D]" aria-hidden="true" />
+                          <active.icon
+                            className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 text-[#1B365D]"
+                            aria-hidden="true"
+                          />
                         </div>
                         <span className="text-[#00BFFF] text-xs sm:text-sm font-bold tracking-widest uppercase">
                           {active.heading}
@@ -417,7 +509,10 @@ const Services = () => {
                       />
 
                       {/* Feature List with proper semantic markup */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mt-6 sm:mt-8" role="list">
+                      <div
+                        className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mt-6 sm:mt-8"
+                        role="list"
+                      >
                         {active.features.map((feature, index) => (
                           <motion.div
                             key={feature}
@@ -427,7 +522,10 @@ const Services = () => {
                             className="flex items-center gap-2 text-sm font-medium text-gray-700"
                             role="listitem"
                           >
-                            <Check className="w-4 h-4 text-green-500 flex-shrink-0" aria-hidden="true" />
+                            <Check
+                              className="w-4 h-4 text-green-500 flex-shrink-0"
+                              aria-hidden="true"
+                            />
                             <span>{feature}</span>
                           </motion.div>
                         ))}
@@ -460,20 +558,28 @@ const Services = () => {
                       transition={{ duration: 0.5 }}
                       className="relative w-full h-full"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#00BFFF]/5 via-transparent to-[#1B365D]/5" aria-hidden="true"></div>
-                      
+                      <div
+                        className="absolute inset-0 bg-gradient-to-br from-[#00BFFF]/5 via-transparent to-[#1B365D]/5"
+                        aria-hidden="true"
+                      ></div>
+
                       <Image
                         src={active.image}
                         alt={active.imageAlt}
                         fill
                         className="object-cover"
-                        style={{ objectPosition: 'top' }}
+                        style={{ objectPosition: "top" }}
                         priority={activeTab === "Web Development"}
                         sizes="50vw"
-                        loading={activeTab === "Web Development" ? "eager" : "lazy"}
+                        loading={
+                          activeTab === "Web Development" ? "eager" : "lazy"
+                        }
                       />
 
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" aria-hidden="true"></div>
+                      <div
+                        className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"
+                        aria-hidden="true"
+                      ></div>
 
                       <motion.div
                         initial={{ opacity: 0, x: -20 }}
@@ -502,18 +608,18 @@ const Services = () => {
             {Object.entries(tabContent).map(([key, service], index) => {
               const ServiceIcon = service.icon;
               const isActive = activeTab === key;
-              
+
               return (
                 <motion.article
                   key={key}
                   className={`group relative p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 transition-all duration-500 cursor-pointer ${
-                    isActive 
-                      ? 'bg-gradient-to-br from-[#00BFFF]/5 to-[#1B365D]/5 border-[#00BFFF]/30 shadow-lg scale-100 sm:scale-105' 
-                      : 'bg-white/50 border-gray-200/50 hover:border-[#00BFFF]/30 hover:bg-blue-50/30 hover:scale-100 sm:hover:scale-102'
+                    isActive
+                      ? "bg-gradient-to-br from-[#00BFFF]/5 to-[#1B365D]/5 border-[#00BFFF]/30 shadow-lg scale-100 sm:scale-105"
+                      : "bg-white/50 border-gray-200/50 hover:border-[#00BFFF]/30 hover:bg-blue-50/30 hover:scale-100 sm:hover:scale-102"
                   }`}
                   onClick={() => setActiveTab(key)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
+                    if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
                       setActiveTab(key);
                     }
@@ -528,28 +634,45 @@ const Services = () => {
                 >
                   {/* Card header */}
                   <header className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                    <div className={`p-2 sm:p-3 rounded-xl transition-all duration-300 ${
-                      isActive 
-                        ? 'bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white shadow-lg' 
-                        : 'bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 text-[#1B365D] group-hover:from-[#00BFFF]/20 group-hover:to-[#1B365D]/20'
-                    }`}>
-                      <ServiceIcon className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
+                    <div
+                      className={`p-2 sm:p-3 rounded-xl transition-all duration-300 ${
+                        isActive
+                          ? "bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white shadow-lg"
+                          : "bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 text-[#1B365D] group-hover:from-[#00BFFF]/20 group-hover:to-[#1B365D]/20"
+                      }`}
+                    >
+                      <ServiceIcon
+                        className="w-5 h-5 sm:w-6 sm:h-6"
+                        aria-hidden="true"
+                      />
                     </div>
-                    <h3 className="font-bold text-base sm:text-lg text-gray-900">{key}</h3>
+                    <h3 className="font-bold text-base sm:text-lg text-gray-900">
+                      {key}
+                    </h3>
                   </header>
 
                   {/* Card content */}
                   <p className="text-gray-600 text-sm leading-relaxed mb-3 sm:mb-4">
-                    {key === "Web Development" && "Professional websites that convert visitors into customers with SEO optimization"}
-                    {key === "Mobile Development" && "Native mobile apps for iOS and Android platforms with superior performance"}
-                    {key === "UI/UX Design" && "User-centered design that drives engagement and conversion optimization"}
+                    {key === "Web Development" &&
+                      "Professional websites that convert visitors into customers with SEO optimization"}
+                    {key === "Mobile Development" &&
+                      "Native mobile apps for iOS and Android platforms with superior performance"}
+                    {key === "UI/UX Design" &&
+                      "User-centered design that drives engagement and conversion optimization"}
                   </p>
 
                   {/* Features list */}
                   <ul className="space-y-2" role="list">
                     {service.features.slice(0, 2).map((feature, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-xs sm:text-sm text-gray-600" role="listitem">
-                        <Check className="w-3 h-3 text-green-500 flex-shrink-0" aria-hidden="true" />
+                      <li
+                        key={idx}
+                        className="flex items-center gap-2 text-xs sm:text-sm text-gray-600"
+                        role="listitem"
+                      >
+                        <Check
+                          className="w-3 h-3 text-green-500 flex-shrink-0"
+                          aria-hidden="true"
+                        />
                         <span>{feature}</span>
                       </li>
                     ))}
@@ -566,11 +689,14 @@ const Services = () => {
                   )}
 
                   {/* Hover effect */}
-                  <div className={`absolute inset-0 rounded-xl sm:rounded-2xl transition-opacity duration-300 ${
-                    isActive 
-                      ? 'bg-gradient-to-br from-[#00BFFF]/5 to-[#1B365D]/5 opacity-100' 
-                      : 'bg-gradient-to-br from-[#00BFFF]/0 to-[#1B365D]/0 opacity-0 group-hover:opacity-100'
-                  }`} aria-hidden="true" />
+                  <div
+                    className={`absolute inset-0 rounded-xl sm:rounded-2xl transition-opacity duration-300 ${
+                      isActive
+                        ? "bg-gradient-to-br from-[#00BFFF]/5 to-[#1B365D]/5 opacity-100"
+                        : "bg-gradient-to-br from-[#00BFFF]/0 to-[#1B365D]/0 opacity-0 group-hover:opacity-100"
+                    }`}
+                    aria-hidden="true"
+                  />
                 </motion.article>
               );
             })}
