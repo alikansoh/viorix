@@ -69,56 +69,7 @@ const Hero = () => {
 
   return (
     <>
-      {/* Enhanced SEO Meta Tags - Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            name: "Viorix Digital Solutions",
-            alternateName: "Viorix Digital",
-            url: "https://viorixdigital.com",
-            logo: "https://viorixdigital.com/logo.png",
-            description:
-              "Leading digital agency providing professional web development, mobile app development, e-commerce solutions, SEO services, and custom software development. Transform your business with cutting-edge digital solutions.",
-            foundingDate: "2020",
-            address: {
-              "@type": "PostalAddress",
-              addressCountry: "GB",
-            },
-            contactPoint: {
-              "@type": "ContactPoint",
-              telephone: "+44-XXX-XXX-XXXX",
-              contactType: "customer service",
-              availableLanguage: ["English"],
-            },
-            sameAs: [
-              "https://linkedin.com/company/viorix-digital",
-              "https://twitter.com/viorixdigital",
-              "https://facebook.com/viorixdigital",
-            ],
-            services: [
-              "Web Development Services",
-              "Mobile App Development",
-              "E-commerce Development Solutions",
-              "Digital Marketing Services",
-              "Custom Software Development",
-              "SEO Optimization",
-              "UI/UX Design",
-              "Website Redesign",
-              "API Development",
-              "Cloud Solutions",
-            ],
-            priceRange: "$$",
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: "5",
-              reviewCount: "250",
-            },
-          }),
-        }}
-      />
+     
 
       {/* Main Hero Section with proper semantic structure */}
       <main
@@ -219,14 +170,14 @@ const Hero = () => {
                 <header>
                   <h1
                     id="hero-heading"
-                    className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight text-gray-900 leading-[1.1] sm:leading-[1.15]"
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-6xl font-black tracking-tight text-gray-900 leading-[1.1] sm:leading-[1.15]"
                     itemProp="headline"
                   >
                     <span className="block text-[#1B365D] mb-2">
                       Professional
                     </span>
                     <span
-                      className="block min-h-[1.2em]"
+                      className="block min-h-[1.4em]"
                       role="status"
                       aria-live="polite"
                     >
