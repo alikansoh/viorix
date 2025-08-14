@@ -1,15 +1,15 @@
-'use client';
-import React, { useEffect, useState, useRef } from 'react';
-import { TypeAnimation } from 'react-type-animation';
-import Link from 'next/link';
-import { motion, useMotionValue, useSpring, useInView } from 'framer-motion';
-import Image from 'next/image';
-import { 
-  ArrowRight, 
-  Rocket, 
-  Users, 
-  Award, 
-  Headphones, 
+"use client";
+import React, { useEffect, useState, useRef } from "react";
+import { TypeAnimation } from "react-type-animation";
+import Link from "next/link";
+import { motion, useMotionValue, useSpring, useInView } from "framer-motion";
+import Image from "next/image";
+import {
+  ArrowRight,
+  Rocket,
+  Users,
+  Award,
+  Headphones,
   Star,
   Code,
   Smartphone,
@@ -17,11 +17,17 @@ import {
   Zap,
   CheckCircle,
   Globe,
-  Briefcase
-} from 'lucide-react';
+  Briefcase,
+} from "lucide-react";
 
 // Enhanced Animated counter component with scroll trigger and accessibility
-const AnimatedNumber = ({ target, suffix = "", duration = 2000, shouldStart = false, ariaLabel }) => {
+const AnimatedNumber = ({
+  target,
+  suffix = "",
+  duration = 2000,
+  shouldStart = false,
+  ariaLabel,
+}) => {
   const [displayNumber, setDisplayNumber] = useState(0);
 
   useEffect(() => {
@@ -34,24 +40,25 @@ const AnimatedNumber = ({ target, suffix = "", duration = 2000, shouldStart = fa
     const animate = (currentTime) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / duration, 1);
-      
+
       // Easing function for smooth animation
       const easeOut = 1 - Math.pow(1 - progress, 3);
       const current = Math.floor(easeOut * target);
-      
+
       setDisplayNumber(current);
-      
+
       if (progress < 1) {
         requestAnimationFrame(animate);
       }
     };
-    
+
     requestAnimationFrame(animate);
   }, [target, duration, shouldStart]);
 
   return (
     <span aria-label={ariaLabel || `${target}${suffix}`}>
-      {displayNumber}{suffix}
+      {displayNumber}
+      {suffix}
     </span>
   );
 };
@@ -69,30 +76,31 @@ const Hero = () => {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            "name": "Viorix Digital Solutions",
-            "alternateName": "Viorix Digital",
-            "url": "https://viorixdigital.com",
-            "logo": "https://viorixdigital.com/logo.png",
-            "description": "Leading digital agency providing professional web development, mobile app development, e-commerce solutions, SEO services, and custom software development. Transform your business with cutting-edge digital solutions.",
-            "foundingDate": "2020",
-            "address": {
+            name: "Viorix Digital Solutions",
+            alternateName: "Viorix Digital",
+            url: "https://viorixdigital.com",
+            logo: "https://viorixdigital.com/logo.png",
+            description:
+              "Leading digital agency providing professional web development, mobile app development, e-commerce solutions, SEO services, and custom software development. Transform your business with cutting-edge digital solutions.",
+            foundingDate: "2020",
+            address: {
               "@type": "PostalAddress",
-              "addressCountry": "GB"
+              addressCountry: "GB",
             },
-            "contactPoint": {
+            contactPoint: {
               "@type": "ContactPoint",
-              "telephone": "+44-XXX-XXX-XXXX",
-              "contactType": "customer service",
-              "availableLanguage": ["English"]
+              telephone: "+44-XXX-XXX-XXXX",
+              contactType: "customer service",
+              availableLanguage: ["English"],
             },
-            "sameAs": [
+            sameAs: [
               "https://linkedin.com/company/viorix-digital",
               "https://twitter.com/viorixdigital",
-              "https://facebook.com/viorixdigital"
+              "https://facebook.com/viorixdigital",
             ],
-            "services": [
+            services: [
               "Web Development Services",
-              "Mobile App Development", 
+              "Mobile App Development",
               "E-commerce Development Solutions",
               "Digital Marketing Services",
               "Custom Software Development",
@@ -100,22 +108,22 @@ const Hero = () => {
               "UI/UX Design",
               "Website Redesign",
               "API Development",
-              "Cloud Solutions"
+              "Cloud Solutions",
             ],
-            "priceRange": "$$",
-            "aggregateRating": {
+            priceRange: "$$",
+            aggregateRating: {
               "@type": "AggregateRating",
-              "ratingValue": "5",
-              "reviewCount": "250"
-            }
-          })
+              ratingValue: "5",
+              reviewCount: "250",
+            },
+          }),
         }}
       />
 
       {/* Main Hero Section with proper semantic structure */}
-      <main 
+      <main
         className="relative min-h-screen flex items-center mt-2 md:mt-18 px-4 sm:px-6 lg:px-8 pb-20 max-w-7xl mx-auto overflow-hidden"
-        itemScope 
+        itemScope
         itemType="https://schema.org/WebPage"
         role="main"
         aria-labelledby="hero-heading"
@@ -124,10 +132,10 @@ const Hero = () => {
         <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
           {/* Gradient mesh background */}
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white to-indigo-50/20"></div>
-          
+
           {/* Animated geometric shapes - Respects prefers-reduced-motion */}
           <div className="absolute top-0 left-0 w-full h-full opacity-[0.03]">
-            <motion.div 
+            <motion.div
               className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] rounded-full blur-3xl"
               animate={{
                 scale: [1, 1.2, 1],
@@ -136,11 +144,11 @@ const Hero = () => {
               transition={{
                 duration: 4,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "easeInOut",
               }}
               aria-hidden="true"
             ></motion.div>
-            <motion.div 
+            <motion.div
               className="absolute bottom-32 right-16 w-24 h-24 bg-gradient-to-l from-[#1B365D] to-[#00BFFF] rounded-full blur-2xl"
               animate={{
                 scale: [1.2, 1, 1.2],
@@ -150,11 +158,11 @@ const Hero = () => {
                 duration: 6,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: 1
+                delay: 1,
               }}
               aria-hidden="true"
             ></motion.div>
-            <motion.div 
+            <motion.div
               className="absolute top-1/2 right-1/4 w-16 h-16 bg-[#00BFFF] rounded-full blur-xl"
               animate={{
                 y: [-20, 20, -20],
@@ -164,14 +172,14 @@ const Hero = () => {
                 duration: 5,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: 2
+                delay: 2,
               }}
               aria-hidden="true"
             ></motion.div>
           </div>
 
           {/* Grid pattern overlay */}
-          <div 
+          <div
             className="absolute inset-0 opacity-[0.02]"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
@@ -183,7 +191,6 @@ const Hero = () => {
         {/* Main Content Container */}
         <div className="relative w-full">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-16">
-            
             {/* Left Side - Content with proper heading hierarchy */}
             <section className="text-center lg:text-left flex-1 max-w-3xl">
               <motion.div
@@ -201,37 +208,50 @@ const Hero = () => {
                   role="banner"
                   aria-label="Trust indicator"
                 >
-                  <CheckCircle className="w-4 h-4 text-green-500" aria-hidden="true" />
+                  <CheckCircle
+                    className="w-4 h-4 text-green-500"
+                    aria-hidden="true"
+                  />
                   <span>Trusted by UK Businesses</span>
                 </motion.div>
 
                 {/* Main Heading - Proper H1 structure for ATS */}
                 <header>
-                  <h1 
+                  <h1
                     id="hero-heading"
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight text-gray-900 leading-[1.1] sm:leading-[1.15]"
                     itemProp="headline"
                   >
-                    <span className="block text-[#1B365D] mb-2">Professional</span>
-                    <span className="block min-h-[1.2em]" aria-live="polite" aria-label="Rotating service types">
+                    <span className="block text-[#1B365D] mb-2">
+                      Professional
+                    </span>
+                    <span
+                      className="block min-h-[1.2em]"
+                      role="status"
+                      aria-live="polite"
+                    >
                       <TypeAnimation
                         sequence={[
-                          'Web Development', 2000,
-                          'Mobile Apps', 2000,
-                          'E-commerce', 2000,
-                          'Digital Marketing', 2000,
-                          'Custom Software', 2000,
-                          'SEO Solutions', 2000,
-                          'UI/UX Design', 2000,
+                          "Web Development",
+                          2000,
+                          "Mobile Apps",
+                          2000,
+                          "E-commerce",
+                          2000,
+                          "Digital Marketing",
+                          2000,
+                          "Custom Software",
+                          2000,
+                          "SEO Solutions",
+                          2000,
+                          "UI/UX Design",
+                          2000,
                         ]}
                         wrapper="span"
-                        speed={50}
-                        deletionSpeed={40}
-                        repeat={Infinity}
                         className="bg-gradient-to-r from-[#00BFFF] via-[#0099CC] to-[#1B365D] bg-clip-text text-transparent"
-                        aria-label="Our services include web development, mobile apps, e-commerce, digital marketing, custom software, SEO solutions, and UI/UX design"
                       />
                     </span>
+
                     <span className="block text-gray-800 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl mt-2 font-bold">
                       That Scale Your Business
                     </span>
@@ -239,28 +259,41 @@ const Hero = () => {
                 </header>
 
                 {/* Company Description with semantic structure */}
-                <div 
+                <div
                   className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl space-y-4 leading-relaxed"
                   itemProp="description"
                   role="region"
                   aria-labelledby="company-description"
                 >
-                  <h2 id="company-description" className="sr-only">Company Description</h2>
+                  <h2 id="company-description" className="sr-only">
+                    Company Description
+                  </h2>
                   <p>
-                    <strong className="font-bold text-[#1B365D]">Viorix Digital Solutions</strong> is a 
-                    leading digital agency specializing in <strong>responsive web development</strong>, 
-                    <strong> cross-platform mobile app development</strong>, <strong>e-commerce website design</strong>, 
-                    and <strong>result-driven digital marketing strategies</strong>.
+                    <strong className="font-bold text-[#1B365D]">
+                      Viorix Digital Solutions
+                    </strong>{" "}
+                    is a leading digital agency specializing in{" "}
+                    <strong>responsive web development</strong>,
+                    <strong> cross-platform mobile app development</strong>,{" "}
+                    <strong>e-commerce website design</strong>, and{" "}
+                    <strong>result-driven digital marketing strategies</strong>.
                   </p>
                   <p className="hidden sm:block">
-                    Transform your business with our <strong>custom software solutions</strong>, 
-                    <strong>SEO optimization services</strong>, and <strong>conversion-focused web design</strong> 
-                    that drive measurable results and boost your online presence.
+                    Transform your business with our{" "}
+                    <strong>custom software solutions</strong>,
+                    <strong>SEO optimization services</strong>, and{" "}
+                    <strong>conversion-focused web design</strong>
+                    that drive measurable results and boost your online
+                    presence.
                   </p>
                 </div>
 
                 {/* Feature highlights with proper semantics */}
-                <div className="flex flex-wrap gap-3 justify-center lg:justify-start" role="list" aria-label="Key features">
+                <div
+                  className="flex flex-wrap gap-3 justify-center lg:justify-start"
+                  role="list"
+                  aria-label="Key features"
+                >
                   {[
                     { icon: Code, text: "Custom Development" },
                     { icon: Smartphone, text: "Mobile-First Design" },
@@ -275,24 +308,33 @@ const Hero = () => {
                       className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2.5 rounded-full border border-blue-100/50 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105"
                       role="listitem"
                     >
-                      <feature.icon className="w-4 h-4 text-[#00BFFF]" aria-hidden="true" />
-                      <span className="text-sm font-medium text-[#1B365D]">{feature.text}</span>
+                      <feature.icon
+                        className="w-4 h-4 text-[#00BFFF]"
+                        aria-hidden="true"
+                      />
+                      <span className="text-sm font-medium text-[#1B365D]">
+                        {feature.text}
+                      </span>
                     </motion.div>
                   ))}
                 </div>
 
                 {/* Call-to-Action Buttons with proper accessibility */}
-                <nav className="flex flex-col sm:flex-row items-center gap-4 pt-4" role="navigation" aria-label="Primary actions">
-                  <Link 
-                    href="/contact" 
+                <nav
+                  className="flex flex-col sm:flex-row items-center gap-4 pt-4"
+                  role="navigation"
+                  aria-label="Primary actions"
+                >
+                  <Link
+                    href="/contact"
                     className="group w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-semibold rounded-full shadow-lg hover:shadow-2xl transition-all duration-500 focus:ring-4 focus:ring-blue-300/50 relative overflow-hidden focus:outline-none"
                     aria-label="Get free consultation for web development services"
                   >
                     <motion.div
                       className="relative flex items-center justify-center gap-2"
-                      whileHover={{ 
+                      whileHover={{
                         scale: 1.02,
-                        boxShadow: "0 25px 50px -12px rgba(0, 191, 255, 0.25)"
+                        boxShadow: "0 25px 50px -12px rgba(0, 191, 255, 0.25)",
                       }}
                       whileTap={{ scale: 0.98 }}
                       initial={{ opacity: 0, y: 20 }}
@@ -300,23 +342,29 @@ const Hero = () => {
                       transition={{ duration: 0.6, delay: 0.4 }}
                     >
                       {/* Button shine effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000" aria-hidden="true"></div>
+                      <div
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[200%] transition-transform duration-1000"
+                        aria-hidden="true"
+                      ></div>
                       <Rocket className="w-5 h-5" aria-hidden="true" />
                       <span>Get Free Consultation</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
+                      <ArrowRight
+                        className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+                        aria-hidden="true"
+                      />
                     </motion.div>
                   </Link>
 
-                  <Link 
-                    href="/services" 
+                  <Link
+                    href="/services"
                     className="group w-full sm:w-auto px-8 py-4 border-2 border-[#00BFFF] text-[#1B365D] font-semibold rounded-full hover:bg-gradient-to-r hover:from-[#00BFFF] hover:to-[#1B365D] hover:text-white hover:border-transparent transition-all duration-500 focus:ring-4 focus:ring-blue-300/50 backdrop-blur-sm bg-white/50 focus:outline-none"
                     aria-label="View our digital services and solutions"
                   >
                     <motion.div
                       className="flex items-center justify-center gap-2"
-                      whileHover={{ 
+                      whileHover={{
                         scale: 1.02,
-                        boxShadow: "0 20px 40px -12px rgba(27, 54, 93, 0.15)"
+                        boxShadow: "0 20px 40px -12px rgba(27, 54, 93, 0.15)",
                       }}
                       whileTap={{ scale: 0.98 }}
                       initial={{ opacity: 0, y: 20 }}
@@ -324,7 +372,10 @@ const Hero = () => {
                       transition={{ duration: 0.6, delay: 0.5 }}
                     >
                       <span>View Our Services</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
+                      <ArrowRight
+                        className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+                        aria-hidden="true"
+                      />
                     </motion.div>
                   </Link>
                 </nav>
@@ -332,8 +383,14 @@ const Hero = () => {
             </section>
 
             {/* Right Side - Enhanced Image Section with larger mobile image */}
-            <aside className="flex-1 flex justify-center lg:justify-end w-full max-w-lg lg:max-w-none" role="img" aria-labelledby="hero-image-description">
-              <h3 id="hero-image-description" className="sr-only">Professional web development team image</h3>
+            <aside
+              className="flex-1 flex justify-center lg:justify-end w-full max-w-lg lg:max-w-none"
+              role="img"
+              aria-labelledby="hero-image-description"
+            >
+              <h3 id="hero-image-description" className="sr-only">
+                Professional web development team image
+              </h3>
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -363,20 +420,22 @@ const Hero = () => {
                 <div className="hidden lg:block aspect-square w-full relative">
                   <div className="w-full h-full relative">
                     {/* Organic blob shape background */}
-                    <div 
+                    <div
                       className="absolute inset-0 bg-gradient-to-br from-[#00BFFF]/10 to-[#1B365D]/10 shadow-2xl"
                       style={{
-                        clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
-                        filter: "blur(1px)"
+                        clipPath:
+                          "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
+                        filter: "blur(1px)",
                       }}
                       aria-hidden="true"
                     ></div>
-                    
+
                     {/* Main image container with organic shape */}
-                    <div 
+                    <div
                       className="relative w-full h-full overflow-hidden shadow-2xl"
                       style={{
-                        clipPath: "polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%)"
+                        clipPath:
+                          "polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%)",
                       }}
                     >
                       <Image
@@ -397,12 +456,12 @@ const Hero = () => {
                       className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] rounded-full shadow-lg flex items-center justify-center"
                       animate={{
                         y: [0, -10, 0],
-                        rotate: [0, 5, 0]
+                        rotate: [0, 5, 0],
                       }}
                       transition={{
                         duration: 3,
                         repeat: Infinity,
-                        ease: "easeInOut"
+                        ease: "easeInOut",
                       }}
                       aria-hidden="true"
                     >
@@ -413,13 +472,13 @@ const Hero = () => {
                       className="absolute -bottom-4 -left-4 w-10 h-10 bg-gradient-to-r from-[#1B365D] to-[#00BFFF] rounded-full shadow-lg flex items-center justify-center"
                       animate={{
                         y: [0, 10, 0],
-                        rotate: [0, -5, 0]
+                        rotate: [0, -5, 0],
                       }}
                       transition={{
                         duration: 4,
                         repeat: Infinity,
                         ease: "easeInOut",
-                        delay: 1
+                        delay: 1,
                       }}
                       aria-hidden="true"
                     >
@@ -430,13 +489,13 @@ const Hero = () => {
                       className="absolute top-1/3 -left-6 w-8 h-8 bg-white shadow-lg rounded-full flex items-center justify-center border-2 border-[#00BFFF]"
                       animate={{
                         x: [0, -5, 0],
-                        scale: [1, 1.1, 1]
+                        scale: [1, 1.1, 1],
                       }}
                       transition={{
                         duration: 5,
                         repeat: Infinity,
                         ease: "easeInOut",
-                        delay: 2
+                        delay: 2,
                       }}
                       aria-hidden="true"
                     >
@@ -462,20 +521,63 @@ const Hero = () => {
             >
               {/* Section Header */}
               <header className="flex items-center justify-center mb-12">
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" aria-hidden="true"></div>
-                <h2 id="trust-indicators" className="px-6 text-sm font-medium text-gray-500 bg-white">Our Track Record</h2>
-                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" aria-hidden="true"></div>
+                <div
+                  className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"
+                  aria-hidden="true"
+                ></div>
+                <h2
+                  id="trust-indicators"
+                  className="px-6 text-sm font-medium text-gray-500 bg-white"
+                >
+                  Our Track Record
+                </h2>
+                <div
+                  className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"
+                  aria-hidden="true"
+                ></div>
               </header>
 
               {/* Statistics Grid */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8" role="list" aria-label="Company statistics">
+              <div
+                className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8"
+                role="list"
+                aria-label="Company statistics"
+              >
                 {[
-                  { icon: Briefcase, target: 50, suffix: "+", label: "Projects", sublabel: "Completed", ariaLabel: "Over 50 projects completed" },
-                  { icon: Award, target: 99, suffix: "%", label: "Success Rate", sublabel: "Project Delivery", ariaLabel: "99 percent success rate in project delivery" },
-                  { icon: Headphones, target: 24, suffix: "/7", label: "Support", sublabel: "Always Available", ariaLabel: "24/7 support always available" },
-                  { icon: null, target: 5, suffix: ".0", label: "Rating", sublabel: "Client Reviews", ariaLabel: "5.0 star rating from client reviews" }
+                  {
+                    icon: Briefcase,
+                    target: 50,
+                    suffix: "+",
+                    label: "Projects",
+                    sublabel: "Completed",
+                    ariaLabel: "Over 50 projects completed",
+                  },
+                  {
+                    icon: Award,
+                    target: 99,
+                    suffix: "%",
+                    label: "Success Rate",
+                    sublabel: "Project Delivery",
+                    ariaLabel: "99 percent success rate in project delivery",
+                  },
+                  {
+                    icon: Headphones,
+                    target: 24,
+                    suffix: "/7",
+                    label: "Support",
+                    sublabel: "Always Available",
+                    ariaLabel: "24/7 support always available",
+                  },
+                  {
+                    icon: null,
+                    target: 5,
+                    suffix: ".0",
+                    label: "Rating",
+                    sublabel: "Client Reviews",
+                    ariaLabel: "5.0 star rating from client reviews",
+                  },
                 ].map((stat, index) => (
-                  <article 
+                  <article
                     key={stat.label}
                     className="text-center group cursor-pointer p-4 rounded-2xl hover:bg-white/50 hover:shadow-lg transition-all duration-300"
                     role="listitem"
@@ -489,27 +591,42 @@ const Hero = () => {
                       <div className="flex items-center justify-center mb-3">
                         <div className="p-3 bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 rounded-2xl group-hover:from-[#00BFFF]/20 group-hover:to-[#1B365D]/20 transition-all duration-300">
                           {stat.icon ? (
-                            <stat.icon className="w-6 h-6 sm:w-8 sm:h-8 text-[#1B365D]" aria-hidden="true" />
+                            <stat.icon
+                              className="w-6 h-6 sm:w-8 sm:h-8 text-[#1B365D]"
+                              aria-hidden="true"
+                            />
                           ) : (
-                            <div className="flex" role="img" aria-label="5 star rating">
+                            <div
+                              className="flex"
+                              role="img"
+                              aria-label="5 star rating"
+                            >
                               {[...Array(5)].map((_, i) => (
-                                <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500 fill-current" aria-hidden="true" />
+                                <Star
+                                  key={i}
+                                  className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500 fill-current"
+                                  aria-hidden="true"
+                                />
                               ))}
                             </div>
                           )}
                         </div>
                       </div>
                       <div className="text-2xl sm:text-3xl font-bold text-[#1B365D] mb-1">
-                        <AnimatedNumber 
-                          target={stat.target} 
-                          suffix={stat.suffix} 
+                        <AnimatedNumber
+                          target={stat.target}
+                          suffix={stat.suffix}
                           duration={2000 + index * 200}
                           shouldStart={isStatsInView}
                           ariaLabel={stat.ariaLabel}
                         />
                       </div>
-                      <div className="text-sm sm:text-base text-gray-700 font-medium">{stat.label}</div>
-                      <div className="text-xs sm:text-sm text-gray-500 mt-1">{stat.sublabel}</div>
+                      <div className="text-sm sm:text-base text-gray-700 font-medium">
+                        {stat.label}
+                      </div>
+                      <div className="text-xs sm:text-sm text-gray-500 mt-1">
+                        {stat.sublabel}
+                      </div>
                     </motion.div>
                   </article>
                 ))}
@@ -528,21 +645,53 @@ const Hero = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <h2 id="seo-content" className="sr-only">Our Comprehensive Digital Services</h2>
+              <h2 id="seo-content" className="sr-only">
+                Our Comprehensive Digital Services
+              </h2>
               <div className="max-w-5xl mx-auto p-6 sm:p-8 bg-gradient-to-r from-gray-50/50 to-blue-50/30 rounded-3xl border border-gray-100/50 backdrop-blur-sm">
                 <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                  <strong className="text-[#1B365D]">Viorix Digital Solutions</strong> specializes in{' '}
-                  <em className="text-[#00BFFF] font-medium">responsive web design</em>,{' '}
-                  <em className="text-[#00BFFF] font-medium">mobile app development</em>,{' '}
-                  <em className="text-[#00BFFF] font-medium">e-commerce platform development</em>,{' '}
-                  <em className="text-[#00BFFF] font-medium">search engine optimization (SEO)</em>,{' '}
-                  <em className="text-[#00BFFF] font-medium">digital marketing strategies</em>,{' '}
-                  <em className="text-[#00BFFF] font-medium">custom software development</em>,{' '}
-                  <em className="text-[#00BFFF] font-medium">API integration</em>,{' '}
-                  <em className="text-[#00BFFF] font-medium">cloud solutions</em>, and{' '}
-                  <em className="text-[#00BFFF] font-medium">UI/UX design services</em>.{' '}
-                  We serve businesses of all sizes with cutting-edge technology solutions 
-                  that drive growth and enhance online presence.
+                  <strong className="text-[#1B365D]">
+                    Viorix Digital Solutions
+                  </strong>{" "}
+                  specializes in{" "}
+                  <em className="text-[#00BFFF] font-medium">
+                    responsive web design
+                  </em>
+                  ,{" "}
+                  <em className="text-[#00BFFF] font-medium">
+                    mobile app development
+                  </em>
+                  ,{" "}
+                  <em className="text-[#00BFFF] font-medium">
+                    e-commerce platform development
+                  </em>
+                  ,{" "}
+                  <em className="text-[#00BFFF] font-medium">
+                    search engine optimization (SEO)
+                  </em>
+                  ,{" "}
+                  <em className="text-[#00BFFF] font-medium">
+                    digital marketing strategies
+                  </em>
+                  ,{" "}
+                  <em className="text-[#00BFFF] font-medium">
+                    custom software development
+                  </em>
+                  ,{" "}
+                  <em className="text-[#00BFFF] font-medium">
+                    API integration
+                  </em>
+                  ,{" "}
+                  <em className="text-[#00BFFF] font-medium">
+                    cloud solutions
+                  </em>
+                  , and{" "}
+                  <em className="text-[#00BFFF] font-medium">
+                    UI/UX design services
+                  </em>
+                  . We serve businesses of all sizes with cutting-edge
+                  technology solutions that drive growth and enhance online
+                  presence.
                 </p>
               </div>
             </motion.div>
