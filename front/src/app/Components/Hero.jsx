@@ -383,21 +383,22 @@ const Hero = () => {
             </section>
 
             {/* Right Side - Enhanced Image Section with larger mobile image */}
-            <aside
+            <figure
               className="flex-1 flex justify-center lg:justify-end w-full max-w-lg lg:max-w-none"
               role="img"
               aria-labelledby="hero-image-description"
             >
-              <h3 id="hero-image-description" className="sr-only">
+              <figcaption id="hero-image-description" className="sr-only">
                 Professional web development team image
-              </h3>
+              </figcaption>
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
                 className="relative w-full max-w-[360px] sm:max-w-[420px] md:max-w-[480px] lg:max-w-[420px] xl:max-w-[480px]"
               >
-                {/* Mobile: Larger rounded rectangle with better proportions */}
+                {/* Mobile: Rounded rectangle */}
                 <div className="aspect-[4/5] w-full relative lg:hidden">
                   <div className="w-full h-full rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-[#00BFFF]/5 to-[#1B365D]/5 p-2">
                     <div className="w-full h-full rounded-2xl overflow-hidden">
@@ -416,10 +417,10 @@ const Hero = () => {
                   </div>
                 </div>
 
-                {/* Desktop: Creative organic shape */}
+                {/* Desktop: Organic blob shape */}
                 <div className="hidden lg:block aspect-square w-full relative">
                   <div className="w-full h-full relative">
-                    {/* Organic blob shape background */}
+                    {/* Blob background */}
                     <div
                       className="absolute inset-0 bg-gradient-to-br from-[#00BFFF]/10 to-[#1B365D]/10 shadow-2xl"
                       style={{
@@ -430,7 +431,7 @@ const Hero = () => {
                       aria-hidden="true"
                     ></div>
 
-                    {/* Main image container with organic shape */}
+                    {/* Main image container */}
                     <div
                       className="relative w-full h-full overflow-hidden shadow-2xl"
                       style={{
@@ -451,13 +452,10 @@ const Hero = () => {
                       />
                     </div>
 
-                    {/* Floating elements with accessibility considerations */}
+                    {/* Floating motion elements */}
                     <motion.div
                       className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] rounded-full shadow-lg flex items-center justify-center"
-                      animate={{
-                        y: [0, -10, 0],
-                        rotate: [0, 5, 0],
-                      }}
+                      animate={{ y: [0, -10, 0], rotate: [0, 5, 0] }}
                       transition={{
                         duration: 3,
                         repeat: Infinity,
@@ -470,10 +468,7 @@ const Hero = () => {
 
                     <motion.div
                       className="absolute -bottom-4 -left-4 w-10 h-10 bg-gradient-to-r from-[#1B365D] to-[#00BFFF] rounded-full shadow-lg flex items-center justify-center"
-                      animate={{
-                        y: [0, 10, 0],
-                        rotate: [0, -5, 0],
-                      }}
+                      animate={{ y: [0, 10, 0], rotate: [0, -5, 0] }}
                       transition={{
                         duration: 4,
                         repeat: Infinity,
@@ -487,10 +482,7 @@ const Hero = () => {
 
                     <motion.div
                       className="absolute top-1/3 -left-6 w-8 h-8 bg-white shadow-lg rounded-full flex items-center justify-center border-2 border-[#00BFFF]"
-                      animate={{
-                        x: [0, -5, 0],
-                        scale: [1, 1.1, 1],
-                      }}
+                      animate={{ x: [0, -5, 0], scale: [1, 1.1, 1] }}
                       transition={{
                         duration: 5,
                         repeat: Infinity,
@@ -504,7 +496,7 @@ const Hero = () => {
                   </div>
                 </div>
               </motion.div>
-            </aside>
+            </figure>
           </div>
 
           {/* Trust Indicators with accessibility enhancements */}
