@@ -200,6 +200,7 @@ const Hero = () => {
                         ]}
                         wrapper="span"
                         className="bg-gradient-to-r from-[#00BFFF] via-[#0099CC] to-[#1B365D] bg-clip-text text-transparent"
+                        repeat={Infinity}
                       />
                     </span>
 
