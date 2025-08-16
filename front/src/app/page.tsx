@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Hero from "./Components/Hero";
 import Services from "./Components/Services";
+import WhyChooseUs from "./Components/WhyUs";
 import OurProcess from "./Components/OurProcess";
 
 export default function Home() {
@@ -76,6 +77,10 @@ export default function Home() {
 
         {/* Our Process Section */}
         <OurProcess />
+
+          {/* Our Process Section */}
+          <WhyChooseUs />
+
       </main>
     </>
   );
