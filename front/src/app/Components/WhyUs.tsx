@@ -92,23 +92,40 @@ const WhyUs = () => {
 
   const testimonials = [
     {
-      name: "Alex Thompson",
-      role: "Founder & CEO",
-      company: "TechStart Innovations",
-      quote: "They transformed our startup idea into a robust platform that scaled beyond our expectations. Their technical expertise and fresh approach made all the difference.",
-      metric: "500% User Growth",
-      avatar: "AT"
+      name: "Imad Al Soudani",
+      role: "Owner",
+      company: "Hope btc ",
+      quote: "Ali built us a professional website that makes it easy for new students to register for training. His dedication and support were excellent, and through Viorix Digital Solutions we now have a strong online presence.",
+      metric: "More Student Registrations",
+      avatar: "IA"
     },
     {
-      name: "Maria Santos",
-      role: "Product Manager",
-      company: "GrowthLab Solutions",
-      quote: "The AI features they implemented gave us a significant competitive advantage. Their ability to understand our vision and execute it flawlessly was impressive.",
-      metric: "85% Cost Reduction",
-      avatar: "MS"
+      name: "Hassan Husseini",
+      role: "Owner",
+      company: "JRS Building Company",
+      quote: "Ali created a modern portfolio website that showcases our projects beautifully and helps us attract new clients. Thanks to his work and the expertise of Viorix Digital Solutions, our company looks more professional online.",
+      metric: "Increased Client Enquiries",
+      avatar: "HH"
     },
+    {
+      name: "Ali Hashem",
+      role: "Owner",
+      company: "ColdFix",
+      quote: "Ali designed a clean, SEO-friendly website for ColdFix that represents our services perfectly. His professionalism, combined with the quality standards of Viorix Digital Solutions, has already brought us more leads.",
+      metric: "40% More Leads",
+      avatar: "AH"
+    },
+    {
+      name: "Bader Al Badri",
+      role: "Owner",
+      company: "360 Drive Academy",
+      quote: "Ali built a sleek, user-friendly website for our driving school. Students can now book lessons effortlessly, and through Viorix Digital Solutions we’ve noticed a clear increase in new enrolments.",
+      metric: "30% More Bookings",
+      avatar: "BB"
+    }
   ];
-
+   
+  
   // Enhanced animated background particles - using deterministic values for SSR compatibility
   const particles = useMemo(
     () => {
@@ -389,20 +406,20 @@ const WhyUs = () => {
         </div>
 
         {/* Enhanced call to action section */}
-        <div className="text-center bg-gradient-to-r from-[#1B365D] via-black to-[#00BFFF] rounded-3xl p-16 relative overflow-hidden shadow-2xl shadow-[#00BFFF]/20">
-          <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-transparent to-black/10"></div>
-          <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.05)_50%,transparent_75%)] bg-[size:20px_20px] animate-pulse"></div>
-          <div className="relative z-10">
-            <h3 className="text-4xl font-black text-white mb-8">Ready to Transform Your Business?</h3>
-            <p className="text-2xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Let&apos;s discuss how we can help you build innovative solutions that drive growth and success.
-            </p>
-            <button className="bg-white text-[#1B365D] font-black px-12 py-6 rounded-3xl hover:bg-gray-100 hover:scale-105 transition-all duration-300 shadow-xl shadow-white/20 text-lg">
-              Start Your Project Today
-              <ArrowRight className="w-6 h-6 inline-block ml-3" />
-            </button>
-          </div>
-        </div>
+        <div className="text-center bg-gradient-to-r from-[#00BFFF] to-[#1B365D] rounded-3xl p-16 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-[#00BFFF]/20 via-transparent to-[#1B365D]/20"></div>
+
+      <div className="relative z-10">
+        <h3 className="text-4xl font-black text-white mb-8">Ready to Transform Your Business?</h3>
+        <p className="text-2xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
+          Let&apos;s discuss how we can help you build innovative solutions that drive growth and success.
+        </p>
+        <button className="bg-white text-[#1B365D] font-black px-12 py-6 rounded-3xl hover:bg-gray-100 hover:scale-105 transition-all duration-300 text-lg">
+          Start Your Project Today
+          <ArrowRight className="w-6 h-6 inline-block ml-3" />
+        </button>
+      </div>
+    </div>
       </div>
     </section>
   );

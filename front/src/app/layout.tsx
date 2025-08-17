@@ -1,5 +1,6 @@
 import './globals.css';
 import Navbar from './Components/Navbar';
+import Footer from './Components/Footer'
 import { Inter } from 'next/font/google';
 import { Metadata } from 'next';
 
@@ -54,6 +55,7 @@ export default function RootLayout({
       <body className="font-sans">
         <Navbar />
         <main className="pt-16">{children}</main>
+        <Footer/>
       </body>
     </html>
   );

@@ -60,10 +60,12 @@ export default function OurSimpleProcess() {
   const [activeStep, setActiveStep] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const stepRefs = useRef([]);
   const containerRef = useRef(null);
+  const progressLineRef = useRef(null);
 
-  // Check if we're on mobile for deliverables visibility
+  // Check if we're on mobile
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -76,39 +78,55 @@ export default function OurSimpleProcess() {
     }
   }, []);
 
-  // Enhanced smooth scroll with easing
+  // Enhanced smooth scroll with better positioning
   const smoothScrollTo = (index) => {
     if (typeof window === 'undefined') return;
     
     const element = stepRefs.current[index];
     if (!element) return;
 
-    const container = containerRef.current;
-    const containerRect = container?.getBoundingClientRect() || { top: 0 };
     const elementRect = element.getBoundingClientRect();
-    const offset = elementRect.top + window.pageYOffset - containerRect.top - 120;
+    const absoluteElementTop = elementRect.top + window.pageYOffset;
+    const middle = absoluteElementTop - (window.innerHeight / 2) + (elementRect.height / 2);
 
     window.scrollTo({
-      top: offset,
+      top: Math.max(0, middle),
       behavior: 'smooth'
     });
   };
 
-  // Optimized intersection observer with better thresholds
+  // Better intersection observer for large screens
   useEffect(() => {
+    if (!stepRefs.current.length) return;
+
+    const observerOptions = {
+      threshold: [0, 0.25, 0.5, 0.75, 1],
+      rootMargin: '-20% 0px -40% 0px'
+    };
+
+    let activeIndex = 0;
     const observers = stepRefs.current.map((ref, index) => {
       if (!ref) return null;
       
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) {
-            setActiveStep(index);
+          const rect = entry.boundingClientRect;
+          const windowHeight = window.innerHeight;
+          
+          // Calculate if the element is in the "active zone" (center portion of viewport)
+          const elementCenter = rect.top + rect.height / 2;
+          const viewportCenter = windowHeight / 2;
+          const distanceFromCenter = Math.abs(elementCenter - viewportCenter);
+          
+          // Element is considered "active" when it's closest to viewport center
+          if (entry.isIntersecting && distanceFromCenter < windowHeight * 0.4) {
+            if (index !== activeIndex) {
+              activeIndex = index;
+              setActiveStep(index);
+            }
           }
         },
-        {
-          threshold: [0.3, 0.7],
-          rootMargin: '-10% 0px -30% 0px'
-        }
+        observerOptions
       );
       
       observer.observe(ref);
@@ -118,6 +136,38 @@ export default function OurSimpleProcess() {
     return () => {
       observers.forEach(observer => observer?.disconnect());
     };
+  }, []);
+
+  // Calculate scroll progress for progress line
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!containerRef.current || !stepRefs.current.length) return;
+
+      const container = containerRef.current;
+      const containerRect = container.getBoundingClientRect();
+      const containerTop = containerRect.top + window.pageYOffset;
+      const containerHeight = containerRect.height;
+      const windowHeight = window.innerHeight;
+      
+      // Calculate how much of the container has been scrolled through
+      const scrollTop = window.pageYOffset;
+      const containerStart = containerTop - windowHeight * 0.5;
+      const containerEnd = containerTop + containerHeight - windowHeight * 0.5;
+      
+      let progress = 0;
+      if (scrollTop > containerStart && scrollTop < containerEnd) {
+        progress = (scrollTop - containerStart) / (containerEnd - containerStart);
+      } else if (scrollTop >= containerEnd) {
+        progress = 1;
+      }
+      
+      setScrollProgress(Math.max(0, Math.min(1, progress)));
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Calculate initial progress
+    
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Initial visibility animation
@@ -184,6 +234,7 @@ export default function OurSimpleProcess() {
               isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
             }`}
             style={{ transitionDelay: '400ms' }}
+            id="process-heading"
           >
             Our Simple Process
           </h1>
@@ -230,27 +281,27 @@ export default function OurSimpleProcess() {
         {/* Steps Container */}
         <div className="max-w-6xl mx-auto relative">
           <div className="flex">
-            {/* Enhanced Desktop Icons - Perfectly aligned with sections */}
+            {/* Enhanced Desktop Icons - Better aligned and animated */}
             <aside className="hidden lg:flex flex-col relative w-24" aria-hidden="true">
-              {/* Animated vertical line */}
+              {/* Animated vertical line with smooth progress */}
               <div 
-                className="absolute left-8 w-1 bg-gradient-to-b from-transparent via-[#00B4D8]/30 to-transparent rounded-full overflow-hidden"
+                ref={progressLineRef}
+                className="absolute left-8 w-1 bg-gradient-to-b from-transparent via-[#00B4D8]/30 to-transparent rounded-full"
                 style={{ 
                   top: '60px',
                   height: 'calc(100% - 120px)'
                 }}
               >
                 <div 
-                  className="w-full bg-gradient-to-b from-[#0047AB] to-[#00B4D8] rounded-full transition-all duration-1000"
+                  className="w-full bg-gradient-to-b from-[#0047AB] to-[#00B4D8] rounded-full transition-all duration-300 ease-out"
                   style={{ 
-                    height: `${((activeStep + 1) / steps.length) * 100}%`,
-                    transform: 'translateY(-100%)',
-                    animation: 'slideDown 1s ease-out forwards'
+                    height: `${scrollProgress * 100}%`,
+                    transformOrigin: 'top'
                   }}
                 />
               </div>
               
-              {/* Desktop Icons with enhanced animations - positioned to match sections exactly */}
+              {/* Desktop Icons with better spacing */}
               {steps.map((step, index) => {
                 const IconComponent = step.icon;
                 const isActive = activeStep === index;
@@ -261,18 +312,23 @@ export default function OurSimpleProcess() {
                     key={index}
                     className="relative flex items-start justify-start"
                     style={{ 
-                      height: '192px', // Fixed height to match section spacing
-                      paddingTop: '40px' // Align with section content
+                      minHeight: index === steps.length - 1 ? '160px' : '240px',
+                      paddingTop: '40px'
                     }}
                   >
-                    <div
-                      className={`relative z-10 w-16 h-16 rounded-full flex items-center justify-center transition-all duration-700 ${
+                    <button
+                      onClick={() => {
+                        setActiveStep(index);
+                        smoothScrollTo(index);
+                      }}
+                      className={`relative z-10 w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                         isActive
                           ? 'bg-gradient-to-r from-[#0047AB] to-[#00B4D8] shadow-2xl shadow-blue-500/40 scale-110'
                           : isPassed
                           ? 'bg-gradient-to-r from-green-500 to-emerald-500 shadow-lg scale-100'
                           : 'bg-white/90 border-2 border-gray-200 shadow-lg hover:shadow-xl hover:scale-105'
                       }`}
+                      aria-label={`Navigate to step ${index + 1}: ${step.title}`}
                     >
                       <IconComponent 
                         className={`w-6 h-6 transition-all duration-500 ${
@@ -300,15 +356,15 @@ export default function OurSimpleProcess() {
                           <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-pulse" />
                         </>
                       )}
-                    </div>
+                    </button>
                   </div>
                 );
               })}
             </aside>
 
-            {/* Enhanced Step Content */}
+            {/* Enhanced Step Content with better spacing */}
             <main className="flex-1 lg:pl-12">
-              <div className="space-y-12">
+              <div className="space-y-16 lg:space-y-24">
                 {steps.map((step, index) => {
                   const IconComponent = step.icon;
                   const isActive = activeStep === index;
@@ -321,7 +377,10 @@ export default function OurSimpleProcess() {
                       className={`group relative transition-all duration-700 ${
                         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
                       }`}
-                      style={{ transitionDelay: `${index * 100 + 1000}ms` }}
+                      style={{ 
+                        transitionDelay: `${index * 100 + 1000}ms`,
+                        minHeight: '200px'
+                      }}
                       onMouseEnter={() => setHoveredStep(index)}
                       onMouseLeave={() => setHoveredStep(null)}
                     >
@@ -336,10 +395,14 @@ export default function OurSimpleProcess() {
                         tabIndex="0"
                         role="button"
                         onKeyDown={(e) => handleKeyPress(e, index)}
+                        onClick={() => {
+                          setActiveStep(index);
+                          smoothScrollTo(index);
+                        }}
                         aria-label={`Step ${index + 1}: ${step.title}`}
                       >
                         {/* Mobile Icon */}
-                        <div className="lg:hidden mb-6">
+                        <div className="lg:hidden mb-6 relative">
                           <div
                             className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 ${
                               isActive
@@ -463,19 +526,13 @@ export default function OurSimpleProcess() {
       </div>
 
       <style jsx>{`
-        @keyframes slideDown {
-          from { transform: translateY(-100%); }
-          to { transform: translateY(0); }
-        }
-        
-        @keyframes fadeInUp {
-          from { 
-            opacity: 0;
-            transform: translateY(30px);
+        /* Enhanced mobile responsiveness */
+        @media (max-width: 1023px) {
+          .lg\\:opacity-0 {
+            opacity: 1 !important;
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+          .lg\\:max-h-0 {
+            max-height: 200px !important;
           }
         }
 
@@ -486,16 +543,6 @@ export default function OurSimpleProcess() {
         
         .hover\\:scale-102:hover {
           transform: scale(1.02);
-        }
-
-        /* Enhanced mobile responsiveness */
-        @media (max-width: 1023px) {
-          .lg\\:opacity-0 {
-            opacity: 1 !important;
-          }
-          .lg\\:max-h-0 {
-            max-height: 200px !important;
-          }
         }
 
         /* Accessibility improvements */
@@ -512,6 +559,11 @@ export default function OurSimpleProcess() {
         [role="button"]:focus-visible {
           outline: 2px solid #0047AB;
           outline-offset: 2px;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+          scroll-behavior: smooth;
         }
       `}</style>
     </section>
