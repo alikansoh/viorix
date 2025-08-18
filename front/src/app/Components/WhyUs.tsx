@@ -337,7 +337,7 @@ const WhyUs = () => {
         {/* Enhanced values section */}
         <div className="mb-32">
           <div className="text-center mb-24">
-            <h3 className="text-5xl font-black text-gray-900 mb-8">Our Core Principles</h3>
+            <h3 className="text-5xl font-black text-gray-900 bg-gradient-to-r from-[#0047AB] via-[#0066CC] to-[#00B4D8] bg-clip-text text-transparent leading-tight transform transition-all duration-700 mb-8">Our Core Principles</h3>
             <p className="text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
               The values that drive our innovation and ensure exceptional results for every project.
             </p>
@@ -363,7 +363,7 @@ const WhyUs = () => {
         {/* Enhanced testimonials */}
         <div className="mb-32">
           <div className="text-center mb-24">
-            <h3 className="text-5xl font-black text-gray-900 mb-8">Success Stories</h3>
+            <h3 className="text-5xl font-black bg-gradient-to-r from-[#0047AB] via-[#0066CC] to-[#00B4D8] bg-clip-text text-transparent leading-tight transform transition-all duration-700' mb-8">Success Stories</h3>
             <p className="text-2xl text-gray-600">Real impact from companies who trusted us to bring their vision to life.</p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

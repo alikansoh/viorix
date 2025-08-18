@@ -12,6 +12,10 @@ import {
   BarChart3,
   Cloud,
   X,
+  Home,
+  User,
+  FolderOpen,
+  Mail,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -85,11 +89,11 @@ const servicesData = [
 ];
 
 const links = [
-  { name: "Home", href: "/", ariaLabel: "Navigate to homepage" },
-  { name: "About", href: "/about", ariaLabel: "Learn about our company" },
-  { name: "Services", href: "/services", ariaLabel: "View our services", hasDropdown: true },
-  { name: "Projects", href: "/projects", ariaLabel: "Browse our portfolio" },
-  { name: "Contact", href: "/contact", ariaLabel: "Get in touch with us" },
+  { name: "Home", href: "/", ariaLabel: "Navigate to homepage", icon: Home },
+  { name: "About", href: "/about", ariaLabel: "Learn about our company", icon: User },
+  { name: "Services", href: "/services", ariaLabel: "View our services", hasDropdown: true, icon: Palette },
+  { name: "Projects", href: "/projects", ariaLabel: "Browse our portfolio", icon: FolderOpen },
+  { name: "Contact", href: "/contact", ariaLabel: "Get in touch with us", icon: Mail },
 ];
 
 export default function EnhancedNavbar() {
@@ -99,6 +103,7 @@ export default function EnhancedNavbar() {
   const [activeService, setActiveService] = useState(0);
   const [menuTimeout, setMenuTimeout] = useState<NodeJS.Timeout | null>(null);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -107,19 +112,47 @@ export default function EnhancedNavbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   // Improved hover logic: delay hiding mega menu for smoother UX
   const handleServicesMouseEnter = () => {
     if (menuTimeout) clearTimeout(menuTimeout);
     setShowServices(true);
   };
   const handleServicesMouseLeave = () => {
-    const timeout = setTimeout(() => setShowServices(false), 120); // short delay prevents flickering
+    const timeout = setTimeout(() => setShowServices(false), 120);
     setMenuTimeout(timeout);
   };
 
+  const toggleMobileMenu = () => {
+    if (isAnimating) return;
+    
+    setIsAnimating(true);
+    setIsOpen(!isOpen);
+    
+    // Reset animation state after transition completes
+    setTimeout(() => setIsAnimating(false), 400);
+  };
+
   const closeMobileMenu = () => {
+    if (isAnimating) return;
+    
+    setIsAnimating(true);
     setIsOpen(false);
     setMobileServicesOpen(false);
+    
+    setTimeout(() => setIsAnimating(false), 400);
   };
 
   return (
@@ -134,14 +167,15 @@ export default function EnhancedNavbar() {
                   <Image
                     src="/logo.png"
                     alt="Company logo"
-                    width={scrolled ? 112 : 160} // fallback width for various breakpoints
-                    height={scrolled ? 112 : 160} // fallback height for various breakpoints
+                    width={scrolled ? 112 : 160}
+                    height={scrolled ? 112 : 160}
                     className={`transition-all duration-500 ${scrolled ? "w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32" : "w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-40 lg:h-40 xl:w-44 xl:h-44"}`}
                     priority
                   />
                 </div>
               </Link>
             </div>
+
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center space-x-4 xl:space-x-8">
               {links.map((link) => {
@@ -226,6 +260,7 @@ export default function EnhancedNavbar() {
                 );
               })}
             </nav>
+
             {/* CTA Section */}
             <div className="flex items-center space-x-2 sm:space-x-4">
               <div className="hidden md:block">
@@ -249,148 +284,251 @@ export default function EnhancedNavbar() {
                   <span className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-[#1B365D] rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping" style={{ animationDelay: "0.3s", zIndex: 0 }} />
                 </Link>
               </div>
+
+              {/* Enhanced Mobile Menu Button */}
               <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden relative w-11 h-11 flex items-center justify-center bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-xl shadow-lg hover:shadow-xl hover:bg-white transition-all duration-300 group"
+                onClick={toggleMobileMenu}
+                disabled={isAnimating}
+                className={`lg:hidden relative w-12 h-12 flex items-center justify-center bg-white/90 backdrop-blur-sm border border-gray-200/50 rounded-xl shadow-lg transition-all duration-300 group overflow-hidden ${
+                  isOpen 
+                    ? "shadow-xl bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 border-[#00BFFF]/30 scale-110" 
+                    : "hover:shadow-xl hover:bg-white hover:scale-105"
+                }`}
                 aria-label={isOpen ? "Close menu" : "Open menu"}
               >
-                <div className="w-5 h-4 flex flex-col justify-between">
-                  <span className={`w-full h-0.5 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] transform transition-all duration-300 ease-out ${isOpen ? "rotate-45 translate-y-1.5 w-6" : "group-hover:w-6"}`} />
-                  <span className={`w-full h-0.5 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] transition-all duration-300 ease-out ${isOpen ? "opacity-0 scale-0" : "group-hover:w-6"}`} />
-                  <span className={`w-full h-0.5 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] transform transition-all duration-300 ease-out ${isOpen ? "-rotate-45 -translate-y-1.5 w-6" : "group-hover:w-6"}`} />
+                {/* Animated background pulse */}
+                <div className={`absolute inset-0 bg-gradient-to-r from-[#00BFFF]/20 to-[#1B365D]/20 rounded-xl transition-all duration-300 ${
+                  isOpen ? "opacity-100 animate-pulse" : "opacity-0"
+                }`} />
+                
+                {/* Menu icon container */}
+                <div className="relative w-6 h-5 flex flex-col justify-between">
+                  {/* Top line */}
+                  <span className={`h-0.5 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] transform transition-all duration-300 ease-out origin-center ${
+                    isOpen 
+                      ? "rotate-45 translate-y-2 w-6 shadow-sm" 
+                      : "w-5 group-hover:w-6 group-hover:shadow-sm"
+                  }`} />
+                  
+                  {/* Middle line */}
+                  <span className={`h-0.5 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] transition-all duration-300 ease-out ${
+                    isOpen 
+                      ? "opacity-0 scale-0 rotate-180" 
+                      : "w-6 group-hover:w-6 group-hover:shadow-sm"
+                  }`} />
+                  
+                  {/* Bottom line */}
+                  <span className={`h-0.5 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] transform transition-all duration-300 ease-out origin-center ${
+                    isOpen 
+                      ? "-rotate-45 -translate-y-2 w-6 shadow-sm" 
+                      : "w-4 group-hover:w-6 group-hover:shadow-sm"
+                  }`} />
                 </div>
+
+                {/* Floating dots for enhanced visual feedback */}
+                <div className={`absolute top-1 right-1 w-1 h-1 bg-[#00BFFF] rounded-full transition-all duration-500 ${
+                  isOpen ? "opacity-100 animate-ping" : "opacity-0"
+                }`} />
+                <div className={`absolute bottom-1 left-1 w-1 h-1 bg-[#1B365D] rounded-full transition-all duration-500 delay-100 ${
+                  isOpen ? "opacity-100 animate-ping" : "opacity-0"
+                }`} />
               </button>
             </div>
           </div>
         </div>
       </header>
-      {/* Enhanced Mobile Menu */}
-      {isOpen && (
-        <>
-          <div
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
-            onClick={closeMobileMenu}
-          />
-          <div className="fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 lg:hidden overflow-y-auto">
-            <div className="relative h-full flex flex-col">
-              {/* Mobile Menu Gradient Backgrounds */}
-              <div className="absolute top-0 right-0 w-full h-32 bg-gradient-to-bl from-[#00BFFF]/20 via-[#1B365D]/10 to-transparent pointer-events-none" />
-              <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-tr from-[#1B365D]/10 via-[#00BFFF]/5 to-transparent pointer-events-none" />
-              {/* Header */}
-              <div className="relative flex items-center justify-between p-6 border-b border-gray-100 bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10">
-                <div className="flex items-center space-x-4">
-                  <div className="flex-shrink-0">
-                    <Image
-                      src="/logo.png"
-                      alt="Company logo"
-                      width={58}
-                      height={58}
-                      className="w-20 h-20  "
-                      priority
-                    />
-                  </div>
-                  <div>
-                    <div className="text-lg font-bold bg-gradient-to-r from-[#00BFFF] to-[#1B365D] bg-clip-text text-transparent">Viorix Digital Solutions</div>
-                    <div className="text-xs mt-1">Your Digital Partner</div>
-                  </div>
+
+      {/* Enhanced Mobile Menu - Removed backdrop */}
+      <div className={`fixed top-0 right-0 z-40 lg:hidden transition-all duration-400 ${
+        isOpen ? "visible" : "invisible"
+      }`}>
+        
+        {/* Sliding Menu Panel */}
+        <div className={`h-screen w-full sm:w-96 bg-white shadow-2xl transition-all duration-400 ease-out overflow-hidden ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}>
+          
+
+
+          <div className="relative h-full flex flex-col">
+            {/* Enhanced Header with slide-in animation */}
+            <div className={`relative flex items-center justify-between p-6 border-b border-gray-100 bg-gradient-to-r from-[#00BFFF]/5 to-[#1B365D]/5 transition-all duration-500 delay-100 ${
+              isOpen ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
+            }`}>
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <div className={`absolute inset-0 bg-gradient-to-r from-[#00BFFF]/20 to-[#1B365D]/20 rounded-full animate-pulse transition-opacity duration-500 ${
+                    isOpen ? "opacity-100" : "opacity-0"
+                  }`} />
+                  <Image
+                    src="/logo.png"
+                    alt="Company logo"
+                    width={64}
+                    height={64}
+                    className="relative w-16 h-16 transition-transform duration-500 hover:scale-105"
+                    priority
+                  />
                 </div>
-                <button
-                  onClick={closeMobileMenu}
-                  className="p-2 hover:bg-white/50 rounded-xl transition-colors duration-200 backdrop-blur-sm"
-                >
-                  <X size={24} className="text-gray-600" />
-                </button>
-              </div>
-              {/* Mobile Navigation */}
-              <nav className="relative p-4 space-y-2 flex-grow">
-                {links.map((link) => {
-                  const isActive = pathname === link.href || (link.hasDropdown && pathname.startsWith("/services"));
-                  if (link.name === "Services") {
-                    return (
-                      <div key={link.name} className="space-y-2">
-                        {/* Mobile Dropdown for Service Categories */}
-                        <button
-                          type="button"
-                          className={`w-full flex items-center justify-between p-4 rounded-2xl font-medium bg-white  transition-all duration-300 ${
-                            mobileServicesOpen ? "text-[#1B365D] bg-[#00BFFF]/10" : "text-gray-700"
-                          }`}
-                          onClick={() => setMobileServicesOpen((prev) => !prev)}
-                          aria-expanded={mobileServicesOpen}
-                          aria-controls="mobile-services-dropdown"
-                        >
-                          <span className="flex items-center space-x-2">
-                            <span>Services</span>
-                          </span>
-                          <ChevronDown size={20} className={`transition-transform duration-300 ${mobileServicesOpen ? "rotate-180" : ""}`} />
-                        </button>
-                        {mobileServicesOpen && (
-                          <div
-                            id="mobile-services-dropdown"
-                            className="mt-2 space-y-2"
-                          >
-                            {servicesData.map((service) => (
-                              <Link
-                                key={service.category}
-                                href={`/services/${service.category.toLowerCase().replace(/\s+/g, "-")}`}
-                                onClick={closeMobileMenu}
-                                className="flex items-center p-3 rounded-xl bg-gray-50 border border-gray-100 hover:bg-gradient-to-r hover:from-[#00BFFF]/10 hover:to-[#1B365D]/10 hover:text-[#1B365D] text-base font-semibold transition-all duration-200"
-                              >
-                                <service.icon size={18} className="mr-3 text-[#1B365D]" />
-                                <span>{service.category}</span>
-                                <ArrowRight size={16} className="ml-auto text-[#00BFFF]" />
-                              </Link>
-                            ))}
-                            
-                          </div>
-                        )}
-                      </div>
-                    );
-                  }
-                  return (
-                    <Link
-                      key={link.name}
-                      href={link.href}
-                      onClick={closeMobileMenu}
-                      className={`flex items-center justify-between p-4 rounded-2xl font-medium transition-all duration-300 group ${
-                        isActive
-                          ? "bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white shadow-lg"
-                          : "text-gray-700 hover:bg-gradient-to-r hover:from-[#00BFFF]/10 hover:to-[#1B365D]/10 hover:text-[#1B365D]"
-                      }`}
-                    >
-                      <span className="text-lg">{link.name}</span>
-                      <ArrowRight
-                        size={20}
-                        className={`transition-all duration-300 ${
-                          isActive
-                            ? "text-white"
-                            : "opacity-0 group-hover:opacity-100 group-hover:translate-x-1"
-                        }`}
-                      />
-                    </Link>
-                  );
-                })}
-              </nav>
-              {/* Mobile CTA */}
-              <div className="relative p-4 border-t border-gray-100 bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10">
-                <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4">
-                  <div className="text-center mb-4">
-                    <div className="text-sm font-semibold text-gray-700">Ready to get started?</div>
-                    <div className="text-xs text-gray-500">Let&apos;s discuss your project</div>
+                <div>
+                  <div className="text-lg font-bold bg-gradient-to-r from-[#00BFFF] to-[#1B365D] bg-clip-text text-transparent">
+                    Viorix Digital
                   </div>
+                  <div className="text-xs text-gray-500 mt-0.5">Digital Solutions</div>
+                </div>
+              </div>
+              
+              <button
+                onClick={closeMobileMenu}
+                className="relative p-2.5 hover:bg-red-50 rounded-xl transition-all duration-200 group"
+              >
+                <X size={24} className="text-gray-600 group-hover:text-red-500 transition-colors duration-200" />
+                <div className="absolute inset-0 bg-red-100/50 rounded-xl scale-0 group-hover:scale-100 transition-transform duration-200" />
+              </button>
+            </div>
+
+            {/* Navigation with staggered animations */}
+            <nav className="relative p-4 space-y-3 flex-grow overflow-y-auto">
+              {links.map((link, index) => {
+                const isActive = pathname === link.href || (link.hasDropdown && (pathname.startsWith("/services") || servicesData.some(service => pathname.includes(service.category.toLowerCase().replace(/\s+/g, "-")))));
+                const delay = 150 + (index * 50);
+                
+                if (link.name === "Services") {
+                  return (
+                    <div key={link.name} className={`space-y-2 transition-all duration-500 ${
+                      isOpen ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
+                    }`} style={{ transitionDelay: `${delay}ms` }}>
+                      
+                      <button
+                        type="button"
+                        className={`w-full flex items-center justify-between p-4 rounded-2xl font-medium transition-all duration-300 group ${
+                          isActive || mobileServicesOpen
+                            ? "text-[#1B365D] bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 shadow-lg" 
+                            : "text-gray-700 hover:bg-gradient-to-r hover:from-[#00BFFF]/5 hover:to-[#1B365D]/5"
+                        }`}
+                        onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                        aria-expanded={mobileServicesOpen}
+                      >
+                        <span className="flex items-center space-x-3">
+                          <div className={`p-1.5 rounded-lg transition-all duration-300 ${
+                            isActive || mobileServicesOpen
+                              ? "bg-white shadow-md" 
+                              : "bg-gray-100 group-hover:bg-white group-hover:shadow-md"
+                          }`}>
+                            <link.icon size={16} className={isActive || mobileServicesOpen ? "text-[#1B365D]" : "text-gray-600"} />
+                          </div>
+                          <span className="text-lg">Services</span>
+                        </span>
+                        <ChevronDown size={20} className={`transition-all duration-300 ${
+                          mobileServicesOpen ? "rotate-180 text-[#00BFFF]" : "text-gray-400"
+                        }`} />
+                      </button>
+
+                      {/* Services Dropdown with smooth height transition */}
+                      <div className={`overflow-hidden transition-all duration-400 ease-out ${
+                        mobileServicesOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                      }`}>
+                        <div className="pt-2 space-y-2">
+                          {servicesData.map((service, serviceIndex) => (
+                            <Link
+                              key={service.category}
+                              href={`/services/${service.category.toLowerCase().replace(/\s+/g, "-")}`}
+                              onClick={closeMobileMenu}
+                              className={`flex items-center p-3 ml-4 rounded-xl bg-gradient-to-r from-gray-50 to-gray-50/50 border border-gray-100 hover:from-[#00BFFF]/10 hover:to-[#1B365D]/10 hover:border-[#00BFFF]/20 text-sm font-medium transition-all duration-300 group transform ${
+                                mobileServicesOpen ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"
+                              }`}
+                              style={{ transitionDelay: `${100 + (serviceIndex * 50)}ms` }}
+                            >
+                              <div className="p-1.5 rounded-lg bg-white shadow-sm mr-3 group-hover:shadow-md transition-shadow duration-200">
+                                <service.icon size={16} className="text-[#1B365D] group-hover:text-[#00BFFF] transition-colors duration-200" />
+                              </div>
+                              <span className="flex-1 group-hover:text-[#1B365D] transition-colors duration-200">
+                                {service.category}
+                              </span>
+                              <ArrowRight size={14} className="text-[#00BFFF] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200" />
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
+                return (
                   <Link
-                    href="/contact"
+                    key={link.name}
+                    href={link.href}
                     onClick={closeMobileMenu}
-                    className="flex items-center justify-center space-x-2 w-full py-4 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group"
+                    className={`flex items-center justify-between p-4 rounded-2xl font-medium transition-all duration-500 group ${
+                      isActive
+                        ? "bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white shadow-lg transform scale-105"
+                        : "text-gray-700 hover:bg-gradient-to-r hover:from-[#00BFFF]/10 hover:to-[#1B365D]/10 hover:text-[#1B365D] hover:scale-105"
+                    } ${isOpen ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"}`}
+                    style={{ transitionDelay: `${delay}ms` }}
                   >
-                    <span>Get a Quote</span>
-                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform duration-300" />
+                    <span className="flex items-center space-x-3">
+                      <div className={`p-1.5 rounded-lg transition-all duration-300 ${
+                        isActive 
+                          ? "bg-white/20" 
+                          : "bg-gray-100 group-hover:bg-white group-hover:shadow-md"
+                      }`}>
+                        <link.icon size={16} className={isActive ? "text-white" : "text-gray-600 group-hover:text-[#1B365D]"} />
+                      </div>
+                      <span className="text-lg">{link.name}</span>
+                    </span>
+                    <ArrowRight
+                      size={20}
+                      className={`transition-all duration-300 ${
+                        isActive
+                          ? "text-white"
+                          : "opacity-0 group-hover:opacity-100 group-hover:translate-x-1 text-[#00BFFF]"
+                      }`}
+                    />
                   </Link>
+                );
+              })}
+            </nav>
+
+            {/* Enhanced CTA with slide-up animation */}
+            <div className={`relative p-4 border-t border-gray-100 bg-gradient-to-r from-[#00BFFF]/5 to-[#1B365D]/5 transition-all duration-500 delay-500 ${
+              isOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+            }`}>
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-5 border border-gray-100/50">
+                <div className="text-center mb-4">
+                  <div className="text-sm font-semibold text-gray-700">Ready to get started?</div>
+                  <div className="text-xs text-gray-500 mt-1">Let&apos;s discuss your project</div>
+                </div>
+                
+                <Link
+                  href="/contact"
+                  onClick={closeMobileMenu}
+                  className="relative flex items-center justify-center space-x-2 w-full py-4 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group overflow-hidden"
+                >
+                  {/* Animated background effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/5 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
+                  
+                  <span className="relative z-10">Get a Quote</span>
+                  <ArrowRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
+                  
+                  {/* Floating particles */}
+                  <div className="absolute top-1 right-2 w-1 h-1 bg-white/60 rounded-full animate-ping" />
+                  <div className="absolute bottom-2 left-3 w-0.5 h-0.5 bg-white/40 rounded-full animate-ping" style={{ animationDelay: '0.5s' }} />
+                </Link>
+                
+                {/* Contact info */}
+                <div className="mt-4 pt-3 border-t border-gray-200/50">
+                  <div className="flex items-center justify-center space-x-4 text-xs text-gray-500">
+                    <span>📞 Call us now</span>
+                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                    <span>✉️ Quick response</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </>
-      )}
+        </div>
+      </div>
+
+      {/* Spacer for fixed header */}
       <div className={`${scrolled ? "h-20" : "h-24"} transition-all duration-500`} />
     </>
   );

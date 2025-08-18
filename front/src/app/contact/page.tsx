@@ -78,7 +78,15 @@ const faqs = [
   },
   {
     q: "Can I book a free consultation call?",
-    a: <>Absolutely! Just mention it in your message or <a href="/contact" className="text-[#00BFFF] underline">book directly here</a>.</>,
+    a: (
+      <>
+        Absolutely! Just mention it in your message or{" "}
+        <a href="/contact" className="text-[#00BFFF] underline">
+          book directly here
+        </a>
+        .
+      </>
+    ),
   },
   {
     q: "Where is your team located?",
@@ -86,15 +94,27 @@ const faqs = [
   },
   {
     q: "What services do you provide?",
-    a: <>We offer web development, mobile app development, e-commerce, SEO, digital marketing, and more. <a href="/services" className="text-[#00BFFF] underline">See full list.</a></>,
+    a: (
+      <>
+        We offer web development, mobile app development, e-commerce, SEO,
+        digital marketing, and more.{" "}
+        <a href="/services" className="text-[#00BFFF] underline">
+          See full list.
+        </a>
+      </>
+    ),
   },
 ];
 
 const ContactUs = () => {
   const [form, setForm] = useState(initialFormState);
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle"
+  );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -131,7 +151,12 @@ const ContactUs = () => {
         <motion.div
           className="absolute top-1/2 left-2/3 w-16 h-16 bg-gradient-to-br from-[#0099CC] to-[#1B365D] rounded-full blur-xl opacity-20"
           animate={{ scale: [1, 1.08, 1], opacity: [0.1, 0.18, 0.1] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2,
+          }}
         />
         {/* Sparkle foreground */}
         <Sparkle className="absolute bottom-24 left-1/2 w-8 h-8 text-[#00BFFF]/40 blur-sm opacity-80 animate-spin-slow" />
@@ -155,56 +180,72 @@ const ContactUs = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.2 }}
         >
-          Start your next digital project, boost your business, or simply say hello.<br />Our team is ready to help – and we reply fast!
+          Start your next digital project, boost your business, or simply say
+          hello.
+          <br />
+          Our team is ready to help – and we reply fast!
         </motion.p>
       </header>
 
       {/* Contact Info + Socials + Quick Links */}
       <section className="mb-10 flex flex-col-reverse lg:flex-row gap-8 items-stretch justify-between w-full max-w-5xl mx-auto">
-        {/* Info Cards */}
+        {/* Contact Info – Glassmorphism Style */}
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <motion.div
-            className="flex flex-col items-center justify-center p-5 rounded-2xl bg-gradient-to-br from-blue-50/60 to-[#eaf6fb] border border-blue-100 shadow-lg hover:scale-105 transition-transform duration-300"
-            initial={{ opacity: 0, y: 20 }}
+          {/* Email */}
+          <motion.a
+            href="mailto:hello@viorix.co.uk"
+            className="flex flex-col items-center text-center p-6 rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300"
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <Mail className="w-7 h-7 text-[#00BFFF] mb-1" />
-            <span className="font-semibold text-[#1B365D]">Email</span>
-            <a
-              href="mailto:hello@viorix.co.uk"
-              className="text-sm text-blue-700 hover:underline"
-            >
-              hello@viorix.co.uk
-            </a>
-          </motion.div>
-          <motion.div
-            className="flex flex-col items-center justify-center p-5 rounded-2xl bg-gradient-to-br from-blue-50/60 to-[#eaf6fb] border border-blue-100 shadow-lg hover:scale-105 transition-transform duration-300"
-            initial={{ opacity: 0, y: 20 }}
+            <div className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-tr from-[#00BFFF] to-[#1B365D] shadow-md mb-3">
+              <Mail className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="font-semibold text-[#1B365D] text-lg">Email</h3>
+            <p className="text-sm text-gray-700">hello@viorix.co.uk</p>
+          </motion.a>
+
+          {/* Phone */}
+          <motion.a
+            href="tel:+441234567890"
+            className="flex flex-col items-center text-center p-6 rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300"
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
           >
-            <Phone className="w-7 h-7 text-[#00BFFF] mb-1" />
-            <span className="font-semibold text-[#1B365D]">Phone</span>
-            <a href="tel:+441234567890" className="text-sm text-blue-700 hover:underline">
-              +44 1234 567890
-            </a>
-          </motion.div>
+            <div className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-tr from-[#00BFFF] to-[#1B365D] shadow-md mb-3">
+              <Phone className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="font-semibold text-[#1B365D] text-lg">Phone</h3>
+            <p className="text-sm text-gray-700">+44 1234 567890</p>
+          </motion.a>
+
+          {/* Office */}
           <motion.div
-            className="flex flex-col items-center justify-center p-5 rounded-2xl bg-gradient-to-br from-blue-50/60 to-[#eaf6fb] border border-blue-100 shadow-lg hover:scale-105 transition-transform duration-300"
-            initial={{ opacity: 0, y: 20 }}
+            className="flex flex-col items-center text-center p-6 rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300"
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
           >
-            <MapPin className="w-7 h-7 text-[#00BFFF] mb-1" />
-            <span className="font-semibold text-[#1B365D]">Office</span>
-            <span className="text-sm text-gray-700 text-center">London, UK<br />Mon-Fri 09:00–18:00</span>
+            <div className="w-14 h-14 flex items-center justify-center rounded-full bg-gradient-to-tr from-[#00BFFF] to-[#1B365D] shadow-md mb-3">
+              <MapPin className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="font-semibold text-[#1B365D] text-lg">Office</h3>
+            <p className="text-sm text-gray-700">
+              London, UK
+              <br />
+              Mon–Fri 09:00–18:00
+            </p>
           </motion.div>
         </div>
+
         {/* Social Media + Quick Links */}
         <aside className="flex flex-col gap-8 items-center justify-center mb-4 lg:mb-0">
           <div>
-            <span className="text-base font-semibold text-[#1B365D] mb-2 block text-center">Connect With Us</span>
+            <span className="text-base font-semibold text-[#1B365D] mb-2 block text-center">
+              Connect With Us
+            </span>
             <div className="flex gap-4 justify-center">
               {socials.map(({ icon: Icon, name, url, color }) => (
                 <a
@@ -221,11 +262,28 @@ const ContactUs = () => {
             </div>
           </div>
           <div>
-            <span className="text-base font-semibold text-[#1B365D] mb-2 block text-center">Quick Links</span>
+            <span className="text-base font-semibold text-[#1B365D] mb-2 block text-center">
+              Quick Links
+            </span>
             <div className="flex flex-col gap-2 items-center">
-              <a href="/services" className="text-[#00BFFF] font-medium hover:underline">Our Services</a>
-              <a href="/about" className="text-[#00BFFF] font-medium hover:underline">About Us</a>
-              <a href="/faq" className="text-[#00BFFF] font-medium hover:underline">FAQ</a>
+              <a
+                href="/services"
+                className="text-[#00BFFF] font-medium hover:underline"
+              >
+                Our Services
+              </a>
+              <a
+                href="/about"
+                className="text-[#00BFFF] font-medium hover:underline"
+              >
+                About Us
+              </a>
+              <a
+                href="/faq"
+                className="text-[#00BFFF] font-medium hover:underline"
+              >
+                FAQ
+              </a>
             </div>
           </div>
         </aside>
@@ -243,7 +301,10 @@ const ContactUs = () => {
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-[#1B365D] mb-2">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-[#1B365D] mb-2"
+              >
                 <User className="inline-block w-4 h-4 mr-1 text-[#00BFFF]" />
                 Name
               </label>
@@ -260,7 +321,10 @@ const ContactUs = () => {
               />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-[#1B365D] mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-[#1B365D] mb-2"
+              >
                 <Mail className="inline-block w-4 h-4 mr-1 text-[#00BFFF]" />
                 Email
               </label>
@@ -278,7 +342,10 @@ const ContactUs = () => {
             </div>
           </div>
           <div>
-            <label htmlFor="company" className="block text-sm font-medium text-[#1B365D] mb-2">
+            <label
+              htmlFor="company"
+              className="block text-sm font-medium text-[#1B365D] mb-2"
+            >
               <Building2 className="inline-block w-4 h-4 mr-1 text-[#00BFFF]" />
               Company (optional)
             </label>
@@ -294,7 +361,10 @@ const ContactUs = () => {
             />
           </div>
           <div>
-            <label htmlFor="message" className="block text-sm font-medium text-[#1B365D] mb-2">
+            <label
+              htmlFor="message"
+              className="block text-sm font-medium text-[#1B365D] mb-2"
+            >
               <MessageSquare className="inline-block w-4 h-4 mr-1 text-[#00BFFF]" />
               Message
             </label>
@@ -359,9 +429,14 @@ const ContactUs = () => {
               transition={{ duration: 0.5, delay: 0.1 * idx }}
             >
               <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-br from-[#00BFFF]/20 to-[#1B365D]/20 rounded-xl mb-2">
-                <value.icon className="w-7 h-7 text-[#00BFFF]" aria-hidden="true" />
+                <value.icon
+                  className="w-7 h-7 text-[#00BFFF]"
+                  aria-hidden="true"
+                />
               </div>
-              <h3 className="text-lg font-bold text-[#1B365D] mb-1">{value.title}</h3>
+              <h3 className="text-lg font-bold text-[#1B365D] mb-1">
+                {value.title}
+              </h3>
               <p className="text-sm text-gray-700 text-center">{value.desc}</p>
             </motion.div>
           ))}
@@ -402,10 +477,13 @@ const ContactUs = () => {
         >
           <div className="flex items-center gap-3 mb-4">
             <Sparkle className="w-7 h-7 text-[#00BFFF]" aria-hidden="true" />
-            <span className="text-lg font-bold text-[#1B365D]">Ready to get started?</span>
+            <span className="text-lg font-bold text-[#1B365D]">
+              Ready to get started?
+            </span>
           </div>
           <p className="text-base text-gray-700 mb-6 text-center">
-            Our team is excited to hear about your project, challenge, or idea.<br />
+            Our team is excited to hear about your project, challenge, or idea.
+            <br />
             Reach out now to begin your journey with Viorix Digital Solutions.
           </p>
           <a
