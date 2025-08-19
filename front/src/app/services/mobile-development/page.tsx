@@ -532,33 +532,37 @@ const MobileApplicationsPage: React.FC = () => {
     </motion.div>
 
     {/* Technology Tabs */}
-    <div className="flex justify-center mb-16">
-      <div className="bg-slate-800/50 backdrop-blur-sm p-2 rounded-2xl border border-slate-700/50">
-        {(Object.keys(technologies) as TechCategory[]).map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`px-8 py-4 rounded-xl font-semibold transition-all duration-500 capitalize relative overflow-hidden ${
-              activeTab === tab
-                ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-2xl shadow-cyan-500/25'
-                : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
-            }`}
-          >
-            {activeTab === tab && (
-              <motion.div
-                layoutId="activeTab"
-                className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl"
-                initial={false}
-                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-              />
-            )}
-            <span className="relative z-10">
-              {tab === 'native' ? 'Native Development' : tab === 'crossplatform' ? 'Cross-Platform' : 'Backend & APIs'}
-            </span>
-          </button>
-        ))}
-      </div>
-    </div>
+    <div className="flex justify-center mb-16 px-4">
+  <div className="bg-slate-800/50 backdrop-blur-sm p-2 rounded-2xl border border-slate-700/50 flex flex-wrap justify-center gap-2">
+    {(Object.keys(technologies) as TechCategory[]).map((tab) => (
+      <button
+        key={tab}
+        onClick={() => setActiveTab(tab)}
+        className={`px-4 sm:px-8 py-2 sm:py-4 rounded-xl font-semibold text-sm sm:text-base transition-all duration-500 capitalize relative overflow-hidden flex-1 sm:flex-none text-center ${
+          activeTab === tab
+            ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-2xl shadow-cyan-500/25'
+            : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+        }`}
+      >
+        {activeTab === tab && (
+          <motion.div
+            layoutId="activeTab"
+            className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl"
+            initial={false}
+            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+          />
+        )}
+        <span className="relative z-10">
+          {tab === 'native'
+            ? 'Native Development'
+            : tab === 'crossplatform'
+            ? 'Cross-Platform'
+            : 'Backend & APIs'}
+        </span>
+      </button>
+    ))}
+  </div>
+</div>
 
     {/* Technology Cards */}
     <div className="max-w-6xl mx-auto">
