@@ -2,7 +2,7 @@ import { ArrowRight, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram
 
 export default function WonderfulFooter() {
   return (
-    <footer className="bg-gradient-to-br from-[#2C5282] via-[#2D3748] to-[#1A202C] text-white relative overflow-hidden">
+    <footer className="bg-gradient-to-br from-[#2C5282] via-[#2D3748] mt-10 to-[#1A202C] text-white relative overflow-hidden">
       {/* Enhanced Background with logo-matching colors */}
       <div className="absolute inset-0" aria-hidden="true">
         {/* Background gradient matching logo colors */}
