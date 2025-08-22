@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState, useEffect } from "react";
 import { Star, Shield, Bolt, ArrowRight, Globe, Code, Database, Cpu, Zap, Target, Users, TrendingUp, CheckCircle } from "lucide-react";
+import Link from "next/link";
 
 const WhyUs = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -414,10 +415,12 @@ const WhyUs = () => {
         <p className="text-2xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
           Let&apos;s discuss how we can help you build innovative solutions that drive growth and success.
         </p>
-        <button className="bg-white text-[#1B365D] font-black px-12 py-6 rounded-3xl hover:bg-gray-100 hover:scale-105 transition-all duration-300 text-lg">
+        <Link href="/contact">
+        <button className="bg-white cursor-pointer text-[#1B365D] font-black px-12 py-6 rounded-3xl hover:bg-gray-100 hover:scale-105 transition-all duration-300 text-lg">
           Start Your Project Today
           <ArrowRight className="w-6 h-6 inline-block ml-3" />
         </button>
+        </Link>
       </div>
     </div>
       </div>

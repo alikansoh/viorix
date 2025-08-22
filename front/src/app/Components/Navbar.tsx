@@ -7,11 +7,8 @@ import {
   ChevronDown,
   Smartphone,
   Globe,
-  Database,
   Palette,
   BarChart3,
-  Cloud,
-  X,
   Home,
   User,
   FolderOpen,
@@ -30,6 +27,7 @@ const servicesData = [
       { name: "API Development", desc: "RESTful and GraphQL APIs" },
     ],
     color: "from-blue-500 to-cyan-500",
+    slug: "web-development"
   },
   {
     category: "Mobile Development",
@@ -41,6 +39,7 @@ const servicesData = [
       { name: "App Store Optimization", desc: "Maximize your app visibility" },
     ],
     color: "from-purple-500 to-pink-500",
+    slug: "mobile-development"
   },
   {
     category: "UI/UX Design",
@@ -52,6 +51,7 @@ const servicesData = [
       { name: "Prototyping", desc: "Interactive design prototypes" },
     ],
     color: "from-emerald-500 to-teal-500",
+    slug: "ui-ux-design"
   },
   {
     category: "Digital Marketing",
@@ -63,29 +63,9 @@ const servicesData = [
       { name: "Content Marketing", desc: "Strategic content creation" },
     ],
     color: "from-orange-500 to-red-500",
+    slug: "digital-marketing"
   },
-  {
-    category: "Cloud Solutions",
-    icon: Cloud,
-    services: [
-      { name: "Cloud Migration", desc: "Seamless cloud transitions" },
-      { name: "DevOps Services", desc: "Automated deployment pipelines" },
-      { name: "Infrastructure Management", desc: "Scalable cloud infrastructure" },
-      { name: "Security Solutions", desc: "Comprehensive security measures" },
-    ],
-    color: "from-indigo-500 to-purple-500",
-  },
-  {
-    category: "Data & Analytics",
-    icon: Database,
-    services: [
-      { name: "Data Analysis", desc: "Transform data into insights" },
-      { name: "Business Intelligence", desc: "Advanced reporting solutions" },
-      { name: "Machine Learning", desc: "AI-powered solutions" },
-      { name: "Data Visualization", desc: "Interactive dashboards" },
-    ],
-    color: "from-yellow-500 to-orange-500",
-  },
+  
 ];
 
 const links = [
@@ -104,6 +84,7 @@ export default function EnhancedNavbar() {
   const [menuTimeout, setMenuTimeout] = useState<NodeJS.Timeout | null>(null);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [navHeight, setNavHeight] = useState(0);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -111,6 +92,20 @@ export default function EnhancedNavbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Calculate navbar height dynamically
+  useEffect(() => {
+    const updateNavHeight = () => {
+      const navbar = document.querySelector('header');
+      if (navbar) {
+        setNavHeight(navbar.offsetHeight);
+      }
+    };
+
+    updateNavHeight();
+    window.addEventListener('resize', updateNavHeight);
+    return () => window.removeEventListener('resize', updateNavHeight);
+  }, [scrolled]); // Recalculate when scroll state changes
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -177,7 +172,7 @@ export default function EnhancedNavbar() {
             </div>
 
             {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center space-x-4 xl:space-x-8">
+            <nav className="hidden xl:flex items-center space-x-4 xl:space-x-8">
               {links.map((link) => {
                 const isActive = pathname === link.href || (link.hasDropdown && pathname.startsWith("/services"));
                 if (link.hasDropdown) {
@@ -198,25 +193,25 @@ export default function EnhancedNavbar() {
                         <span>{link.name}</span>
                         <ChevronDown size={16} className={`transition-transform duration-300 ${showServices ? "rotate-180" : ""}`} />
                       </button>
-                      {/* Mega Menu */}
+                      {/* Mega Menu - Better positioned for tablets */}
                       {showServices && (
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[96vw] max-w-[900px] bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 z-50">
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-3 w-[95vw] max-w-[900px] bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 z-[60]">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {/* Service Categories */}
                             <div className="space-y-2">
                               <h3 className="text-lg font-bold text-gray-800 mb-4">Our Services</h3>
                               {servicesData.map((service, idx) => (
-                                <button
+                                <Link
                                   key={idx}
-                                  type="button"
+                                  href={`/services/${service.slug}`}
                                   onMouseEnter={() => setActiveService(idx)}
-                                  className={`w-full text-left p-3 rounded-xl transition-all duration-300 group ${activeService === idx ? "bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white shadow-lg" : "hover:bg-gray-50"}`}
+                                  className={`w-full text-left p-3 rounded-xl transition-all duration-300 group block ${activeService === idx ? "bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white shadow-lg" : "hover:bg-gray-50"}`}
                                 >
                                   <div className="flex items-center space-x-3">
                                     <service.icon size={20} className={activeService === idx ? "text-white" : "text-gray-600"} />
                                     <span className="font-medium">{service.category}</span>
                                   </div>
-                                </button>
+                                </Link>
                               ))}
                             </div>
                             {/* Active Service Details */}
@@ -229,17 +224,14 @@ export default function EnhancedNavbar() {
                               </div>
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {servicesData[activeService].services.map((service, idx) => (
-                                  <div key={idx} className="p-4 rounded-xl border border-gray-100 hover:border-[#00BFFF]/30 hover:bg-[#00BFFF]/5 transition-all duration-300 group cursor-pointer">
+                                  <div
+                                    key={idx}
+                                    className="p-4 rounded-xl border border-gray-100 hover:border-[#00BFFF]/30 hover:bg-[#00BFFF]/5 transition-all duration-300 group "
+                                  >
                                     <h5 className="font-semibold text-gray-800 mb-1 group-hover:text-[#1B365D] transition-colors">{service.name}</h5>
                                     <p className="text-sm text-gray-600">{service.desc}</p>
                                   </div>
                                 ))}
-                              </div>
-                              <div className="mt-6 pt-4 border-t border-gray-100">
-                                <Link href="/services" className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white rounded-full font-semibold hover:from-[#1B365D] hover:to-[#00BFFF] transition-all duration-300 group">
-                                  <span>View All Services</span>
-                                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                                </Link>
                               </div>
                             </div>
                           </div>
@@ -263,7 +255,7 @@ export default function EnhancedNavbar() {
 
             {/* CTA Section */}
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="hidden md:block">
+              <div className="hidden lg:block">
                 <Link
                   href="/contact"
                   className="group relative inline-flex items-center justify-center px-7 py-3 font-semibold text-white transition-all duration-300 ease-out transform hover:scale-105 focus:scale-105"
@@ -289,7 +281,7 @@ export default function EnhancedNavbar() {
               <button
                 onClick={toggleMobileMenu}
                 disabled={isAnimating}
-                className={`lg:hidden relative w-12 h-12 flex items-center justify-center bg-white/90 backdrop-blur-sm border border-gray-200/50 rounded-xl shadow-lg transition-all duration-300 group overflow-hidden ${
+                className={`xl:hidden relative w-12 h-12 flex items-center justify-center bg-white/90 backdrop-blur-sm border border-gray-200/50 rounded-xl shadow-lg transition-all duration-300 group overflow-hidden ${
                   isOpen 
                     ? "shadow-xl bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 border-[#00BFFF]/30 scale-110" 
                     : "hover:shadow-xl hover:bg-white hover:scale-105"
@@ -338,58 +330,38 @@ export default function EnhancedNavbar() {
         </div>
       </header>
 
-      {/* Enhanced Mobile Menu - Removed backdrop */}
-      <div className={`fixed top-0 right-0 z-40 lg:hidden transition-all duration-400 ${
+      {/* Enhanced Mobile/Tablet Menu - Fixed positioning */}
+      <div className={`fixed inset-0 z-40 xl:hidden transition-all duration-400 ${
         isOpen ? "visible" : "invisible"
-      }`}>
+      }`} style={{ top: `${navHeight}px` }}>
         
-        {/* Sliding Menu Panel */}
-        <div className={`h-screen w-full sm:w-96 bg-white shadow-2xl transition-all duration-400 ease-out overflow-hidden ${
+        {/* Backdrop for tablets */}
+        <div 
+          className={`absolute inset-0 bg-black/20 backdrop-blur-sm transition-all duration-400 ${
+            isOpen ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={closeMobileMenu}
+        />
+        
+        {/* Sliding Menu Panel - Better positioning for tablets */}
+        <div className={`absolute top-0 right-0 h-full w-full sm:w-96 md:w-80 lg:w-96 bg-white shadow-2xl transition-all duration-400 ease-out overflow-hidden ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}>
           
-
-
           <div className="relative h-full flex flex-col">
-            {/* Enhanced Header with slide-in animation */}
-            <div className={`relative flex items-center justify-between p-6 border-b border-gray-100 bg-gradient-to-r from-[#00BFFF]/5 to-[#1B365D]/5 transition-all duration-500 delay-100 ${
+            
+
+            {/* Tablet-only Header - Simplified */}
+            <div className={`hidden sm:block relative p-4 border-b border-gray-100 bg-gradient-to-r from-[#00BFFF]/5 to-[#1B365D]/5 transition-all duration-500 delay-100 ${
               isOpen ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
             }`}>
-              <div className="flex items-center space-x-4">
-                <div className="relative">
-                  <div className={`absolute inset-0 bg-gradient-to-r from-[#00BFFF]/20 to-[#1B365D]/20 rounded-full animate-pulse transition-opacity duration-500 ${
-                    isOpen ? "opacity-100" : "opacity-0"
-                  }`} />
-                  <Image
-                    src="/logo.png"
-                    alt="Company logo"
-                    width={64}
-                    height={64}
-                    className="relative w-16 h-16 transition-transform duration-500 hover:scale-105"
-                    priority
-                  />
-                </div>
-                <div>
-                  <div className="text-lg font-bold bg-gradient-to-r from-[#00BFFF] to-[#1B365D] bg-clip-text text-transparent">
-                    Viorix Digital
-                  </div>
-                  <div className="text-xs text-gray-500 mt-0.5">Digital Solutions</div>
-                </div>
-              </div>
               
-              <button
-                onClick={closeMobileMenu}
-                className="relative p-2.5 hover:bg-red-50 rounded-xl transition-all duration-200 group"
-              >
-                <X size={24} className="text-gray-600 group-hover:text-red-500 transition-colors duration-200" />
-                <div className="absolute inset-0 bg-red-100/50 rounded-xl scale-0 group-hover:scale-100 transition-transform duration-200" />
-              </button>
             </div>
 
             {/* Navigation with staggered animations */}
             <nav className="relative p-4 space-y-3 flex-grow overflow-y-auto">
               {links.map((link, index) => {
-                const isActive = pathname === link.href || (link.hasDropdown && (pathname.startsWith("/services") || servicesData.some(service => pathname.includes(service.category.toLowerCase().replace(/\s+/g, "-")))));
+                const isActive = pathname === link.href || (link.hasDropdown && (pathname.startsWith("/services") || servicesData.some(service => pathname.includes(service.slug))));
                 const delay = 150 + (index * 50);
                 
                 if (link.name === "Services") {
@@ -431,7 +403,7 @@ export default function EnhancedNavbar() {
                           {servicesData.map((service, serviceIndex) => (
                             <Link
                               key={service.category}
-                              href={`/services/${service.category.toLowerCase().replace(/\s+/g, "-")}`}
+                              href={`/services/${service.slug}`}
                               onClick={closeMobileMenu}
                               className={`flex items-center p-3 ml-4 rounded-xl bg-gradient-to-r from-gray-50 to-gray-50/50 border border-gray-100 hover:from-[#00BFFF]/10 hover:to-[#1B365D]/10 hover:border-[#00BFFF]/20 text-sm font-medium transition-all duration-300 group transform ${
                                 mobileServicesOpen ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0"

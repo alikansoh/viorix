@@ -383,8 +383,6 @@ const MobileApplicationsPage: React.FC = () => {
                 <ol className="flex justify-center space-x-2 text-blue-200">
                   <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
                   <li aria-hidden="true">/</li>
-                  <li><Link href="/services" className="hover:text-white transition-colors">Services</Link></li>
-                  <li aria-hidden="true">/</li>
                   <li className="text-white" aria-current="page">Mobile Applications</li>
                 </ol>
               </nav>
@@ -423,7 +421,7 @@ const MobileApplicationsPage: React.FC = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <Link
-                    href="#contact"
+                    href="/contact"
                     className="inline-flex items-center px-8 py-4 bg-white text-[#1B365D] font-semibold rounded-full hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
                     <Rocket className="w-5 h-5 mr-2" />
@@ -436,7 +434,7 @@ const MobileApplicationsPage: React.FC = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <Link
-                    href="#portfolio"
+                    href="/projects"
                     className="inline-flex items-center px-8 py-4 border-2 border-white text-white font-semibold rounded-full hover:bg-white/10 transition-all duration-300"
                   >
                     View App Portfolio
@@ -836,7 +834,7 @@ const MobileApplicationsPage: React.FC = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <Link
-                    href="tel:+441234567890"
+                    href="tel:+447464485026"
                     className="inline-flex items-center px-8 py-4 bg-white text-[#1B365D] font-semibold rounded-full hover:bg-blue-50 transition-all duration-300 shadow-lg"
                   >
                     <Phone className="w-5 h-5 mr-2" />
@@ -848,7 +846,7 @@ const MobileApplicationsPage: React.FC = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <Link
-                    href="mailto:hello@viorixdigital.com"
+                    href="mailto:info@viorix.co.uk"
                     className="inline-flex items-center px-8 py-4 border-2 border-white text-white font-semibold rounded-full hover:bg-white/10 transition-all duration-300"
                   >
                     <Mail className="w-5 h-5 mr-2" />
@@ -861,15 +859,15 @@ const MobileApplicationsPage: React.FC = () => {
               <div className="flex flex-wrap justify-center gap-8 text-sm text-blue-100 pt-8 border-t border-white/20">
                 <div className="flex items-center">
                   <Phone className="w-4 h-4 mr-2" />
-                  +44 123 456 7890
+                  +44 7464 485 026
                 </div>
                 <div className="flex items-center">
                   <Mail className="w-4 h-4 mr-2" />
-                  hello@viorixdigital.com
+                  info@viorix.co.uk
                 </div>
                 <div className="flex items-center">
                   <MapPin className="w-4 h-4 mr-2" />
-                  Luton, England, UK
+                  London, England, UK
                 </div>
               </div>
             </motion.div>
@@ -898,7 +896,7 @@ const MobileApplicationsPage: React.FC = () => {
                 },
                 "address": {
                   "@type": "PostalAddress",
-                  "addressLocality": "Luton",
+                  "addressLocality": "London",
                   "addressRegion": "England",
                   "addressCountry": "GB"
                 }

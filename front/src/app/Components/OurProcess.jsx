@@ -11,7 +11,7 @@ import {
   Sparkles,
   ArrowRight
 } from 'lucide-react';
-
+import Link from 'next/link';
 const steps = [
   {
     title: 'Discovery Call',
@@ -509,8 +509,9 @@ export default function OurSimpleProcess() {
               <p className="text-gray-600 mb-6">
                 Let's discuss your project and create something amazing together.
               </p>
+              <Link href="/contact" >
               <button
-                className="group w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#0047AB] to-[#00B4D8] text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:ring-4 focus:ring-blue-300/50 hover:scale-105 active:scale-95 focus:outline-none"
+                className="group cursor-pointer w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#0047AB] to-[#00B4D8] text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 focus:ring-4 focus:ring-blue-300/50 hover:scale-105 active:scale-95 focus:outline-none"
                 type="button"
                 aria-label="Start your web development project"
               >
@@ -520,6 +521,7 @@ export default function OurSimpleProcess() {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" aria-hidden="true" />
                 </span>
               </button>
+              </Link>
             </div>
           </aside>
         </div>

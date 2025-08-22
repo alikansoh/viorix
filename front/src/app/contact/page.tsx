@@ -19,6 +19,7 @@ import {
   Clock,
   Sparkle,
 } from "lucide-react";
+import Link from "next/link";
 
 const initialFormState = {
   name: "",
@@ -193,7 +194,7 @@ const ContactUs = () => {
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6">
           {/* Email */}
           <motion.a
-            href="mailto:hello@viorix.co.uk"
+            href="mailto:info@viorix.co.uk"
             className="flex flex-col items-center text-center p-6 rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -203,12 +204,12 @@ const ContactUs = () => {
               <Mail className="w-6 h-6 text-white" />
             </div>
             <h3 className="font-semibold text-[#1B365D] text-lg">Email</h3>
-            <p className="text-sm text-gray-700">hello@viorix.co.uk</p>
+            <p className="text-sm text-gray-700">info@viorix.co.uk</p>
           </motion.a>
 
           {/* Phone */}
           <motion.a
-            href="tel:+441234567890"
+            href="tel:+447464485026"
             className="flex flex-col items-center text-center p-6 rounded-2xl bg-white/40 backdrop-blur-lg border border-white/60 shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -218,7 +219,7 @@ const ContactUs = () => {
               <Phone className="w-6 h-6 text-white" />
             </div>
             <h3 className="font-semibold text-[#1B365D] text-lg">Phone</h3>
-            <p className="text-sm text-gray-700">+44 1234 567890</p>
+            <p className="text-sm text-gray-700">+44 7464 485026</p>
           </motion.a>
 
           {/* Office */}
@@ -233,8 +234,8 @@ const ContactUs = () => {
             </div>
             <h3 className="font-semibold text-[#1B365D] text-lg">Office</h3>
             <p className="text-sm text-gray-700">
-              London, UK
-              <br />
+            124 City Road, London, United Kingdom, EC1V 2NX
+            <br />
               Mon–Fri 09:00–18:00
             </p>
           </motion.div>
@@ -266,24 +267,24 @@ const ContactUs = () => {
               Quick Links
             </span>
             <div className="flex flex-col gap-2 items-center">
-              <a
-                href="/services"
+              <Link
+                href="/services/web-development"
                 className="text-[#00BFFF] font-medium hover:underline"
               >
-                Our Services
-              </a>
-              <a
-                href="/about"
+                <p>web development</p>
+              </Link>
+              <Link
+                href="/services/ui-ux-design"
                 className="text-[#00BFFF] font-medium hover:underline"
               >
-                About Us
-              </a>
-              <a
-                href="/faq"
+                <p>ui-ux design</p>
+              </Link>
+              <Link
+                href="/services/mobile-development"
                 className="text-[#00BFFF] font-medium hover:underline"
               >
-                FAQ
-              </a>
+                <p>mobile development</p>
+              </Link>
             </div>
           </div>
         </aside>

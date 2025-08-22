@@ -57,7 +57,7 @@ export default function Home() {
               "contactPoint": [
                 {
                   "@type": "ContactPoint",
-                  "telephone": "+44-123-456-7890",
+                  "telephone": "+44-7-464-485026",
                   "contactType": "Customer Service",
                   "areaServed": "GB",
                   "availableLanguage": ["English"]

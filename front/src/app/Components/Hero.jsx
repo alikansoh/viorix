@@ -308,7 +308,7 @@ const Hero = () => {
                   </Link>
 
                   <Link
-                    href="/services"
+                    href="/about"
                     className="group w-full sm:w-auto px-8 py-4 border-2 border-[#00BFFF] text-[#1B365D] font-semibold rounded-full hover:bg-gradient-to-r hover:from-[#00BFFF] hover:to-[#1B365D] hover:text-white hover:border-transparent transition-all duration-500 focus:ring-4 focus:ring-blue-300/50 backdrop-blur-sm bg-white/50 focus:outline-none"
                     aria-label="View our digital services and solutions"
                   >
@@ -323,7 +323,7 @@ const Hero = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.5 }}
                     >
-                      <span>View Our Services</span>
+                      <span>About Us</span>
                       <ArrowRight
                         className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
                         aria-hidden="true"
