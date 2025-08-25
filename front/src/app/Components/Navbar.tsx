@@ -13,7 +13,6 @@ import {
   User,
   FolderOpen,
   Mail,
-  X,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
