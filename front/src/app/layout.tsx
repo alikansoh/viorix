@@ -36,7 +36,7 @@ export const metadata: Metadata = {
       "We build modern, scalable websites and digital solutions for UK businesses. Viorix – your trusted partner in London.",
     images: [
       {
-        url: "https://viorix.co.uk/og-image.jpg", // ⚡️ حط صورة OG هنا
+        url: "https://viorix.co.uk/og.jpg", 
         width: 1200,
         height: 630,
         alt: "Viorix Digital Solutions",
