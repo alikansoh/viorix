@@ -1,4 +1,5 @@
-import { ArrowRight, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, Code, Smartphone, Globe, Rocket } from "lucide-react";
+import { ArrowRight, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, Code, Smartphone,  Rocket } from "lucide-react";
+import Link from "next/link";
 
 export default function WonderfulFooter() {
   return (
@@ -18,7 +19,7 @@ export default function WonderfulFooter() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-4xl mx-auto">
               <h3 className="text-3xl sm:text-4xl font-black mb-6 tracking-tight drop-shadow-md">
-                Stay Updated with{" "}
+                Stay Updated with {" "}
                 <span className="bg-gradient-to-r from-[#1AD1FF] via-[#00BFFF] to-[#0077FF] bg-clip-text text-transparent">
                   Digital Innovation
                 </span>
@@ -104,18 +105,16 @@ export default function WonderfulFooter() {
                 <h4 className="text-xl font-black text-white mb-8 tracking-tight drop-shadow-sm">Our Services</h4>
                 <ul className="space-y-4">
                   {[
-                    { name: 'Web Development', icon: Code },
-                    { name: 'Mobile App Development', icon: Smartphone },
-                    { name: 'E-commerce Solutions', icon: Globe },
-                    { name: 'Digital Marketing', icon: Rocket },
-                    { name: 'SEO Optimization', icon: null },
-                    { name: 'UI/UX Design', icon: null }
+                    { name: "Web Development", icon: Code, href: "/services/web-development" },
+                    { name: "Mobile App Development", icon: Smartphone, href: "/services/mobile-development" },
+                    { name: "Digital Marketing", icon: Rocket, href: "/services/digital-marketing" },
+                    { name: "UI/UX Design", icon: null, href: "/services/ui-ux-design" },
                   ].map((service) => (
                     <li key={service.name}>
-                      <a href="#" className="text-[#1AD1FF] hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center gap-3 group p-2 rounded-xl hover:bg-white/10">
+                      <Link href={service.href} className="text-[#1AD1FF] hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center gap-3 group p-2 rounded-xl hover:bg-white/10">
                         <ArrowRight className="w-4 h-4 text-[#00BFFF] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         <span className="font-medium">{service.name}</span>
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -125,12 +124,21 @@ export default function WonderfulFooter() {
               <div>
                 <h4 className="text-xl font-black text-white mb-8 tracking-tight drop-shadow-sm">Company</h4>
                 <ul className="space-y-4">
-                  {['About Us', 'Our Process', 'Case Studies', 'Blog', 'Careers', 'Contact'].map((item) => (
-                    <li key={item}>
-                      <a href="#" className="text-[#1AD1FF] hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center gap-3 group p-2 rounded-xl hover:bg-white/10">
+                  {[
+                    { name: "About Us", href: "/about" },
+                    
+                    { name: "Blog", href: "/blogs" },
+                    { name: "Careers", href: "#" },
+                    { name: "Contact", href: "/contact" },
+                    { name: "Privacy Policy", href: "/privacy" },
+                    { name: "Terms & Conditions", href: "/terms" },
+                    { name: "Cookies Policy", href: "/cookies" },
+                  ].map((item) => (
+                    <li key={item.name}>
+                      <Link href={item.href} className="text-[#1AD1FF] hover:text-white hover:translate-x-2 transition-all duration-300 flex items-center gap-3 group p-2 rounded-xl hover:bg-white/10">
                         <ArrowRight className="w-4 h-4 text-[#00BFFF] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        <span className="font-medium">{item}</span>
-                      </a>
+                        <span className="font-medium">{item.name}</span>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -156,10 +164,10 @@ export default function WonderfulFooter() {
               {/* Social Links */}
               <div className="flex items-center gap-3">
                 {[
-                  { icon: Facebook, label: 'Facebook', href: '#' },
-                  { icon: Twitter, label: 'Twitter', href: '#' },
-                  { icon: Linkedin, label: 'LinkedIn', href: '#' },
-                  { icon: Instagram, label: 'Instagram', href: '#' }
+                  { icon: Facebook, label: "Facebook", href: "#" },
+                  { icon: Twitter, label: "Twitter", href: "#" },
+                  { icon: Linkedin, label: "LinkedIn", href: "#" },
+                  { icon: Instagram, label: "Instagram", href: "#" },
                 ].map(({ icon: Icon, label, href }) => (
                   <a
                     key={label}

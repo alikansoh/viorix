@@ -12,7 +12,6 @@ import {
   Lightbulb,
   MousePointer,
   Phone,
-  Sparkles,
   PenTool,
   DollarSign,
   Rocket,
@@ -293,10 +292,7 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              <div className="inline-flex items-center px-4 py-2 bg-cyan-500/20 backdrop-blur-sm rounded-full border border-cyan-300/30 mb-6">
-                <Sparkles className="w-5 h-5 text-cyan-300 mr-2" />
-                <span className="text-cyan-100 font-medium">#1 Digital Marketing Agency</span>
-              </div>
+             
 
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight">
                 Grow Your Business With
