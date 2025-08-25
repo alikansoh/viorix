@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import emailjs from "@emailjs/browser";
 import {
   Mail,
   Phone,
@@ -18,8 +19,13 @@ import {
   Headphones,
   Clock,
   Sparkle,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
 import Link from "next/link";
+
+// Initialize EmailJS with your public key
+emailjs.init("_-PS7ydJYxLOybs71"); // Replace with your actual public key
 
 const initialFormState = {
   name: "",
@@ -112,6 +118,7 @@ const ContactUs = () => {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle"
   );
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -122,12 +129,46 @@ const ContactUs = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("sending");
-    // Simulate API call
-    setTimeout(() => {
-      setStatus("sent");
-      setForm(initialFormState);
-      setTimeout(() => setStatus("idle"), 3500);
-    }, 1500);
+    setErrorMessage("");
+
+    // EmailJS configuration
+    const serviceID = "service_c73djix"; // Replace with your EmailJS service ID
+    const templateID = "template_m9r6dcl"; // Replace with your EmailJS template ID
+
+    // Template parameters that will be sent to your email template
+    const templateParams = {
+      from_name: form.name,
+      from_email: form.email,
+      company: form.company || "Not specified",
+      message: form.message,
+      to_name: "Viorix Digital Solutions",
+    };
+
+    try {
+      const result = await emailjs.send(serviceID, templateID, templateParams);
+      
+      if (result.status === 200) {
+        setStatus("sent");
+        setForm(initialFormState);
+        // Auto-hide success message after 5 seconds
+        setTimeout(() => setStatus("idle"), 5000);
+      } else {
+        throw new Error("Email sending failed");
+      }
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      setStatus("error");
+      setErrorMessage(
+        error instanceof Error 
+          ? error.message 
+          : "Failed to send message. Please try again or contact us directly."
+      );
+      // Auto-hide error message after 5 seconds
+      setTimeout(() => {
+        setStatus("idle");
+        setErrorMessage("");
+      }, 5000);
+    }
   };
 
   return (
@@ -295,6 +336,7 @@ const ContactUs = () => {
         {/* Floating icons */}
         <Sparkle className="absolute top-5 right-6 w-6 h-6 text-[#00BFFF]/40 animate-spin-slow" />
         <div className="absolute left-0 bottom-0 w-24 h-24 bg-gradient-to-tr from-[#00BFFF]/20 to-[#1B365D]/15 rounded-full blur-2xl opacity-30"></div>
+        
         <form
           className="grid grid-cols-1 gap-6"
           onSubmit={handleSubmit}
@@ -319,6 +361,7 @@ const ContactUs = () => {
                 className="w-full px-4 py-3 rounded-lg border border-blue-100 bg-white focus:outline-none focus:ring-2 focus:ring-[#00BFFF] transition"
                 placeholder="Your Name"
                 autoComplete="name"
+                disabled={status === "sending"}
               />
             </div>
             <div>
@@ -339,6 +382,7 @@ const ContactUs = () => {
                 className="w-full px-4 py-3 rounded-lg border border-blue-100 bg-white focus:outline-none focus:ring-2 focus:ring-[#00BFFF] transition"
                 placeholder="you@email.com"
                 autoComplete="email"
+                disabled={status === "sending"}
               />
             </div>
           </div>
@@ -359,6 +403,7 @@ const ContactUs = () => {
               className="w-full px-4 py-3 rounded-lg border border-blue-100 bg-white focus:outline-none focus:ring-2 focus:ring-[#00BFFF] transition"
               placeholder="Your Company"
               autoComplete="organization"
+              disabled={status === "sending"}
             />
           </div>
           <div>
@@ -378,36 +423,55 @@ const ContactUs = () => {
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg border border-blue-100 bg-white focus:outline-none focus:ring-2 focus:ring-[#00BFFF] transition resize-none"
               placeholder="How can we help you?"
+              disabled={status === "sending"}
             ></textarea>
           </div>
+          
           <motion.button
             type="submit"
             disabled={status === "sending"}
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-semibold rounded-full shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 focus:ring-4 focus:ring-blue-300/50"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-semibold rounded-full shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-105 focus:ring-4 focus:ring-blue-300/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            whileHover={status !== "sending" ? { scale: 1.05 } : {}}
+            whileTap={status !== "sending" ? { scale: 0.98 } : {}}
           >
-            <Send className="w-5 h-5" />
+            <Send className={`w-5 h-5 ${status === "sending" ? "animate-pulse" : ""}`} />
             {status === "sending" ? "Sending..." : "Send Message"}
           </motion.button>
+
+          {/* Success Message */}
           {status === "sent" && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center mt-2 text-[#00BFFF] font-medium"
+              initial={{ opacity: 0, y: 10, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              className="flex items-center justify-center gap-2 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700"
             >
-              Thank you for contacting us! We’ll get back to you soon.
+              <CheckCircle className="w-5 h-5 text-green-500" />
+              <div className="text-center">
+                <p className="font-medium">Message sent successfully!</p>
+                <p className="text-sm">Thank you for contacting us. We&apos;ll get back to you within 24 hours.</p>
+              </div>
             </motion.div>
           )}
+
+          {/* Error Message */}
           {status === "error" && (
-            <div className="text-center mt-2 text-red-500 font-medium">
-              Something went wrong. Please try again.
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              className="flex items-center justify-center gap-2 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700"
+            >
+              <XCircle className="w-5 h-5 text-red-500" />
+              <div className="text-center">
+                <p className="font-medium">Failed to send message</p>
+                <p className="text-sm">{errorMessage || "Please try again or contact us directly at info@viorix.co.uk"}</p>
+              </div>
+            </motion.div>
           )}
         </form>
+
         <div className="mt-8 text-center">
           <span className="inline-block bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 text-[#1B365D] font-medium px-5 py-2 rounded-full shadow">
-            Let’s build your next success story together!
+            Let&apos;s build your next success story together!
           </span>
         </div>
       </section>

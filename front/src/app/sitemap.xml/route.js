@@ -1,4 +1,4 @@
-import { POSTS } from '../../blogs/posts';
+import { POSTS } from '../blogs/posts';
 
 const BASE_URL = 'https://www.viorix.co.uk';
 
