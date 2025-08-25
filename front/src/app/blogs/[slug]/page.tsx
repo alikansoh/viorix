@@ -20,13 +20,16 @@ export async function generateMetadata(
   };
 }
 
+// ✅ Fixed interface - params should be a Promise in Next.js 15
 interface BlogPostPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  // ✅ Await the params Promise
+  const { slug } = await params;
 
-  const post = POSTS.find((p) => p.slug === params.slug);
+  const post = POSTS.find((p) => p.slug === slug);
 
   if (!post) return notFound();
 
