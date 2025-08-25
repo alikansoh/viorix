@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useMemo } from "react";
 import { POSTS } from "./posts";
-
+import Image from "next/image";
 const POSTS_PER_PAGE = 6;
 
 export default function BlogsPage() {
@@ -160,8 +160,10 @@ export default function BlogsPage() {
                 {/* Image Container with Gradient Overlay */}
                 <div className="relative h-56 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-t from-[#1B365D]/20 via-transparent to-transparent z-10"></div>
-                  <img
+                  <Image
                     src={post.image}
+                    width={600}
+                    height={400}
                     alt={post.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />

@@ -1,18 +1,31 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { POSTS } from "../posts";
+import Image from "next/image";
+import { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = POSTS.find((p) => p.slug === params.slug);
-  if (!post) return { title: "Blog Not Found" };
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
+  const { slug } = await params; // ✅ must await
+
+  const post = POSTS.find((p) => p.slug === slug);
+  if (!post) {
+    return { title: "Blog Not Found" };
+  }
 
   return {
-    title: post.title + " | Viorix Blogs",
+    title: `${post.title} | Viorix Blogs`,
     description: post.description,
   };
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
+interface BlogPostPageProps {
+  params: { slug: string };
+}
+
+export default function BlogPostPage({ params }: BlogPostPageProps) {
+
   const post = POSTS.find((p) => p.slug === params.slug);
 
   if (!post) return notFound();
@@ -76,10 +89,12 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               {/* Hero Image */}
               <div className="relative h-64 md:h-80 lg:h-96 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1B365D]/40 via-transparent to-transparent z-10"></div>
-                <img
+                <Image
                   src={post.image}
                   alt={post.title}
                   className="w-full h-full object-cover"
+                  width={1200}
+                  height={600}
                 />
                 
                 {/* Article Badge */}
@@ -221,9 +236,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                     className="group block bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-blue-100/50 hover:-translate-y-1"
                   >
                     <div className="relative h-40 overflow-hidden">
-                      <img
+                      <Image
                         src={relatedPost.image}
                         alt={relatedPost.title}
+                        width={400}
+                        height={200}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#1B365D]/20 via-transparent to-transparent"></div>

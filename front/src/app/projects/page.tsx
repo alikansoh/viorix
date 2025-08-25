@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Grid, List, X, ChevronLeft, ChevronRight, Eye, ExternalLink } from 'lucide-react';
 import { expandedTechStack, projects, stats } from './portfolioData';
 import { Project, TechStack } from './schema';
+import Image from 'next/image';
 
 const ProjectsPortfolio: React.FC = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -95,9 +96,11 @@ const ProjectsPortfolio: React.FC = () => {
       data-testid={`tech-${tech.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
     >
       <div className="w-12 h-12 mx-auto mb-3 p-2 bg-gradient-to-br from-blue-50/30 to-indigo-50/20 rounded-lg group-hover:from-[#00BFFF]/10 group-hover:to-[#1B365D]/10 transition-all duration-300 flex items-center justify-center">
-        <img
+        <Image
           src={tech.icon}
           alt={tech.name}
+          width={500}
+          height={500}
           className="w-full h-full object-contain filter group-hover:scale-110 transition-transform duration-300"
           onError={(e) => {
             e.currentTarget.style.display = 'none';
@@ -130,9 +133,11 @@ const ProjectsPortfolio: React.FC = () => {
       <div className={`relative overflow-hidden ${
         viewMode === 'list' ? 'md:w-2/5 h-80' : 'h-80'
       }`}>
-        <img
+        <Image
           src={project.image}
           alt={project.title}
+          width={800}
+          height={600}
           className={`w-full h-full object-contain transition-all duration-1000 ${
             hoveredProject === project.id ? 'scale-105 brightness-110' : 'scale-100'
           }`}
