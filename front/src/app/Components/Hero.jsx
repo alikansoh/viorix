@@ -87,7 +87,7 @@ const Hero = () => {
           {/* Animated geometric shapes - Respects prefers-reduced-motion */}
           <div className="absolute top-0 left-0 w-full h-full opacity-[0.03]">
             <motion.div
-              className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] rounded-full blur-3xl"
+              className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] rounded-full blur-3xl"
               animate={{
                 scale: [1, 1.2, 1],
                 opacity: [0.3, 0.6, 0.3],
