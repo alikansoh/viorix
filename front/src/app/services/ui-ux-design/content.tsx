@@ -960,72 +960,68 @@ const UIUXDesignPage: React.FC = () => {
 
         {/* Schema Markup for SEO */}
         <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Professional UI/UX Design Services",
+      "provider": {
+        "@type": "Organization",
+        "name": "Viorix Digital Solutions",
+        "url": "https://viorix.co.uk",
+        "logo": "https://viorix.co.uk/logo.png",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+44-7464-485026",
+          "contactType": "customer service",
+          "areaServed": "GB",
+          "availableLanguage": "English"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "London",
+          "addressRegion": "England",
+          "addressCountry": "GB"
+        }
+      },
+      "serviceType": "UI/UX Design",
+      "description": "Professional UI/UX design services including user experience research, interface design, mobile app design, and user testing for optimal conversion rates.",
+      "areaServed": "United Kingdom",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "UI/UX Design Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
               "@type": "Service",
-              "name": "Professional UI/UX Design Services",
-              "provider": {
-                "@type": "Organization",
-                "name": "Viorix Digital Solutions",
-                "url": "https://viorixdigital.com",
-                "logo": "https://viorixdigital.com/logo.png",
-                "contactPoint": {
-                  "@type": "ContactPoint",
-                  "telephone": "+44-123-456-7890",
-                  "contactType": "customer service",
-                  "areaServed": "GB",
-                  "availableLanguage": "English"
-                },
-                "address": {
-                  "@type": "PostalAddress",
-                  "addressLocality": "London",
-                  "addressRegion": "England",
-                  "addressCountry": "GB"
-                }
-              },
-              "serviceType": "UI/UX Design",
-              "description": "Professional UI/UX design services including user experience research, interface design, mobile app design, and user testing for optimal conversion rates.",
-              "areaServed": "United Kingdom",
-              "hasOfferCatalog": {
-                "@type": "OfferCatalog",
-                "name": "UI/UX Design Services",
-                "itemListElement": [
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "User Experience (UX) Design",
-                      "description": "Comprehensive UX research and design for intuitive user experiences"
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "User Interface (UI) Design",
-                      "description": "Beautiful, modern interfaces that align with your brand"
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "Mobile App Design",
-                      "description": "Platform-specific mobile designs for iOS and Android"
-                    }
-                  }
-                ]
-              },
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.9",
-                "reviewCount": "150"
-              }
-            })
-          }}
-        />
+              "name": "User Experience (UX) Design",
+              "description": "Comprehensive UX research and design for intuitive user experiences"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "User Interface (UI) Design",
+              "description": "Beautiful, modern interfaces that align with your brand"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Mobile App Design",
+              "description": "Platform-specific mobile designs for iOS and Android"
+            }
+          }
+        ]
+      }
+    }),
+  }}
+/>
+
       </div>
     </>
   );

@@ -632,6 +632,78 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Service",
+          "name": "Social Media Advertising",
+          "provider": {
+            "@type": "Organization",
+            "name": "Viorix Digital Solutions",
+            "url": "https://viorix.co.uk",
+            "logo": "https://viorix.co.uk/logo.png",
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+44-7464-485026",
+              "contactType": "customer service",
+              "areaServed": "GB",
+              "availableLanguage": "English"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "London",
+              "addressRegion": "England",
+              "addressCountry": "GB"
+            }
+          },
+          "serviceType": "Social Media Advertising",
+          "description": "Create and manage high-performing social media campaigns that drive measurable results."
+        },
+        {
+          "@type": "Service",
+          "name": "Logo & Branding Design",
+          "provider": {
+            "@type": "Organization",
+            "name": "Viorix Digital Solutions",
+            "url": "https://viorix.co.uk",
+            "logo": "https://viorix.co.uk/logo.png"
+          },
+          "serviceType": "Branding & Design",
+          "description": "Develop a professional brand identity that stands out and resonates with your audience."
+        },
+        {
+          "@type": "Service",
+          "name": "Analytics & Performance",
+          "provider": {
+            "@type": "Organization",
+            "name": "Viorix Digital Solutions",
+            "url": "https://viorix.co.uk",
+            "logo": "https://viorix.co.uk/logo.png"
+          },
+          "serviceType": "Analytics",
+          "description": "Track, analyze, and optimize campaigns to maximize ROI."
+        },
+        {
+          "@type": "Service",
+          "name": "Content Creation",
+          "provider": {
+            "@type": "Organization",
+            "name": "Viorix Digital Solutions",
+            "url": "https://viorix.co.uk",
+            "logo": "https://viorix.co.uk/logo.png"
+          },
+          "serviceType": "Content Creation",
+          "description": "Produce high-quality content that engages your audience and supports your campaigns."
+        }
+      ]
+    })
+  }}
+/>
+
       </div>
   );
 }

@@ -876,72 +876,68 @@ const MobileApplicationsPage: React.FC = () => {
 
         {/* Schema Markup for SEO */}
         <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Professional Mobile App Development Services",
+      "provider": {
+        "@type": "Organization",
+        "name": "Viorix Digital Solutions",
+        "url": "https://viorix.co.uk",
+        "logo": "https://viorix.co.uk/logo.png",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+44-7464-485026",
+          "contactType": "customer service",
+          "areaServed": "GB",
+          "availableLanguage": "English"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "London",
+          "addressRegion": "England",
+          "addressCountry": "GB"
+        }
+      },
+      "serviceType": "Mobile Application Development",
+      "description": "Professional mobile app development services for iOS and Android including native apps, cross-platform solutions, and mobile backend services.",
+      "areaServed": "United Kingdom",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Mobile App Development Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
               "@type": "Service",
-              "name": "Professional Mobile App Development Services",
-              "provider": {
-                "@type": "Organization",
-                "name": "Viorix Digital Solutions",
-                "url": "https://viorixdigital.com",
-                "logo": "https://viorixdigital.com/logo.png",
-                "contactPoint": {
-                  "@type": "ContactPoint",
-                  "telephone": "+44-123-456-7890",
-                  "contactType": "customer service",
-                  "areaServed": "GB",
-                  "availableLanguage": "English"
-                },
-                "address": {
-                  "@type": "PostalAddress",
-                  "addressLocality": "London",
-                  "addressRegion": "England",
-                  "addressCountry": "GB"
-                }
-              },
-              "serviceType": "Mobile Application Development",
-              "description": "Professional mobile app development services for iOS and Android including native apps, cross-platform solutions, and mobile backend services.",
-              "areaServed": "United Kingdom",
-              "hasOfferCatalog": {
-                "@type": "OfferCatalog",
-                "name": "Mobile App Development Services",
-                "itemListElement": [
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "Native Mobile Apps",
-                      "description": "High-performance native applications for iOS and Android"
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "Cross-Platform Development",
-                      "description": "React Native and Flutter applications"
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "Mobile Backend Services",
-                      "description": "APIs and cloud infrastructure for mobile apps"
-                    }
-                  }
-                ]
-              },
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.8",
-                "reviewCount": "100"
-              }
-            })
-          }}
-        />
+              "name": "Native Mobile Apps",
+              "description": "High-performance native applications for iOS and Android"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Cross-Platform Development",
+              "description": "React Native and Flutter applications"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Mobile Backend Services",
+              "description": "APIs and cloud infrastructure for mobile apps"
+            }
+          }
+        ]
+      }
+    }),
+  }}
+/>
+
       </div>
     </>
   );

@@ -1117,69 +1117,63 @@ const WebDevelopmentPage: React.FC = () => {
     __html: JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Service",
-      name: "Professional Web Development Services",
-      provider: {
+      "name": "Professional Web Development Services",
+      "provider": {
         "@type": "Organization",
-        name: "Viorix Digital Solutions",
-        url: "https://viorix.co.uk",
-        logo: "https://viorix.co.uk/logo.png",
-        contactPoint: {
+        "name": "Viorix Digital Solutions",
+        "url": "https://viorix.co.uk",
+        "logo": "https://viorix.co.uk/logo.png",
+        "contactPoint": {
           "@type": "ContactPoint",
-          telephone: "+44-123-456-7890",
-          contactType: "customer service",
-          areaServed: "GB",
-          availableLanguage: "English",
+          "telephone": "+44-7464-485026",
+          "contactType": "customer service",
+          "areaServed": "GB",
+          "availableLanguage": "English"
         },
-        address: {
+        "address": {
           "@type": "PostalAddress",
-          addressLocality: "London",
-          addressRegion: "England",
-          addressCountry: "GB",
-        },
+          "addressLocality": "London",
+          "addressRegion": "England",
+          "addressCountry": "GB"
+        }
       },
-      serviceType: "Web Development",
-      description:
-        "Professional web development services including custom web applications, responsive design, e-commerce development, and SEO optimization.",
-      areaServed: "United Kingdom",
-      hasOfferCatalog: {
+      "serviceType": "Web Development",
+      "description": "Professional web development services including custom web applications, responsive design, e-commerce development, and SEO optimization.",
+      "areaServed": "United Kingdom",
+      "hasOfferCatalog": {
         "@type": "OfferCatalog",
-        name: "Web Development Services",
-        itemListElement: [
+        "name": "Web Development Services",
+        "itemListElement": [
           {
             "@type": "Offer",
-            itemOffered: {
+            "itemOffered": {
               "@type": "Service",
-              name: "Custom Web Development",
-              description:
-                "Bespoke web applications built with modern frameworks",
-            },
+              "name": "Custom Web Development",
+              "description": "Bespoke web applications built with modern frameworks"
+            }
           },
           {
             "@type": "Offer",
-            itemOffered: {
+            "itemOffered": {
               "@type": "Service",
-              name: "Responsive Web Design",
-              description: "Mobile-first approach for all devices",
-            },
+              "name": "Responsive Web Design",
+              "description": "Mobile-first approach for all devices"
+            }
           },
           {
             "@type": "Offer",
-            itemOffered: {
+            "itemOffered": {
               "@type": "Service",
-              name: "E-commerce Development",
-              description: "Complete online store solutions",
-            },
-          },
-        ],
-      },
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "5.0",
-        reviewCount: "50",
-      },
+              "name": "E-commerce Development",
+              "description": "Complete online store solutions"
+            }
+          }
+        ]
+      }
     }),
   }}
 />
+
 
       </div>
     </>
