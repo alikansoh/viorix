@@ -1,6 +1,6 @@
 import { POSTS } from '../blogs/posts';
 
-const BASE_URL = 'https://www.viorix.co.uk';
+const BASE_URL = 'https://viorix.co.uk';
 
 const staticPages = [
   { url: '', changefreq: 'weekly', priority: 1.0 },
