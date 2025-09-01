@@ -3,7 +3,10 @@ import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
-import Script from "next/script"; // 👈 لازم تستورد Script
+import Script from "next/script"; 
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
+
 
 const inter = Inter({
   subsets: ["latin"],
@@ -76,6 +79,8 @@ export default function RootLayout({
         <Navbar />
         <main className="pt-16">{children}</main>
         <Footer />
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
