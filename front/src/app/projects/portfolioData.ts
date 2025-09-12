@@ -208,7 +208,27 @@ export const projects: Project[] = [
     status: "Live",
     featured: true,
     liveUrl: "https://hopebtc.co.uk"
-  }
+  },
+  {
+  id: 6,
+  title: "Hermeco",
+  subtitle: "Construction & Industrial Services Website",
+  description: "A modern website with a CMS for managing construction and industrial projects.",
+  longDescription:
+    "We built a responsive website for Hermeco, a UK-based construction and industrial services company. The main focus was creating a secure CMS so the client can easily manage and update project portfolios. The site was developed with Next.js and MongoDB, ensuring fast performance, SEO optimisation, and a professional admin dashboard for content management.",
+  image: "/hermeco.png",
+  images: ["/hermeco.png"],
+  client: "Hermeco",
+  duration: "1 months",
+  year: "2025",
+  category: "Websites",
+  tags: ["Next.js", "MongoDB", "TypeScript", "Tailwind CSS"],
+  technologies: ["Next.js", "TypeScript", "MongoDB", "Tailwind CSS"],
+  status: "Live",
+  featured: true,
+  liveUrl: "https://hermeco.co.uk"
+}
+
 ];
 
 export const stats: Stat[] = [
