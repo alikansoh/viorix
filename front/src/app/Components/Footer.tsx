@@ -164,10 +164,11 @@ export default function WonderfulFooter() {
               {/* Social Links */}
               <div className="flex items-center gap-3">
                 {[
-                  { icon: Facebook, label: "Facebook", href: "#" },
-                  { icon: Twitter, label: "Twitter", href: "#" },
-                  { icon: Linkedin, label: "LinkedIn", href: "#" },
-                  { icon: Instagram, label: "Instagram", href: "#" },
+                  { icon: Facebook, label: "Facebook", href: "https://www.facebook.com/share/1Vy4drkEKs/?mibextid=wwXIfr" },
+
+              
+                  { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/viorix-digital-solutions/" },
+                  { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/viorix_digital_solutions/" },
                 ].map(({ icon: Icon, label, href }) => (
                   <a
                     key={label}

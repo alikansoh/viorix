@@ -61,19 +61,19 @@ const socials = [
   {
     icon: Linkedin,
     name: "LinkedIn",
-    url: "https://www.linkedin.com/company/viorix-digital",
+    url: "https://www.linkedin.com/company/viorix-digital-solutions",
     color: "text-[#0077B5]",
   },
   {
     icon: Instagram,
     name: "Instagram",
-    url: "https://instagram.com/viorixdigital",
+    url: "https://instagram.com/viorix_digital_solutions",
     color: "text-[#E4405F]",
   },
   {
     icon: Facebook,
     name: "Facebook",
-    url: "https://twitter.com/viorixdigital",
+    url: "https://www.facebook.com/share/1Vy4drkEKs/?mibextid=wwXIfr",
     color: "text-[#1DA1F2]",
   },
 ];
