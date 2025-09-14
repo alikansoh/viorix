@@ -1,4 +1,4 @@
-import { ArrowRight, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, Code, Smartphone,  Rocket } from "lucide-react";
+import { ArrowRight, Mail, Phone, MapPin, Facebook, Linkedin, Instagram, Code, Smartphone,  Rocket } from "lucide-react";
 import Link from "next/link";
 
 export default function WonderfulFooter() {
