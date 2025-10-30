@@ -868,7 +868,7 @@ const OptimizedLandingPage: React.FC = () => {
                 Our Recent Work
               </h2>
               <p className="text-gray-600">
-                Case studies & recent projects that delivered measurable resultts
+                Case studies & recent projects that delivered measurable results
               </p>
             </div>
 
