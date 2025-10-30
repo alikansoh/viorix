@@ -560,7 +560,7 @@
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <div ref={formRef} className="text-center mb-8">
         <h2 className="text-3xl lg:text-4xl font-bold text-[#1B365D] mb-2">
-          Get Your Free Quote in 60 Seconds
+        Join 50+ UK businesses who trusted Viorix to build their online presence
         </h2>
         <p className="text-gray-600">
           No commitment • No spam • Response in 2 hours
