@@ -266,7 +266,7 @@ export default function EnhancedNavbar() {
               {/* Desktop CTA */}
               <div className="hidden lg:block">
                 <Link
-                  href="/contact"
+                  href="/web-quote"
                   className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-200"
                 >
                   <span>Get Free Quote</span>
@@ -277,7 +277,7 @@ export default function EnhancedNavbar() {
               {/* Mobile CTA */}
               <div className="block lg:hidden">
                 <Link
-                  href="/contact"
+                  href="/web-quote"
                   className="inline-flex items-center space-x-1 px-4 py-2 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-semibold rounded-lg text-sm"
                 >
                   <span>Quote</span>
@@ -380,7 +380,7 @@ export default function EnhancedNavbar() {
               {/* Mobile CTA */}
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <Link
-                  href="/contact"
+                  href="/web-quote"
                   onClick={closeMobileMenu}
                   className="w-full flex items-center justify-center space-x-2 py-3 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-semibold rounded-lg"
                 >

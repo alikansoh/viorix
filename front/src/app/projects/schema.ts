@@ -6,6 +6,8 @@ export interface TechStack {
   }
   
   export interface Project {
+    link: string | undefined;
+    alt: string;
     id: number;
     title: string;
     subtitle: string;
