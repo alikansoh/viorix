@@ -1185,7 +1185,7 @@
                 Ready to Transform Your Business?
               </h2>
               <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                Join 50+ successful UK businesses. Get your free quote in 60 seconds.
+                Join 50+ successful UK businesses. Get your free quote in 2 minutes.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
