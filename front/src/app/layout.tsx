@@ -1,12 +1,13 @@
 import "./globals.css";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
+import FloatingButtons from "./Components/FloatingButtons";
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import Script from "next/script";
 
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -46,117 +47,119 @@ export const metadata: Metadata = {
     title: "London's Premier Web Development Agency | Viorix Digital Solutions",
     description:
       "Trusted London web development agency serving UK businesses since [year]. From startups in Shoreditch to enterprises in Canary Wharf, we deliver exceptional digital solutions across the UK.",
-    
+    images: [
+      {
+        url: "https://viorix.co.uk/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Viorix Digital Solutions - London web development agency",
+      },
+    ],
   },
- 
   alternates: {
     canonical: "https://viorix.co.uk",
   },
   other: {
-    "geo.region": "GB-LND",
-    "geo.placename": "London",
-    "geo.position": "51.5074;-0.1278", // London coordinates
-    "ICBM": "51.5074, -0.1278",
+    // Add any verification meta tags here if needed:
+    // "google-site-verification": "your_token"
   },
 };
 
-// JSON-LD structured data for local business
 const structuredData = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": ["Organization", "ProfessionalService", "SoftwareCompany"],
   "@id": "https://viorix.co.uk#organization",
-  "name": "Viorix Digital Solutions",
-  "alternateName": "Viorix",
-  "description": "Professional web development and digital solutions agency serving London and the UK",
-  "url": "https://viorix.co.uk",
-  "telephone": "+44-7464-485026",
-  "email": "hello@viorix.co.uk",
-  "address": {
+  name: "Viorix Digital Solutions",
+  alternateName: "Viorix",
+  description: "Professional web development and digital solutions agency serving London and the UK",
+  url: "https://viorix.co.uk",
+  telephone: "+447464485026",
+  email: "hello@viorix.co.uk",
+  address: {
     "@type": "PostalAddress",
-    "streetAddress": "124 City Road",
-    "addressLocality": "London",
-    "addressRegion": "England",
-    "postalCode": "EC1V 2NX",
-    "addressCountry": "GB"
+    streetAddress: "124 City Road",
+    addressLocality: "London",
+    addressRegion: "England",
+    postalCode: "EC1V 2NX",
+    addressCountry: "GB",
   },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": "51.5074",
-    "longitude": "-0.1278"
-  },
-  "areaServed": [
+  logo: "https://viorix.co.uk/logo.png",
+  image: "https://viorix.co.uk/og-image.png",
+  contactPoint: [
     {
-      "@type": "City",
-      "name": "London"
+      "@type": "ContactPoint",
+      telephone: "+447464485026",
+      contactType: "sales",
+      areaServed: "GB",
+      availableLanguage: ["English"],
     },
-    {
-      "@type": "Country",
-      "name": "United Kingdom"
-    }
   ],
-  "serviceArea": {
-    "@type": "GeoCircle",
-    "geoMidpoint": {
-      "@type": "GeoCoordinates",
-      "latitude": "51.5074",
-      "longitude": "-0.1278"
-    },
-    "geoRadius": "150000" // 150km radius from London - covers most of Southern England
+  areaServed: {
+    "@type": "Country",
+    name: "United Kingdom",
   },
-  "priceRange": "££-£££",
-  "openingHours": "Mo-Fr 09:00-18:00",
-  "sameAs": [
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "18:00",
+    },
+  ],
+  priceRange: "££-£££",
+  sameAs: [
     "https://www.linkedin.com/company/viorix-digital-solutions",
     "https://www.instagram.com/viorix_digital_solutions",
-    // Add your actual social media URLs
-  ]
+  ],
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-GB" className={inter.variable}>
       <head>
-        {/* JSON-LD structured data for local SEO */}
+        {/* Minimal server-side CSS for any global animations you want server-rendered */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            /* Minimal non-styled-jsx CSS (safe in server component) */
+            @keyframes float {
+              0%, 100% { transform: translateY(0px); }
+              50% { transform: translateY(-5px); }
+            }
+            .float-animation { animation: float 3s ease-in-out infinite; }
+          `
+        }} />
+      </head>
+      <body className="font-sans">
+        {/* JSON-LD structured data: non-blocking */}
         <Script
-          id="structured-data"
+          id="ld-json"
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData),
-          }}
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        
-        {/* Google tag (gtag.js) */}
+
+        {/* Google tag (gtag.js) - load after interactive to avoid blocking */}
         <Script
-          async
           src="https://www.googletagmanager.com/gtag/js?id=G-WTB9BL73X4"
+          strategy="afterInteractive"
         />
-        <Script id="google-analytics">
+        <Script id="gtag-init" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-WTB9BL73X4', {
-              custom_map: {'custom_parameter_1': 'location'},
-              location: 'London'
-            });
+            gtag('config', 'G-WTB9BL73X4');
           `}
         </Script>
 
-        {/* Additional meta tags for local SEO */}
-        <meta name="geo.region" content="GB-LND" />
-        <meta name="geo.placename" content="London" />
-        <meta name="geo.position" content="51.5074;-0.1278" />
-        <meta name="ICBM" content="51.5074, -0.1278" />
-        <meta name="DC.title" content="London Web Development Agency - Viorix Digital Solutions" />
-      </head>
-      <body className="font-sans">
         <Navbar />
         <main className="pt-16">{children}</main>
         <Footer />
+
+        {/* Floating buttons moved into a client component to avoid styled-jsx errors */}
+        <FloatingButtons />
+
+        {/* Performance & analytics */}
         <SpeedInsights />
         <Analytics />
       </body>

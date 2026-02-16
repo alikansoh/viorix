@@ -32,6 +32,7 @@ import {
   DollarSign,
   ChevronDown,
   ExternalLink,
+  LineChart,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
@@ -100,7 +101,7 @@ const OptimizedLandingPage: React.FC = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const service = params.get("service");
-    if (service && ["web", "mobile", "uiux"].includes(service)) {
+    if (service && ["web", "mobile", "uiux", "marketing"].includes(service)) {
       setSelectedService(service);
     }
   }, []);
@@ -128,7 +129,7 @@ const OptimizedLandingPage: React.FC = () => {
       title: "Mobile Apps",
       icon: Smartphone,
       description: "iOS & Android apps that engage users and drive revenue",
-      price: "From £2,500",
+      price: "From £1,500",
       features: [
         "iOS & Android",
         "Native Performance",
@@ -154,6 +155,22 @@ const OptimizedLandingPage: React.FC = () => {
         "Design System",
       ],
       color: "from-indigo-500 to-purple-500",
+    },
+    {
+      id: "marketing",
+      title: "Digital Marketing",
+      icon: LineChart,
+      description: "Growth-focused campaigns that drive leads and sales",
+      price: "From £100 /mo",
+      features: [
+        "SEO & Local SEO",
+        "Google & Meta Ads",
+        "Content Strategy",
+        "Conversion Optimization",
+        "Monthly Reporting",
+        "Lead Generation",
+      ],
+      color: "from-emerald-500 to-teal-500",
     },
   ];
 
@@ -806,53 +823,53 @@ const OptimizedLandingPage: React.FC = () => {
             {/* Alternative Contact Below Form */}
             {!submitSuccess && (
               <div className="mt-6 pt-6 border-t border-gray-300">
-              <p className="text-sm text-center text-gray-600 mb-3">
-                Prefer to talk directly?
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3">
-                {/* Call Button */}
-                <a
-                  href="tel:+447464485026"
-                  className="flex-1 flex items-center justify-center px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all"
-                >
-                  <Phone className="w-4 h-4 mr-2" />
-                  Call Now
-                </a>
-            
-                {/* WhatsApp Button */}
-                <a
-                  href="https://wa.me/447464485026?text=Hi%20Viorix,%20I%27m%20interested%20in%20a%20website%20quote"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center px-4 py-3 bg-[#25D366] text-white font-semibold rounded-xl hover:shadow-lg transition-all"
-                >
-                  <FaWhatsapp className="w-4 h-4 mr-2" />
-                  WhatsApp
-                </a>
-            
-                {/* Email Button */}
-                <a
-                  href="mailto:info@viorix.co.uk"
-                  className="flex-1 flex items-center justify-center px-4 py-3 bg-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-300 transition-all"
-                >
-                  <Mail className="w-4 h-4 mr-2" />
-                  Email Us
-                </a>
+                <p className="text-sm text-center text-gray-600 mb-3">
+                  Prefer to talk directly?
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  {/* Call Button */}
+                  <a
+                    href="tel:+447464485026"
+                    className="flex-1 flex items-center justify-center px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all"
+                  >
+                    <Phone className="w-4 h-4 mr-2" />
+                    Call Now
+                  </a>
+
+                  {/* WhatsApp Button */}
+                  <a
+                    href="https://wa.me/447464485026?text=Hi%20Viorix,%20I%27m%20interested%20in%20a%20website%20quote"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center px-4 py-3 bg-[#25D366] text-white font-semibold rounded-xl hover:shadow-lg transition-all"
+                  >
+                    <FaWhatsapp className="w-4 h-4 mr-2" />
+                    WhatsApp
+                  </a>
+
+                  {/* Email Button */}
+                  <a
+                    href="mailto:info@viorix.co.uk"
+                    className="flex-1 flex items-center justify-center px-4 py-3 bg-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-300 transition-all"
+                  >
+                    <Mail className="w-4 h-4 mr-2" />
+                    Email Us
+                  </a>
+                </div>
+
+                {/* ICO Number Section */}
+                <p className="text-xs text-center text-gray-500 mt-6">
+                  Registered with the Information Commissioner’s Office (ICO):{" "}
+                  <a
+                    href="https://ico.org.uk/ESDWebPages/Entry/ZC026034"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#1B365D] font-semibold hover:underline"
+                  >
+                    ZC026034
+                  </a>
+                </p>
               </div>
-            
-              {/* ICO Number Section */}
-              <p className="text-xs text-center text-gray-500 mt-6">
-                Registered with the Information Commissioner’s Office (ICO):{" "}
-                <a
-                  href="https://ico.org.uk/ESDWebPages/Entry/ZC026034"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#1B365D] font-semibold hover:underline"
-                >
-                  ZC026034
-                </a>
-              </p>
-            </div>
             )}
           </motion.div>
         </div>
@@ -1378,15 +1395,7 @@ const OptimizedLandingPage: React.FC = () => {
           </motion.a>
 
           {/* WhatsApp Button */}
-          <motion.a
-            href="https://wa.me/447464485026"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileTap={{ scale: 0.95 }}
-            className="px-4 py-3 bg-[#25D366] text-white font-bold rounded-xl shadow-lg flex items-center justify-center"
-          >
-            <FaWhatsapp className="w-5 h-5" />
-          </motion.a>
+         
         </div>
       </motion.div>
 

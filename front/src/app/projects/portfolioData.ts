@@ -8,59 +8,19 @@ export const expandedTechStack: TechStack[] = [
     category: 'Frontend',
     description: 'A JavaScript library for building user interfaces'
   },
-  { 
-    name: 'Next.js', 
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg', 
-    category: 'Frontend' 
-  },
-  { 
-    name: 'Vue.js', 
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg', 
-    category: 'Frontend' 
-  },
-  { 
-    name: 'Angular', 
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/angularjs/angularjs-original.svg', 
-    category: 'Frontend' 
-  },
-  { 
-    name: 'Svelte', 
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/svelte/svelte-original.svg', 
-    category: 'Frontend' 
-  },
-  
+  { name: 'Next.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg', category: 'Frontend' },
+  { name: 'Vue.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg', category: 'Frontend' },
+  { name: 'Angular', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/angularjs/angularjs-original.svg', category: 'Frontend' },
+  { name: 'Svelte', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/svelte/svelte-original.svg', category: 'Frontend' },
+
   // Backend Frameworks & Languages
-  { 
-    name: 'Node.js', 
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg', 
-    category: 'Backend' 
-  },
-  { 
-    name: 'Laravel', 
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/laravel/laravel-original.svg', 
-    category: 'Backend' 
-  },
-  { 
-    name: 'Django', 
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/django/django-plain.svg', 
-    category: 'Backend' 
-  },
-  { 
-    name: 'Spring Boot', 
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/spring/spring-original.svg', 
-    category: 'Backend' 
-  },
-  { 
-    name: 'Express.js', 
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg', 
-    category: 'Backend' 
-  },
-  { 
-    name: 'FastAPI', 
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg', 
-    category: 'Backend' 
-  },
-  
+  { name: 'Node.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg', category: 'Backend' },
+  { name: 'Laravel', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/laravel/laravel-original.svg', category: 'Backend' },
+  { name: 'Django', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/django/django-plain.svg', category: 'Backend' },
+  { name: 'Spring Boot', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/spring/spring-original.svg', category: 'Backend' },
+  { name: 'Express.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg', category: 'Backend' },
+  { name: 'FastAPI', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg', category: 'Backend' },
+
   // Programming Languages
   { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg', category: 'Languages' },
   { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg', category: 'Languages' },
@@ -112,9 +72,9 @@ export const expandedTechStack: TechStack[] = [
   { name: 'Photoshop', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg', category: 'Design' }
 ];
 
-
 export const projects: Project[] = [
   {
+    
     id: 1,
     title: "JRS Building Contractors",
     subtitle: "Construction & Renovation Website",
@@ -124,14 +84,48 @@ export const projects: Project[] = [
     image: "/jrs.png", 
     images: ["/jrs.png"],
     client: "JRS Building Contractors",
-    duration: "2 months",
+    duration: "1 months",
     year: "2025",
-    category: "Webistes",
+    category: "Websites",
     tags: ["Next.js", "MongoDB", "TypeScript", "Tailwind CSS"],
     technologies: ["Next.js", "TypeScript", "MongoDB", "Tailwind CSS"],
     status: "Live",
     featured: true,
     liveUrl: "https://jrs-building.co.uk"
+  },
+  {
+    id: 7,
+    title: "Coffee Genius",
+    subtitle: "E-commerce + Content Platform",
+    description:
+      "High-performance e-commerce and content platform for Coffee Genius. Built for scalability, SEO, and speed.",
+    longDescription: `
+We’ve just launched Coffee Genius — a high-performance e-commerce + content platform built from the ground up.
+
+This wasn’t just about design.
+It was about building a scalable digital engine for growth.
+
+✔ Online shop with secure Stripe checkout
+✔ Class & training booking system
+✔ Wholesale enquiry workflow
+✔ SEO-first architecture for long-term rankings
+✔ Optimised performance & fast load speeds
+
+Built with modern technology (Next.js + TypeScript) to ensure speed, security, and scalability.
+
+If you’re a startup or growing business looking for a fast, search-driven website that converts — let’s talk.
+`,
+    image: "/coffeegenius.png",
+    images: ["/coffeegenius.png"],
+    client: "Coffee Genius",
+    duration: "1 months",
+    year: "2026",
+    category: "Websites",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "E-commerce", "SEO", "Performance"],
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Stripe", "SEO Optimization"],
+    status: "Live",
+    featured: true,
+    liveUrl: "https://coffeegenius.co.uk"
   },
   {
     id: 2,
@@ -152,25 +146,6 @@ export const projects: Project[] = [
     featured: true,
     liveUrl: "https://coldfix.co.uk"
   },
-   {
-  id: 6,
-  title: "Hermeco",
-  subtitle: "Construction & Industrial Services Website",
-  description: "A modern website with a CMS for managing construction and industrial projects.",
-  longDescription:
-    "We built a responsive website for Hermeco, a UK-based construction and industrial services company. The main focus was creating a secure CMS so the client can easily manage and update project portfolios. The site was developed with Next.js and MongoDB, ensuring fast performance, SEO optimisation, and a professional admin dashboard for content management.",
-  image: "/hermeco.png",
-  images: ["/hermeco.png"],
-  client: "Hermeco",
-  duration: "1 months",
-  year: "2025",
-  category: "Websites",
-  tags: ["Next.js", "MongoDB", "TypeScript", "Tailwind CSS"],
-  technologies: ["Next.js", "TypeScript", "MongoDB", "Tailwind CSS"],
-  status: "Live",
-  featured: true,
-  liveUrl: "https://hermeco.co.uk"
-},
   {
     id: 3,
     title: "360 Drive Academy",
@@ -179,9 +154,9 @@ export const projects: Project[] = [
     longDescription:
       "We created a full platform for 360 Drive Academy to help them manage courses and students. The site includes a CMS for administrators, allowing them to update course details and student records. It was built using React, Express.js, and Node.js, with MongoDB handling the data storage.",
     image: "/360.png",
-    images: ["360.png"],
+    images: ["/360.png"],
     client: "360 Drive Academy",
-    duration: "3 months",
+    duration: "1 months",
     year: "2024",
     category: "Websites",
     tags: ["React", "Node.js", "Express.js", "MongoDB", "React"],
@@ -202,8 +177,8 @@ export const projects: Project[] = [
     client: "Mash & Smash",
     duration: "2 months",
     year: "2024",
-    category: "Webistes",
-    tags: [ "Ordering System"],
+    category: "Websites",
+    tags: ["Ordering System"],
     technologies: [],
     status: "Live",
     liveUrl: "https://www.foodbooking.com/ordering/restaurant/menu?restaurant_uid=066b68c1-e2b1-432a-9fc9-47ee48b74659&dine_in=true&dine_in_subtype=dine_ink",
@@ -222,13 +197,32 @@ export const projects: Project[] = [
     duration: "1 month",
     year: "2024",
     category: "Websites",
-    tags: ["Next.js", "Tailwind CSS", "TypeScript", ],
+    tags: ["Next.js", "Tailwind CSS", "TypeScript"],
     technologies: ["Next.js", "Tailwind CSS", "TypeScript"],
     status: "Live",
     featured: true,
     liveUrl: "https://hopebtc.co.uk"
   },
- 
+  {
+    id: 6,
+    title: "Hermeco",
+    subtitle: "Construction & Industrial Services Website",
+    description: "A modern website with a CMS for managing construction and industrial projects.",
+    longDescription:
+      "We built a responsive website for Hermeco, a UK-based construction and industrial services company. The main focus was creating a secure CMS so the client can easily manage and update project portfolios. The site was developed with Next.js and MongoDB, ensuring fast performance, SEO optimisation, and a professional admin dashboard for content management.",
+    image: "/hermeco.png",
+    images: ["/hermeco.png"],
+    client: "Hermeco",
+    duration: "1 month",
+    year: "2025",
+    category: "Websites",
+    tags: ["Next.js", "MongoDB", "TypeScript", "Tailwind CSS"],
+    technologies: ["Next.js", "TypeScript", "MongoDB", "Tailwind CSS"],
+    status: "Live",
+    featured: true,
+    liveUrl: "https://hermeco.co.uk"
+  },
+  // 🚀 New Project
 
 ];
 
@@ -238,4 +232,3 @@ export const stats: Stat[] = [
   { number: "10+", label: "Technologies Mastered", icon: "💻" },
   { number: "24/7", label: "Support Availability", icon: "🕒" }
 ];
-
