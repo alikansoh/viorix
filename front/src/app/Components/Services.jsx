@@ -54,7 +54,7 @@ const Services = () => {
       description: highlightKeywords(
         "Transform your digital presence with our expert Front-end and Back-end development services. We create SEO-Friendly, lightning-fast, and fully responsive websites that drive conversions and enhance your brand's online authority with modern web technologies."
       ),
-      image: "/web.jpg",
+      image: "/web.webp",
       imageAlt:
         "Professional web development services - responsive websites and SEO optimization",
       icon: Code,

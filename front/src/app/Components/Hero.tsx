@@ -452,7 +452,7 @@ const Hero = () => {
                     <div className="w-full h-full rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-[#00BFFF]/5 to-[#1B365D]/5 p-2">
                       <div className="w-full h-full rounded-2xl overflow-hidden">
                         <Image
-                          src="/hero.jpg"
+                          src="/hero.webp"
                           alt="Professional web development team at Viorix Digital Solutions creating responsive websites, mobile apps, and e-commerce platforms for business growth"
                           width={480}
                           height={600}
@@ -485,7 +485,7 @@ const Hero = () => {
                         }}
                       >
                         <Image
-                          src="/hero.jpg"
+                          src="/hero.webp"
                           alt="Professional web development team at Viorix Digital Solutions creating responsive websites, mobile apps, and e-commerce platforms for business growth"
                           width={480}
                           height={480}
