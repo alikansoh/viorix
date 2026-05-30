@@ -74,7 +74,6 @@ export const expandedTechStack: TechStack[] = [
 
 export const projects: Project[] = [
   {
-    
     id: 1,
     title: "JRS Building Contractors",
     subtitle: "Construction & Renovation Website",
@@ -84,7 +83,7 @@ export const projects: Project[] = [
     image: "/jrs.png", 
     images: ["/jrs.png"],
     client: "JRS Building Contractors",
-    duration: "1 months",
+    duration: "1 month",
     year: "2025",
     category: "Websites",
     tags: ["Next.js", "MongoDB", "TypeScript", "Tailwind CSS"],
@@ -94,15 +93,84 @@ export const projects: Project[] = [
     liveUrl: "https://jrs-building.co.uk"
   },
   {
-    id: 7,
+    id: 2,
+    title: "Cutting Image",
+    subtitle: "Professional Grooming & Barbering Website",
+    description: "A modern website showcasing premium grooming services, pricing, and special offers.",
+    longDescription: `
+  Cutting Image needed a professional online presence to showcase their premium grooming and barbering services.
+  
+  We delivered:
+  
+  ✔ Service showcase with detailed descriptions
+  ✔ Transparent pricing & service menu
+  ✔ Online appointment booking system
+  ✔ Special offers & promotions display
+  ✔ Gallery of work & portfolio
+  ✔ Client testimonials & reviews
+  ✔ Mobile-optimized design for on-the-go bookings
+  ✔ SEO-optimized service pages for local search
+  
+  Built with Next.js and TypeScript for fast performance and reliability.
+  
+  The result: A professional, appointment-focused website that converts visitors into customers and showcases the quality of their work.
+  `,
+    image: "/cuttingimage.png",
+    images: ["/cuttingimage.png"],
+    client: "Cutting Image",
+    duration: "6 weeks",
+    year: "2025",
+    category: "Websites",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "Booking System", "Service Menu"],
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "MongoDB"],
+    status: "Live",
+    featured: true,
+    liveUrl: "https://cutting-image.co.uk"
+  },
+  {
+    id: 3,
+    title: "ILK Technology",
+    subtitle: "B2B Technology Solutions Platform",
+    description: "A comprehensive B2B platform for technology consulting and IT solutions.",
+    longDescription: `
+ILK Technology needed a platform that positioned them as enterprise-grade IT consultants.
+
+We delivered:
+
+✔ Professional B2B website with case studies
+✔ Service showcase with detailed descriptions
+✔ Client success stories & testimonials
+✔ Inquiry & project request system
+✔ Blog integration for thought leadership
+✔ Advanced analytics dashboard
+✔ SEO-optimized architecture for organic visibility
+
+Built with Next.js and Node.js for scalability and performance.
+
+The platform helps ILK attract enterprise clients and establish authority in the B2B technology space.
+`,
+    image: "/ilktechnology.png",
+    images: ["/ilktechnology.png"],
+    client: "ILK Technology",
+    duration: "8 weeks",
+    year: "2025",
+    category: "Websites",
+    tags: ["Next.js", "Node.js", "TypeScript", "Tailwind CSS", "CMS", "Analytics"],
+    technologies: ["Next.js", "Node.js", "TypeScript", "Tailwind CSS", "MongoDB"],
+    status: "Live",
+    featured: true,
+    liveUrl: "https://ilktechnology.com"
+  },
+  {
+    id: 4,
     title: "Coffee Genius",
     subtitle: "E-commerce + Content Platform",
     description:
       "High-performance e-commerce and content platform for Coffee Genius. Built for scalability, SEO, and speed.",
     longDescription: `
-We’ve just launched Coffee Genius — a high-performance e-commerce + content platform built from the ground up.
+We've just launched Coffee Genius — a high-performance e-commerce + content platform built from the ground up.
 
-This wasn’t just about design.
+This wasn't just about design.
 It was about building a scalable digital engine for growth.
 
 ✔ Online shop with secure Stripe checkout
@@ -113,12 +181,12 @@ It was about building a scalable digital engine for growth.
 
 Built with modern technology (Next.js + TypeScript) to ensure speed, security, and scalability.
 
-If you’re a startup or growing business looking for a fast, search-driven website that converts — let’s talk.
+If you're a startup or growing business looking for a fast, search-driven website that converts — let's talk.
 `,
     image: "/coffeegenius.png",
     images: ["/coffeegenius.png"],
     client: "Coffee Genius",
-    duration: "1 months",
+    duration: "1 month",
     year: "2026",
     category: "Websites",
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "E-commerce", "SEO", "Performance"],
@@ -128,7 +196,7 @@ If you’re a startup or growing business looking for a fast, search-driven webs
     liveUrl: "https://coffeegenius.co.uk"
   },
   {
-    id: 2,
+    id: 5,
     title: "ColdFix",
     subtitle: "Refrigeration & Cooling Services Website",
     description: "A responsive website with a clean UI for a UK service provider.",
@@ -147,7 +215,7 @@ If you’re a startup or growing business looking for a fast, search-driven webs
     liveUrl: "https://coldfix.co.uk"
   },
   {
-    id: 3,
+    id: 6,
     title: "360 Drive Academy",
     subtitle: "Driving School Management Website",
     description: "A CMS-powered platform to manage courses and students.",
@@ -156,17 +224,17 @@ If you’re a startup or growing business looking for a fast, search-driven webs
     image: "/360.png",
     images: ["/360.png"],
     client: "360 Drive Academy",
-    duration: "1 months",
+    duration: "1 month",
     year: "2024",
     category: "Websites",
-    tags: ["React", "Node.js", "Express.js", "MongoDB", "React"],
+    tags: ["React", "Node.js", "Express.js", "MongoDB"],
     technologies: ["React", "Express.js", "Node.js", "MongoDB"],
     status: "Live",
     featured: true,
     liveUrl: "https://360driveacademy.co.uk"
   },
   {
-    id: 4,
+    id: 7,
     title: "Mash & Smash Restaurant",
     subtitle: "Restaurant Menu & Ordering System",
     description: "An interactive menu and food ordering system for a local restaurant.",
@@ -185,7 +253,7 @@ If you’re a startup or growing business looking for a fast, search-driven webs
     featured: false
   },
   {
-    id: 5,
+    id: 8,
     title: "HopeBTC Training Centre",
     subtitle: "Training Website for F-Gas Certification",
     description: "A professional website for a UK training provider.",
@@ -204,7 +272,7 @@ If you’re a startup or growing business looking for a fast, search-driven webs
     liveUrl: "https://hopebtc.co.uk"
   },
   {
-    id: 6,
+    id: 9,
     title: "Hermeco",
     subtitle: "Construction & Industrial Services Website",
     description: "A modern website with a CMS for managing construction and industrial projects.",
@@ -222,8 +290,6 @@ If you’re a startup or growing business looking for a fast, search-driven webs
     featured: true,
     liveUrl: "https://hermeco.co.uk"
   },
-  // 🚀 New Project
-
 ];
 
 export const stats: Stat[] = [

@@ -17,51 +17,59 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Viorix Digital Solutions | London Web Development & UK Digital Services",
-    template: "%s | Viorix Digital Solutions - London",
+    default: "Web Development London | Award-Winning Websites & Apps | Viorix",
+    template: "%s | Viorix Digital Solutions",
   },
   description:
-    "Leading London web development agency serving UK businesses. Viorix Digital Solutions creates modern, scalable websites and digital solutions across London, Birmingham, Manchester, and throughout the United Kingdom.",
+    "Top-rated web development agency in London. Custom websites, web apps & digital solutions for UK startups & enterprises. Expert Next.js developers. Free consultation today.",
   keywords: [
-    "London web development",
-    "UK web development agency",
-    "Viorix Digital Solutions London",
-    "web developers London",
-    "digital agency UK",
-    "London website design",
-    "UK custom websites",
-    "Next.js developers London",
-    "digital solutions UK",
-    "London tech company",
-    "web development services UK",
-    "London digital marketing",
-    "UK business websites",
-    "professional web design London",
-    "e-commerce development UK",
+    "web development london",
+    "best web developers london",
+    "custom website design london",
+    "web app development london",
+    "london web agency",
+    "responsive web design",
+    "e-commerce development london",
+    "next.js developers london",
+    "affordable web development",
+    "professional web design services",
+    "london digital agency",
+    "startup web development",
+    "enterprise web solutions",
+    "seo friendly web design london",
+    "website redesign london",
   ],
   openGraph: {
     type: "website",
     locale: "en_GB",
     url: "https://viorix.co.uk",
-    siteName: "Viorix Digital Solutions - London",
-    title: "London's Premier Web Development Agency | Viorix Digital Solutions",
+    siteName: "Viorix Digital Solutions",
+    title: "Web Development London | Award-Winning Websites & Apps",
     description:
-      "Trusted London web development agency serving UK businesses since [year]. From startups in Shoreditch to enterprises in Canary Wharf, we deliver exceptional digital solutions across the UK.",
+      "London's trusted web development agency. 50+ successful projects. Custom websites, web apps & digital solutions built with Next.js & React.",
     images: [
       {
         url: "https://viorix.co.uk/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Viorix Digital Solutions - London web development agency",
+        alt: "Viorix Digital Solutions - Web Development Agency London",
+        type: "image/jpeg",
       },
     ],
   },
+ 
   alternates: {
     canonical: "https://viorix.co.uk",
   },
-  other: {
-    // Add any verification meta tags here if needed:
-    // "google-site-verification": "your_token"
+  robots: {
+    index: true,
+    follow: true,
+    "max-image-preview": "large",
+    "max-snippet": -1,
+    "max-video-preview": -1,
+  },
+  verification: {
+    google: "your-google-verification-code", // Replace with actual code
   },
 };
 
@@ -71,7 +79,7 @@ const structuredData = {
   "@id": "https://viorix.co.uk#organization",
   name: "Viorix Digital Solutions",
   alternateName: "Viorix",
-  description: "Professional web development and digital solutions agency serving London and the UK",
+  description: "Award-winning web development and digital solutions agency serving London and the UK",
   url: "https://viorix.co.uk",
   telephone: "+447464485026",
   email: "hello@viorix.co.uk",
@@ -83,8 +91,13 @@ const structuredData = {
     postalCode: "EC1V 2NX",
     addressCountry: "GB",
   },
-  logo: "https://viorix.co.uk/logo.png",
-  image: "https://viorix.co.uk/og-image.png",
+  logo: {
+    "@type": "ImageObject",
+    url: "https://viorix.co.uk/logo.png",
+    width: 250,
+    height: 60,
+  },
+  image: "https://viorix.co.uk/og-image.jpg",
   contactPoint: [
     {
       "@type": "ContactPoint",
@@ -92,6 +105,7 @@ const structuredData = {
       contactType: "sales",
       areaServed: "GB",
       availableLanguage: ["English"],
+      contactOption: "TollFree",
     },
   ],
   areaServed: {
@@ -104,41 +118,127 @@ const structuredData = {
       dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
       opens: "09:00",
       closes: "18:00",
+      description: "Available for consultations and meetings during business hours",
     },
   ],
   priceRange: "££-£££",
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.9",
+    reviewCount: "12",
+    bestRating: "5",
+    worstRating: "1",
+  },
   sameAs: [
     "https://www.linkedin.com/company/viorix-digital-solutions",
     "https://www.instagram.com/viorix_digital_solutions",
   ],
 };
 
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": "https://viorix.co.uk#localbusiness",
+  name: "Viorix Digital Solutions",
+  businessType: "SoftwareDevelopment",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "124 City Road",
+    addressLocality: "London",
+    addressRegion: "England",
+    postalCode: "EC1V 2NX",
+    addressCountry: "GB",
+  },
+  telephone: "+447464485026",
+  email: "hello@viorix.co.uk",
+  url: "https://viorix.co.uk",
+  areaServed: {
+    "@type": "Country",
+    name: "United Kingdom",
+  },
+  knowsAbout: ["Web Development", "Digital Solutions", "Web Apps", "Custom Websites", "Next.js"],
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-GB" className={inter.variable}>
       <head>
-        {/* Minimal server-side CSS for any global animations you want server-rendered */}
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="format-detection" content="telephone=+447464485026" />
+        
+        {/* Preconnect to external domains */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.clarity.ms" />
+
+        {/* Sitemap and RSS */}
+        <link rel="sitemap" href="https://viorix.co.uk/sitemap.xml" />
+
+        {/* Microsoft Clarity */}
+        <Script
+          id="clarity-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "wzacswvwh2");
+            `
+          }}
+        />
+
         <style dangerouslySetInnerHTML={{
           __html: `
-            /* Minimal non-styled-jsx CSS (safe in server component) */
             @keyframes float {
               0%, 100% { transform: translateY(0px); }
               50% { transform: translateY(-5px); }
             }
             .float-animation { animation: float 3s ease-in-out infinite; }
+            
+            html {
+              scroll-behavior: smooth;
+            }
+            
+            body {
+              margin: 0;
+              padding: 0;
+            }
           `
         }} />
       </head>
       <body className="font-sans">
-        {/* JSON-LD structured data: non-blocking */}
+        {/* Organization Schema - JSON-LD */}
         <Script
-          id="ld-json"
+          id="ld-json-org"
           type="application/ld+json"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
 
-        {/* Google tag (gtag.js) - load after interactive to avoid blocking */}
+        {/* Local Business Schema - JSON-LD */}
+        <Script
+          id="ld-json-local"
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
+
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=G-WTB9BL73X4"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          ></iframe>
+        </noscript>
+
+        {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-WTB9BL73X4"
           strategy="afterInteractive"
@@ -148,18 +248,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-WTB9BL73X4');
+            gtag('config', 'G-WTB9BL73X4', {
+              'page_path': window.location.pathname,
+              'page_title': document.title,
+              'anonymize_ip': true
+            });
           `}
         </Script>
 
         <Navbar />
         <main className="pt-16">{children}</main>
         <Footer />
-
-        {/* Floating buttons moved into a client component to avoid styled-jsx errors */}
         <FloatingButtons />
 
-        {/* Performance & analytics */}
+        {/* Performance & Analytics */}
         <SpeedInsights />
         <Analytics />
       </body>
