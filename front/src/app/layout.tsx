@@ -257,7 +257,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>
 
         <Navbar />
-        <main className="pt-16">{children}</main>
+        <main className="">{children}</main>
         <Footer />
         <FloatingButtons />
 

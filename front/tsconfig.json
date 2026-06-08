@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/Components/Services.jsx",
+    "src/app/Components/Services.tsx",
     "src/app/Components/Navbar.tsx",
     "src/app/Components/Hero.tsx",
     "src/app/Components/WhyUs.tsx",
