@@ -1,14 +1,7 @@
 "use client";
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useMemo,
-  useCallback,
-} from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import type { SVGProps } from "react";
 
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import emailjs from "@emailjs/browser";
 import {
@@ -21,32 +14,30 @@ import {
   Phone,
   Mail,
   Clock,
-  Award,
-  Users,
   Zap,
   Shield,
   Target,
   Send,
   MessageCircle,
-  X,
   DollarSign,
   ChevronDown,
   ExternalLink,
   LineChart,
+  Users,
+  type LucideIcon,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
-import { projects, stats as importedStats } from "../projects/portfolioData";
+import { projects } from "../projects/portfolioData";
 import { Project } from "../projects/schema";
 
 interface Service {
   id: string;
   title: string;
-  icon: React.ComponentType<SVGProps<SVGSVGElement>>;
+  icon: LucideIcon;
   description: string;
   price: string;
   features: string[];
-  color: string;
 }
 
 interface FormData {
@@ -66,6 +57,47 @@ interface PortfolioItem {
   link?: string;
 }
 
+/* ─── tiny animated number ─── */
+function AnimNum({
+  target,
+  suffix = "",
+  run = false,
+}: {
+  target: number;
+  suffix?: string;
+  run?: boolean;
+}) {
+  const [v, setV] = useState(0);
+
+  useEffect(() => {
+    if (!run) return;
+
+    const t0 = performance.now();
+    const dur = 1600;
+    let raf = 0;
+
+    const tick = (now: number) => {
+      const p = Math.min((now - t0) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      setV(Math.round(e * target));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [run, target]);
+
+  return (
+    <>
+      {v}
+      {suffix}
+    </>
+  );
+}
+
 const OptimizedLandingPage: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string>("web");
   const [formData, setFormData] = useState<FormData>({
@@ -75,10 +107,14 @@ const OptimizedLandingPage: React.FC = () => {
     budget: "",
     message: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [submitSuccess, setSubmitSuccess] = useState<boolean>(false);
-  const [showExitIntent, setShowExitIntent] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [showFaq, setShowFaq] = useState<string | null>(null);
+  const [statsRun, setStatsRun] = useState(false);
+
+  const [portfolioFilter, setPortfolioFilter] = useState("All");
+  const [portfolioQuery] = useState("");
+  const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
 
   const formRef = useRef<HTMLDivElement | null>(null);
   const reviewsRef = useRef<HTMLDivElement | null>(null);
@@ -86,17 +122,11 @@ const OptimizedLandingPage: React.FC = () => {
 
   const isFormInView = useInView(formRef, { once: true });
   const isReviewsInView = useInView(reviewsRef, { once: true });
-  const isStatsInView = useInView(statsRef, { once: true });
+  const isStatsInView = useInView(statsRef, { once: true, amount: 0.3 });
 
   useEffect(() => {
-    const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0 && !submitSuccess && !showExitIntent) {
-        setShowExitIntent(true);
-      }
-    };
-    document.addEventListener("mouseleave", handleMouseLeave);
-    return () => document.removeEventListener("mouseleave", handleMouseLeave);
-  }, [submitSuccess, showExitIntent]);
+    if (isStatsInView) setStatsRun(true);
+  }, [isStatsInView]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -111,18 +141,16 @@ const OptimizedLandingPage: React.FC = () => {
       id: "web",
       title: "Website Development",
       icon: Code,
-      description:
-        "Professional business websites that convert visitors to customers",
+      description: "Professional business websites that convert visitors to customers",
       price: "From £500",
       features: [
         "Mobile-Responsive Design",
-        "SEO Optimization",
+        "SEO Optimisation",
         "Fast Loading Speed",
         "Secure Hosting Included",
         "Easy Content Updates",
         "24/7 Support",
       ],
-      color: "from-blue-500 to-cyan-500",
     },
     {
       id: "mobile",
@@ -138,7 +166,6 @@ const OptimizedLandingPage: React.FC = () => {
         "App Store Launch",
         "Cloud Backend",
       ],
-      color: "from-cyan-500 to-blue-600",
     },
     {
       id: "uiux",
@@ -154,7 +181,6 @@ const OptimizedLandingPage: React.FC = () => {
         "User Testing",
         "Design System",
       ],
-      color: "from-indigo-500 to-purple-500",
     },
     {
       id: "marketing",
@@ -166,11 +192,10 @@ const OptimizedLandingPage: React.FC = () => {
         "SEO & Local SEO",
         "Google & Meta Ads",
         "Content Strategy",
-        "Conversion Optimization",
+        "Conversion Optimisation",
         "Monthly Reporting",
         "Lead Generation",
       ],
-      color: "from-emerald-500 to-teal-500",
     },
   ];
 
@@ -191,7 +216,7 @@ const OptimizedLandingPage: React.FC = () => {
       rating: 5,
       text: "Modern portfolio that showcases our projects beautifully. The design brings in new clients consistently.",
       avatar: "HH",
-      result: "3x more leads monthly",
+      result: "3× more leads monthly",
     },
     {
       name: "Ali Hashem",
@@ -207,91 +232,72 @@ const OptimizedLandingPage: React.FC = () => {
       role: "Owner",
       company: "360 Drive Academy",
       rating: 5,
-      text: "Sleek website for our driving school. Students book lessons online effortlessly now. Game changer.",
+      text: "Sleek website for our driving school. Students book lessons online effortlessly now. A genuine game-changer.",
       avatar: "BB",
       result: "60% faster bookings",
     },
   ];
 
-  // Map imported stats into the component's stats structure, pick small icons for visual parity
-  const stats = useMemo(() => {
-    const iconCandidates = [Award, Star, Code, Clock];
-    return importedStats.map(
-      (s: { number: string; label: string }, idx: number) => ({
-        number: s.number ?? "",
-        label: s.label ?? "",
-        icon: iconCandidates[idx % iconCandidates.length],
-      })
-    );
-  }, []);
-
   const faqs = [
     {
-      q: "How long does it take to build a website?",
-      a: "Most websites are completed in 2-4 weeks. We'll give you an exact timeline during your free consultation based on your specific requirements.",
+      q: "How long does a website take to build?",
+      a: "Most websites are completed in 2–4 weeks. We'll give you an exact timeline during your free consultation based on your requirements.",
     },
     {
       q: "Do you offer payment plans?",
-      a: "Yes! We offer flexible payment options including 50% upfront and 50% on completion. For larger projects, we can arrange monthly installments.",
+      a: "Yes — 50% upfront, 50% on completion. For larger projects we can arrange monthly instalments. We want the process to feel comfortable.",
     },
     {
-      q: "Will I be able to update the website myself?",
-      a: "Absolutely. We build websites with easy-to-use content management systems. We also provide training and ongoing support.",
+      q: "Will I be able to update the content myself?",
+      a: "Absolutely. We build with easy-to-use CMS tools and provide training so you're fully in control from day one.",
     },
     {
-      q: "What if I'm not happy with the final result?",
-      a: "We offer unlimited revisions until you're 100% satisfied. Our money-back guarantee ensures you're protected throughout the process.",
+      q: "What if I'm not happy with the result?",
+      a: "We offer unlimited revisions until you're 100% satisfied — and a 14-day money-back guarantee if we ever fall short.",
     },
     {
-      q: "Do you provide hosting and maintenance?",
-      a: "Yes, all our packages include secure hosting for the first year. We also offer affordable maintenance plans to keep your site running smoothly.",
+      q: "Do you handle hosting and maintenance?",
+      a: "Yes. All packages include secure hosting for the first year. Affordable maintenance plans are available to keep everything running smoothly.",
     },
   ];
 
-  // Map imported projects to the lightweight PortfolioItem shape expected by the UI
   const portfolioItems: PortfolioItem[] = useMemo(() => {
     return projects.map((p: Project) => {
-      // prefer primary image then first in images array
-      const imageSrc = p.image?.startsWith("/")
-        ? p.image
-        : p.image || (Array.isArray(p.images) && p.images[0]) || "";
-      const category = (p.category || "Websites").replace(
-        /Webistes/gi,
-        "Websites"
-      ); // normalize common typo
+      const resolvedImage =
+        typeof p.image === "string" && p.image.length > 0
+          ? p.image
+          : Array.isArray(p.images) && p.images.length > 0
+          ? p.images[0]
+          : "/images/placeholder.png";
+
       return {
         title: p.title || "Untitled Project",
-        category,
-        imageSrc,
-        alt: p.alt || `${p.title} screenshot`,
+        category: (p.category || "Websites").replace(/Webistes/gi, "Websites"),
+        imageSrc: resolvedImage.startsWith("/") ? resolvedImage : resolvedImage,
+        alt: p.alt || `${p.title || "Project"} screenshot`,
         description: p.description || p.longDescription || "",
         link: p.liveUrl || p.link || "",
-      } as PortfolioItem;
+      };
     });
   }, []);
-
-  const [portfolioFilter, setPortfolioFilter] = useState<string>("All");
-  const [portfolioQuery, setPortfolioQuery] = useState<string>("");
-  const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
 
   const categories = useMemo(() => {
     const cats = Array.from(new Set(portfolioItems.map((p) => p.category)));
     return ["All", ...cats];
   }, [portfolioItems]);
 
-  const filteredPortfolio = useMemo(() => {
-    return portfolioItems.filter((item) => {
-      const matchesCategory =
-        portfolioFilter === "All" || item.category === portfolioFilter;
-      const matchesQuery =
-        portfolioQuery.trim() === "" ||
-        item.title.toLowerCase().includes(portfolioQuery.toLowerCase()) ||
-        (item.description || "")
-          .toLowerCase()
-          .includes(portfolioQuery.toLowerCase());
-      return matchesCategory && matchesQuery;
-    });
-  }, [portfolioItems, portfolioFilter, portfolioQuery]);
+  const filteredPortfolio = useMemo(
+    () =>
+      portfolioItems.filter((item) => {
+        const matchesCat = portfolioFilter === "All" || item.category === portfolioFilter;
+        const matchesQ =
+          portfolioQuery.trim() === "" ||
+          item.title.toLowerCase().includes(portfolioQuery.toLowerCase()) ||
+          (item.description || "").toLowerCase().includes(portfolioQuery.toLowerCase());
+        return matchesCat && matchesQ;
+      }),
+    [portfolioItems, portfolioFilter, portfolioQuery],
+  );
 
   const closeModal = useCallback(() => {
     setActiveModalIndex(null);
@@ -299,32 +305,26 @@ const OptimizedLandingPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
+    const handle = (e: KeyboardEvent) => {
       if (activeModalIndex === null) return;
-      if (e.key === "Escape") {
-        closeModal();
-      } else if (e.key === "ArrowRight") {
-        setActiveModalIndex((prev) => {
-          if (prev === null) return null;
-          return (prev + 1) % filteredPortfolio.length;
-        });
+      if (!filteredPortfolio.length) return;
+
+      if (e.key === "Escape") closeModal();
+      else if (e.key === "ArrowRight") {
+        setActiveModalIndex((p) => (p === null ? null : (p + 1) % filteredPortfolio.length));
       } else if (e.key === "ArrowLeft") {
-        setActiveModalIndex((prev) => {
-          if (prev === null) return null;
-          return (
-            (prev - 1 + filteredPortfolio.length) % filteredPortfolio.length
-          );
-        });
+        setActiveModalIndex((p) =>
+          p === null ? null : (p - 1 + filteredPortfolio.length) % filteredPortfolio.length,
+        );
       }
     };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
+
+    window.addEventListener("keydown", handle);
+    return () => window.removeEventListener("keydown", handle);
   }, [activeModalIndex, filteredPortfolio.length, closeModal]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -334,1074 +334,1381 @@ const OptimizedLandingPage: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const serviceID = "service_c73djix";
-    const templateID = "template_rl3gq4l";
-    const publicKey = "_-PS7ydJYxLOybs71";
-
     const templateParams = {
       name: formData.name,
       email: formData.email,
       phone: formData.phone || "Not provided",
       budget: formData.budget || "Not specified",
       message: formData.message || "No additional details",
-      selectedService: services.find((s) => s.id === selectedService)?.title,
+      selectedService: services.find((s) => s.id === selectedService)?.title ?? "Unknown service",
       submittedAt: new Date().toLocaleString(),
     };
 
     try {
-      await emailjs.send(serviceID, templateID, templateParams, publicKey);
+      await emailjs.send(
+        "service_c73djix",
+        "template_rl3gq4l",
+        templateParams,
+        "_-PS7ydJYxLOybs71",
+      );
       setSubmitSuccess(true);
       setIsSubmitting(false);
 
       setTimeout(() => {
         setSubmitSuccess(false);
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          budget: "",
-          message: "",
-        });
+        setFormData({ name: "", email: "", phone: "", budget: "", message: "" });
       }, 8000);
-    } catch (error) {
-      console.error("EmailJS error:", error);
+    } catch {
       setIsSubmitting(false);
-      alert(
-        "We couldn't send your request. Please call us directly at +44 7464 485 026"
-      );
+      alert("We couldn't send your request. Please call us directly at +44 7464 485 026");
     }
   };
 
-  const scrollToForm = () => {
+  const scrollToForm = () =>
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
 
   const selectedServiceData = services.find((s) => s.id === selectedService);
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Exit Intent Popup */}
-      <AnimatePresence>
-        {showExitIntent && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setShowExitIntent(false)}
+    <>
+      <style>{`
+        .lp {
+          --bg: #050a13;
+          --blue: #00bfff;
+          --navy: #1b365d;
+          --border: rgba(0,191,255,.13);
+          --bh: rgba(0,191,255,.4);
+          --glass: rgba(0,191,255,.05);
+          --muted: rgba(255,255,255,.55);
+          font-family: Inter, "DM Sans", system-ui, -apple-system, sans-serif;
+        }
+        .lp-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,191,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,191,255,.05) 1px,transparent 1px);background-size:48px 48px;opacity:.28;pointer-events:none;}
+        .lp-vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 70% 30%,rgba(0,80,170,.2) 0%,transparent 55%),radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(4,8,16,.65) 100%);}
+        .lp-orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px);}
+        .lp-orb-a{width:480px;height:480px;top:-80px;right:-120px;background:rgba(0,100,220,.14);animation:orbA 20s ease-in-out infinite alternate;}
+        .lp-orb-b{width:360px;height:360px;bottom:-60px;left:-80px;background:rgba(0,191,255,.09);animation:orbB 25s ease-in-out infinite alternate;}
+        @keyframes orbA{0%{transform:translate(0,0) scale(1);}100%{transform:translate(-40px,40px) scale(1.1);}}
+        @keyframes orbB{0%{transform:translate(0,0) scale(1);}100%{transform:translate(50px,-30px) scale(1.08);}}
+        .svc-tab{border:1px solid var(--border);background:rgba(255,255,255,.04);color:rgba(255,255,255,.6);border-radius:10px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:border-color .22s,background .22s,color .22s;display:flex;align-items:center;gap:7px;}
+        .svc-tab.active{border-color:var(--blue);background:rgba(0,191,255,.1);color:#fff;}
+        .svc-tab:hover:not(.active){border-color:rgba(0,191,255,.3);background:rgba(0,191,255,.06);color:#fff;}
+        .feat-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;color:rgba(255,255,255,.8);}
+        .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--blue);color:#050a13;font-size:14px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:14px 26px;border-radius:12px;text-decoration:none;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s,background .2s;border:none;cursor:pointer;}
+        .btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.28),transparent);transition:left .4s ease;}
+        .btn-primary:hover::before{left:100%;}
+        .btn-primary:hover{transform:translateY(-2px);background:#33ccff;}
+        .btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid rgba(255,255,255,.3);color:rgba(255,255,255,.85);font-size:14px;font-weight:700;padding:14px 26px;border-radius:12px;text-decoration:none;transition:border-color .22s,background .22s,color .22s;background:transparent;}
+        .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08);color:#fff;}
+        .stat-card{border:1px solid var(--border);background:linear-gradient(145deg,rgba(7,16,30,.9),rgba(4,8,16,.95));border-radius:14px;padding:22px 18px;text-align:center;transition:border-color .25s,transform .28s cubic-bezier(.22,1,.36,1);}
+        .stat-card:hover{border-color:var(--bh);transform:translateY(-3px);}
+        .stat-num{font-size:clamp(30px,4vw,44px);font-weight:800;letter-spacing:-.03em;background:linear-gradient(110deg,#fff,rgba(255,255,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+        .stat-suf{background:linear-gradient(110deg,var(--blue),#6ddcff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+        .form-card{background:linear-gradient(145deg,rgba(7,16,30,.96),rgba(4,8,16,.98));border:1px solid var(--border);border-radius:22px;padding:44px;}
+        .form-input{width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,.1);border-radius:11px;background:rgba(255,255,255,.04);color:#fff;font-size:14px;transition:border-color .22s,background .22s;outline:none;font-family:inherit;}
+        .form-input:focus{border-color:var(--blue);background:rgba(0,191,255,.06);}
+        .form-input::placeholder{color:rgba(255,255,255,.28);}
+        .form-label{display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.55);margin-bottom:7px;letter-spacing:.07em;text-transform:uppercase;}
+        select.form-input option{background:#0a1525;color:#fff;}
+        .port-card{background:linear-gradient(145deg,rgba(7,16,30,.9),rgba(4,8,16,.95));border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:border-color .25s,transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s;}
+        .port-card:hover{border-color:var(--bh);transform:translateY(-5px);box-shadow:0 20px 48px rgba(0,0,0,.6);}
+        .review-card{background:linear-gradient(145deg,rgba(7,16,30,.9),rgba(4,8,16,.95));border:1px solid var(--border);border-radius:18px;padding:28px;transition:border-color .25s,transform .3s cubic-bezier(.22,1,.36,1);}
+        .review-card:hover{border-color:var(--bh);transform:translateY(-4px);}
+        .review-card::before{content:'"';position:absolute;top:8px;right:20px;font-size:88px;line-height:1;color:rgba(0,191,255,.05);font-family:Georgia,serif;pointer-events:none;}
+        .faq-item{background:linear-gradient(145deg,rgba(7,16,30,.9),rgba(4,8,16,.95));border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .22s;}
+        .faq-item:hover{border-color:rgba(0,191,255,.28);}
+        .faq-item.open{border-color:rgba(0,191,255,.35);}
+        .val-card{background:linear-gradient(145deg,rgba(7,16,30,.9),rgba(4,8,16,.95));border:1px solid var(--border);border-radius:18px;padding:28px;transition:border-color .25s,transform .3s cubic-bezier(.22,1,.36,1);}
+        .val-card:hover{border-color:var(--bh);transform:translateY(-4px);}
+        .val-ico{width:52px;height:52px;border-radius:14px;border:1px solid rgba(0,191,255,.2);background:rgba(0,191,255,.08);display:flex;align-items:center;justify-content:center;margin-bottom:18px;transition:background .25s;}
+        .val-card:hover .val-ico{background:rgba(0,191,255,.15);}
+        .guar-card{background:linear-gradient(145deg,rgba(7,16,30,.95),rgba(4,8,16,.98));border:1px solid rgba(0,191,255,.18);border-radius:22px;padding:48px;}
+        .cta-block{position:relative;border-radius:24px;padding:72px 48px;text-align:center;overflow:hidden;border:1px solid rgba(0,191,255,.2);background:linear-gradient(135deg,rgba(0,80,170,.18) 0%,rgba(0,40,100,.14) 50%,rgba(0,191,255,.07) 100%);}
+        .cta-scanline{position:absolute;top:-2px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,191,255,.6),transparent);animation:scan 4s linear infinite;pointer-events:none;}
+        @keyframes scan{0%{top:-2px;opacity:0;}5%{opacity:1;}95%{opacity:1;}100%{top:100%;opacity:0;}}
+        .sticky-bar{position:fixed;bottom:0;left:0;right:0;padding:10px 16px;background:rgba(5,10,19,.96);border-top:1px solid var(--border);backdrop-filter:blur(12px);z-index:50;}
+        @media(max-width:768px){
+          .form-card{padding:24px 18px;}
+          .guar-card{padding:28px 20px;}
+          .cta-block{padding:40px 20px;}
+        }
+        @media(prefers-reduced-motion:reduce){.lp *{animation:none!important;transition:none!important;}}
+      `}</style>
+
+      <div className="lp min-h-screen" style={{ background: "var(--bg)", color: "#fff" }}>
+        <header style={{ position: "relative", overflow: "hidden", paddingBottom: "0" }}>
+          <div className="lp-grid" aria-hidden />
+          <div className="lp-vig" aria-hidden />
+          <div className="lp-orb lp-orb-a" aria-hidden />
+          <div className="lp-orb lp-orb-b" aria-hidden />
+
+          <div
+            style={{
+              position: "relative",
+              zIndex: 2,
+              maxWidth: 1240,
+              margin: "0 auto",
+              padding: "64px 24px 72px",
+            }}
           >
             <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              className="bg-white rounded-2xl p-6 lg:p-8 max-w-md w-full relative shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
-              <button
-                onClick={() => setShowExitIntent(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "6px 16px",
+                  borderRadius: 999,
+                  border: "1px solid rgba(0,191,255,.2)",
+                  background: "rgba(0,191,255,.06)",
+                  fontSize: 11,
+                  letterSpacing: ".16em",
+                  textTransform: "uppercase",
+                  color: "var(--blue)",
+                  fontWeight: 600,
+                  marginBottom: 24,
+                }}
               >
-                <X className="w-6 h-6" />
-              </button>
-
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Zap className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-[#1B365D] mb-2">
-                  Wait! Before You Go...
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Get £100 OFF your project if you request a quote in the next 5
-                  minutes!
-                </p>
-
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border-2 border-green-200 mb-4">
-                  <p className="font-bold text-green-900 mb-2">
-                    Limited Time Offer:
-                  </p>
-                  <ul className="text-sm text-green-800 space-y-1 text-left">
-                    <li className="flex items-center">
-                      <CheckCircle className="w-4 h-4 mr-2 flex-shrink-0" />
-                      £100 OFF any project over £1,000
-                    </li>
-                    <li className="flex items-center">
-                      <CheckCircle className="w-4 h-4 mr-2 flex-shrink-0" />
-                      Free 30-min consultation (worth £150)
-                    </li>
-                    <li className="flex items-center">
-                      <CheckCircle className="w-4 h-4 mr-2 flex-shrink-0" />
-                      Priority project scheduling
-                    </li>
-                  </ul>
-                </div>
-
-                <button
-                  onClick={() => {
-                    setShowExitIntent(false);
-                    scrollToForm();
-                  }}
-                  className="w-full py-4 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-bold rounded-xl hover:shadow-lg transition-all mb-3"
-                >
-                  Claim My £100 Discount
-                </button>
-
-                <button
-                  onClick={() => setShowExitIntent(false)}
-                  className="text-sm text-gray-500 hover:text-gray-700"
-                >
-                  No thanks, I&apos;ll pay full price
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Hero Section - Dynamic based on service */}
-      <header className="bg-gradient-to-br from-[#1B365D] via-[#2A4A6B] to-[#00BFFF] text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 8, repeat: Infinity }}
-            className="absolute top-20 left-10 w-32 h-32 bg-white rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{ scale: [1.2, 1, 1.2], opacity: [0.4, 0.7, 0.4] }}
-            transition={{ duration: 10, repeat: Infinity, delay: 2 }}
-            className="absolute bottom-32 right-16 w-24 h-24 bg-cyan-300 rounded-full blur-2xl"
-          />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="grid lg:grid-cols-2 gap-8 items-center"
-          >
-            {/* Left Column - Copy */}
-            <div className="text-center lg:text-left">
-              <div className="inline-flex items-center px-4 py-2 bg-green-500/20 backdrop-blur-sm rounded-full border border-green-300/30 mb-4">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2" />
-                <span className="text-green-300 font-medium text-sm">
-                  🎉 Special Offer: £100 OFF Today
-                </span>
+                London Web Agency · UK
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-4">
-                {selectedServiceData?.title}
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-300 mt-2">
-                  {selectedServiceData?.price}
-                </span>
-              </h1>
-
-              <p className="text-lg sm:text-xl text-blue-100 mb-6 leading-relaxed">
-                {selectedServiceData?.description} • Trusted by 50+ UK
-                businesses • 100% satisfaction guaranteed
-              </p>
-
-              <div className="grid grid-cols-2 gap-2 mb-6 text-sm">
-                {selectedServiceData?.features.slice(0, 4).map((feature) => (
-                  <div
-                    key={feature}
-                    className="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2"
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr auto",
+                  gap: "48px 64px",
+                  alignItems: "start",
+                }}
+              >
+                <div>
+                  <h1
+                    style={{
+                      fontSize: "clamp(36px,5.5vw,72px)",
+                      fontWeight: 800,
+                      letterSpacing: "-.035em",
+                      lineHeight: 1,
+                      margin: "0 0 20px",
+                    }}
                   >
-                    <CheckCircle className="w-4 h-4 mr-2 text-cyan-300 flex-shrink-0" />
-                    <span className="text-left">{feature}</span>
+                    {selectedServiceData?.title}
+                    <span
+                      style={{
+                        display: "block",
+                        background: "linear-gradient(110deg,#00bfff 0%,#6ddcff 45%,#0099cc 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      {selectedServiceData?.price}
+                    </span>
+                  </h1>
+
+                  <p
+                    style={{
+                      fontSize: 17,
+                      color: "rgba(255,255,255,.62)",
+                      lineHeight: 1.7,
+                      maxWidth: "56ch",
+                      marginBottom: 28,
+                    }}
+                  >
+                    {selectedServiceData?.description} — trusted by 50+ UK businesses, with every
+                    project backed by a satisfaction guarantee.
+                  </p>
+
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 36 }}>
+                    {selectedServiceData?.features.slice(0, 4).map((f) => (
+                      <div key={f} className="feat-chip">
+                        <CheckCircle
+                          style={{ width: 13, height: 13, color: "var(--blue)", flexShrink: 0 }}
+                          aria-hidden
+                        />
+                        {f}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                <motion.button
-                  onClick={scrollToForm}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 bg-white text-[#1B365D] font-bold rounded-full shadow-2xl hover:shadow-cyan-500/50 transition-all text-lg"
-                >
-                  Get Free Quote • 2 Min
-                  <ArrowRight className="w-5 h-5 inline ml-2" />
-                </motion.button>
-
-                <a
-                  href="tel:+447464485026"
-                  className="px-8 py-4 border-2 border-white text-white font-bold rounded-full hover:bg-white/10 transition-all text-lg text-center"
-                >
-                  <Phone className="w-5 h-5 inline mr-2" />
-                  Call Now
-                </a>
-              </div>
-
-              <p className="text-sm text-blue-200 mt-4">
-                ⚡ 2-hour response • No obligation • Free consultation included
-              </p>
-            </div>
-
-            {/* Right Column - Trust Indicators */}
-            <div className="hidden lg:block">
-              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center">
-                    <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                    <span className="ml-2 font-bold">5.0 Rating</span>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
+                    <button onClick={scrollToForm} className="btn-primary">
+                      Get a Free Quote
+                      <ArrowRight style={{ width: 15, height: 15 }} aria-hidden />
+                    </button>
+                    <a href="tel:+447464485026" className="btn-ghost">
+                      <Phone style={{ width: 15, height: 15 }} aria-hidden />
+                      Call Us
+                    </a>
                   </div>
-                  <span className="text-sm">50+ Reviews</span>
+
+                  <p style={{ fontSize: 12, color: "rgba(255,255,255,.3)", marginTop: 16 }}>
+                    No commitment · Response within 2 hours · Free consultation included
+                  </p>
                 </div>
 
-                <div className="space-y-3 mb-4">
-                  {reviews.slice(0, 2).map((review, i) => (
-                    <div key={i} className="bg-white/5 rounded-lg p-3">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center text-xs font-bold">
-                          {review.avatar}
+                <div
+                  className="hidden lg:block"
+                  style={{
+                    width: 300,
+                    border: "1px solid rgba(0,191,255,.15)",
+                    background: "rgba(7,16,30,.85)",
+                    borderRadius: 18,
+                    padding: 24,
+                    backdropFilter: "blur(12px)",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                    <div style={{ display: "flex", gap: 2 }}>
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          style={{ width: 14, height: 14, fill: "#facc15", color: "#facc15" }}
+                          aria-hidden
+                        />
+                      ))}
+                    </div>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>5.0</span>
+                    <span style={{ fontSize: 12, color: "rgba(255,255,255,.4)" }}>· 50+ reviews</span>
+                  </div>
+                  {reviews.slice(0, 2).map((r, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        background: "rgba(255,255,255,.04)",
+                        borderRadius: 12,
+                        padding: "12px 14px",
+                        marginBottom: 10,
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                        <div
+                          style={{
+                            width: 30,
+                            height: 30,
+                            borderRadius: 8,
+                            background: "linear-gradient(135deg,#00bfff,#1b365d)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: 11,
+                            fontWeight: 700,
+                            flexShrink: 0,
+                          }}
+                        >
+                          {r.avatar}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-sm truncate">
-                            {review.name}
-                          </p>
-                          <p className="text-xs text-blue-200">
-                            {review.company}
+                        <div>
+                          <p style={{ fontSize: 12, fontWeight: 700, margin: 0 }}>{r.name}</p>
+                          <p style={{ fontSize: 11, color: "rgba(255,255,255,.4)", margin: 0 }}>
+                            {r.company}
                           </p>
                         </div>
-                        <span className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded">
-                          {review.result}
+                        <span
+                          style={{
+                            marginLeft: "auto",
+                            fontSize: 10,
+                            background: "rgba(0,191,255,.12)",
+                            color: "var(--blue)",
+                            padding: "3px 8px",
+                            borderRadius: 999,
+                            fontWeight: 700,
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {r.result}
                         </span>
                       </div>
-                      <p className="text-xs text-blue-100 line-clamp-2">
-                        {review.text}
+                      <p
+                        style={{
+                          fontSize: 12,
+                          color: "rgba(255,255,255,.55)",
+                          margin: 0,
+                          lineHeight: 1.55,
+                        }}
+                      >
+                        {r.text.slice(0, 90)}…
                       </p>
                     </div>
                   ))}
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 text-center text-sm">
-                  <div className="bg-white/5 rounded-lg p-3">
-                    <div className="font-bold text-xl">2 Hour</div>
-                    <div className="text-blue-200 text-xs">Response</div>
-                  </div>
-                  <div className="bg-white/5 rounded-lg p-3">
-                    <div className="font-bold text-xl">100%</div>
-                    <div className="text-blue-200 text-xs">On-Time</div>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 14 }}>
+                    {[
+                      ["2 hours", "Response time"],
+                      ["100%", "On-time delivery"],
+                    ].map(([n, l]) => (
+                      <div
+                        key={l}
+                        style={{
+                          background: "rgba(255,255,255,.04)",
+                          borderRadius: 10,
+                          padding: "12px",
+                          textAlign: "center",
+                        }}
+                      >
+                        <p
+                          style={{
+                            fontSize: 20,
+                            fontWeight: 800,
+                            margin: 0,
+                            background: "linear-gradient(110deg,#00bfff,#6ddcff)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text",
+                          }}
+                        >
+                          {n}
+                        </p>
+                        <p style={{ fontSize: 11, color: "rgba(255,255,255,.38)", margin: 0 }}>{l}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        </div>
-      </header>
 
-      {/* Trust Bar - Stats */}
-      <section
-        ref={statsRef}
-        className="py-6 bg-gray-50 border-b border-gray-200"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {stats.map((stat, index) => {
-              const Icon = stat.icon;
-              return (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 44 }}>
+                {services.map((s) => {
+                  const Icon = s.icon;
+                  return (
+                    <button
+                      key={s.id}
+                      onClick={() => setSelectedService(s.id)}
+                      className={`svc-tab${selectedService === s.id ? " active" : ""}`}
+                    >
+                      <Icon style={{ width: 15, height: 15 }} aria-hidden />
+                      {s.title}
+                    </button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </div>
+        </header>
+
+        <section
+          ref={statsRef}
+          style={{
+            position: "relative",
+            padding: "52px 0",
+            borderTop: "1px solid rgba(0,191,255,.08)",
+            borderBottom: "1px solid rgba(0,191,255,.08)",
+          }}
+        >
+          <div className="lp-grid" style={{ opacity: 0.15 }} aria-hidden />
+          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4,minmax(0,1fr))", gap: 16 }}>
+              {[
+                { n: 40, suf: "+", label: "Projects Delivered", sub: "London & UK" },
+                { n: 99, suf: "%", label: "On-Time Delivery", sub: "Every project" },
+                { n: 50, suf: "+", label: "Happy Clients", sub: "Across industries" },
+                { n: 5, suf: ".0 ★", label: "Average Rating", sub: "Verified reviews" },
+              ].map((s, i) => (
                 <motion.div
-                  key={stat.label}
+                  key={i}
                   initial={{ opacity: 0, y: 20 }}
                   animate={isStatsInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                  className="text-center"
+                  transition={{ duration: 0.5, delay: i * 0.07 }}
+                  className="stat-card"
                 >
-                  <div className="flex items-center justify-center mb-1">
-                    <Icon className="w-5 h-5 text-[#00BFFF] mr-1" />
-                    <div className="text-2xl font-bold text-[#1B365D]">
-                      {stat.number}
-                    </div>
+                  <div className="stat-num">
+                    <AnimNum target={s.n} suffix="" run={statsRun} />
+                    <span className="stat-suf">{s.suf}</span>
                   </div>
-                  <div className="text-xs text-gray-600">{stat.label}</div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Main Form Section - Simplified */}
-      <section className="py-12 lg:py-16 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div ref={formRef} className="text-center mb-8">
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1B365D] mb-2">
-              Join 50+ UK businesses who trusted Viorix to build their online
-              presence
-            </h2>
-            <p className="text-gray-600">
-              No commitment • No spam • Response in 2 hours
-            </p>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isFormInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="bg-gradient-to-br from-gray-50 to-blue-50 p-6 lg:p-10 rounded-2xl shadow-xl border-2 border-[#00BFFF]/20"
-          >
-            {submitSuccess ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-8"
-              >
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="w-10 h-10 text-green-500" />
-                </div>
-                <h3 className="text-2xl font-bold text-green-600 mb-2">
-                  Quote Request Received! 🎉
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  We&apos;ll contact you within 2 hours with your custom quote
-                </p>
-
-                <div className="bg-white p-6 rounded-xl border-2 border-green-200 mb-4">
-                  <p className="font-bold text-[#1B365D] mb-3">
-                    What happens next?
+                  <p
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: "rgba(255,255,255,.7)",
+                      margin: "8px 0 2px",
+                    }}
+                  >
+                    {s.label}
                   </p>
-                  <div className="space-y-2 text-sm text-left">
-                    <div className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>We&apos;ll review your requirements (5 mins)</span>
-                    </div>
-                    <div className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>
-                        You&apos;ll receive a detailed quote via email (within 2
-                        hours)
-                      </span>
-                    </div>
-                    <div className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      <span>We&apos;ll schedule a free consultation call</span>
-                    </div>
-                  </div>
-                </div>
+                  <p style={{ fontSize: 11, color: "rgba(255,255,255,.3)", margin: 0 }}>{s.sub}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-                <p className="text-sm text-gray-600 mb-4">
-                  Need to speak immediately?
-                </p>
-                <a
-                  href="tel:+447464485026"
-                  className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-bold rounded-xl hover:shadow-lg transition-all"
-                >
-                  <Phone className="w-5 h-5 mr-2" />
-                  Call +44 7464 485 026
-                </a>
-
-                {/* ICO Number for success state */}
-                <p className="text-xs text-center text-gray-500 mt-6">
-                  Registered with the Information Commissioner’s Office (ICO):{" "}
-                  <a
-                    href="https://ico.org.uk/ESDWebPages/Entry/ZC026034"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#1B365D] font-semibold hover:underline"
-                  >
-                    ZC026034
-                  </a>
-                </p>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Your Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00BFFF] focus:border-[#00BFFF] transition-all"
-                      placeholder="John Smith"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00BFFF] focus:border-[#00BFFF] transition-all"
-                      placeholder="john@example.com"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Phone (Optional)
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00BFFF] focus:border-[#00BFFF] transition-all"
-                      placeholder="+44 7464 485 026"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Budget Range (Optional)
-                    </label>
-                    <select
-                      name="budget"
-                      value={formData.budget}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00BFFF] focus:border-[#00BFFF] transition-all bg-white"
-                    >
-                      <option value="">Select budget</option>
-                      <option value="£500 - £1,000">£500 - £1,000</option>
-                      <option value="£1,000 - £2,500">£1,000 - £2,500</option>
-                      <option value="£2,500 - £5,000">£2,500 - £5,000</option>
-                      <option value="£5,000 - £10,000">£5,000 - £10,000</option>
-                      <option value="£10,000+">£10,000+</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Project Details (Optional)
-                  </label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    rows={3}
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-[#00BFFF] focus:border-[#00BFFF] transition-all resize-none"
-                    placeholder="Tell us about your project..."
-                  />
-                </div>
-
-                <motion.button
-                  type="submit"
-                  disabled={isSubmitting}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`w-full py-4 rounded-xl font-bold text-white transition-all text-lg ${
-                    isSubmitting
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-gradient-to-r from-[#00BFFF] to-[#1B365D] hover:shadow-lg"
-                  }`}
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center justify-center">
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                      Sending...
-                    </span>
-                  ) : (
-                    <span className="flex items-center justify-center">
-                      <Send className="w-5 h-5 mr-2" />
-                      Get My Free Quote Now
-                    </span>
-                  )}
-                </motion.button>
-
-                <div className="flex items-center justify-center gap-6 text-xs text-gray-600 pt-2">
-                  <span className="flex items-center">
-                    <CheckCircle className="w-3 h-3 mr-1 text-green-500" />
-                    100% secure
-                  </span>
-                </div>
-              </form>
-            )}
-
-            {/* Alternative Contact Below Form */}
-            {!submitSuccess && (
-              <div className="mt-6 pt-6 border-t border-gray-300">
-                <p className="text-sm text-center text-gray-600 mb-3">
-                  Prefer to talk directly?
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  {/* Call Button */}
-                  <a
-                    href="tel:+447464485026"
-                    className="flex-1 flex items-center justify-center px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all"
-                  >
-                    <Phone className="w-4 h-4 mr-2" />
-                    Call Now
-                  </a>
-
-                  {/* WhatsApp Button */}
-                  <a
-                    href="https://wa.me/447464485026?text=Hi%20Viorix,%20I%27m%20interested%20in%20a%20website%20quote"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center px-4 py-3 bg-[#25D366] text-white font-semibold rounded-xl hover:shadow-lg transition-all"
-                  >
-                    <FaWhatsapp className="w-4 h-4 mr-2" />
-                    WhatsApp
-                  </a>
-
-                  {/* Email Button */}
-                  <a
-                    href="mailto:info@viorix.co.uk"
-                    className="flex-1 flex items-center justify-center px-4 py-3 bg-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-300 transition-all"
-                  >
-                    <Mail className="w-4 h-4 mr-2" />
-                    Email Us
-                  </a>
-                </div>
-
-                {/* ICO Number Section */}
-                <p className="text-xs text-center text-gray-500 mt-6">
-                  Registered with the Information Commissioner’s Office (ICO):{" "}
-                  <a
-                    href="https://ico.org.uk/ESDWebPages/Entry/ZC026034"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#1B365D] font-semibold hover:underline"
-                  >
-                    ZC026034
-                  </a>
-                </p>
-              </div>
-            )}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Portfolio Section */}
-      <section className="py-12 bg-gradient-to-b from-white to-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 gap-4">
-            <div>
-              <h2 className="text-3xl font-bold text-[#1B365D] mb-1">
-                Our Recent Work
+        <section style={{ padding: "80px 0" }}>
+          <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 24px" }}>
+            <div ref={formRef} style={{ textAlign: "center", marginBottom: 40 }}>
+              <h2
+                style={{
+                  fontSize: "clamp(26px,3.5vw,42px)",
+                  fontWeight: 800,
+                  letterSpacing: "-.03em",
+                  margin: "0 0 12px",
+                }}
+              >
+                Tell us about your project
               </h2>
-              <p className="text-gray-600">
-                Case studies & recent projects that delivered measurable results
+              <p style={{ fontSize: 16, color: "rgba(255,255,255,.5)", margin: 0 }}>
+                We&apos;ll come back to you within 2 hours with a tailored quote — no pressure, no
+                obligation.
               </p>
             </div>
 
-            {/* Filters & Search */}
-            <div className="flex flex-col sm:flex-row gap-3 items-center w-full sm:w-auto">
-              <div className="flex flex-wrap gap-2 justify-center">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={isFormInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="form-card">
+                {submitSuccess ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    style={{ textAlign: "center", padding: "16px 0" }}
+                  >
+                    <div
+                      style={{
+                        width: 72,
+                        height: 72,
+                        background: "rgba(0,191,255,.1)",
+                        border: "1px solid rgba(0,191,255,.3)",
+                        borderRadius: "50%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        margin: "0 auto 20px",
+                      }}
+                    >
+                      <CheckCircle style={{ width: 32, height: 32, color: "var(--blue)" }} />
+                    </div>
+                    <h3 style={{ fontSize: 24, fontWeight: 800, margin: "0 0 8px" }}>
+                      We&apos;ve got your request
+                    </h3>
+                    <p style={{ color: "rgba(255,255,255,.55)", marginBottom: 28 }}>
+                      Expect a reply within 2 hours. In the meantime, feel free to explore our work
+                      below.
+                    </p>
+                    <div
+                      style={{
+                        background: "rgba(255,255,255,.04)",
+                        border: "1px solid var(--border)",
+                        borderRadius: 14,
+                        padding: 20,
+                        textAlign: "left",
+                        marginBottom: 24,
+                      }}
+                    >
+                      <p style={{ fontWeight: 700, margin: "0 0 10px" }}>What happens next</p>
+                      {[
+                        "We review your requirements",
+                        "You receive a detailed quote by email",
+                        "We schedule a free consultation call",
+                      ].map((step, i) => (
+                        <div key={i} style={{ display: "flex", gap: 10, marginBottom: 8 }}>
+                          <div
+                            style={{
+                              width: 20,
+                              height: 20,
+                              borderRadius: 6,
+                              background: "rgba(0,191,255,.1)",
+                              border: "1px solid rgba(0,191,255,.2)",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: 10,
+                              fontWeight: 700,
+                              color: "var(--blue)",
+                              flexShrink: 0,
+                            }}
+                          >
+                            {i + 1}
+                          </div>
+                          <p style={{ fontSize: 13, color: "rgba(255,255,255,.65)", margin: 0 }}>
+                            {step}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                    <a
+                      href="tel:+447464485026"
+                      className="btn-primary"
+                      style={{ width: "100%", justifyContent: "center" }}
+                    >
+                      <Phone style={{ width: 15, height: 15 }} aria-hidden />
+                      Call +44 7464 485 026
+                    </a>
+                    <p style={{ fontSize: 11, color: "rgba(255,255,255,.25)", marginTop: 16 }}>
+                      ICO registered:{" "}
+                      <a
+                        href="https://ico.org.uk/ESDWebPages/Entry/ZC026034"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "rgba(255,255,255,.4)" }}
+                      >
+                        ZC026034
+                      </a>
+                    </p>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={handleSubmit}>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: 16,
+                        marginBottom: 16,
+                      }}
+                    >
+                      <div>
+                        <label className="form-label">Your Name *</label>
+                        <input
+                          type="text"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          required
+                          className="form-input"
+                          placeholder="John Smith"
+                        />
+                      </div>
+                      <div>
+                        <label className="form-label">Email Address *</label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          required
+                          className="form-input"
+                          placeholder="john@example.com"
+                        />
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: 16,
+                        marginBottom: 16,
+                      }}
+                    >
+                      <div>
+                        <label className="form-label">Phone (optional)</label>
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          className="form-input"
+                          placeholder="+44 7464 485 026"
+                        />
+                      </div>
+                      <div>
+                        <label className="form-label">Budget range (optional)</label>
+                        <select
+                          name="budget"
+                          value={formData.budget}
+                          onChange={handleInputChange}
+                          className="form-input"
+                        >
+                          <option value="">Select a range</option>
+                          <option value="£500 - £1,000">£500 – £1,000</option>
+                          <option value="£1,000 - £2,500">£1,000 – £2,500</option>
+                          <option value="£2,500 - £5,000">£2,500 – £5,000</option>
+                          <option value="£5,000 - £10,000">£5,000 – £10,000</option>
+                          <option value="£10,000+">£10,000+</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div style={{ marginBottom: 22 }}>
+                      <label className="form-label">Tell us about your project (optional)</label>
+                      <textarea
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        rows={3}
+                        className="form-input"
+                        placeholder="What are you trying to build or improve?"
+                        style={{ resize: "none" }}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="btn-primary"
+                      style={{ width: "100%", justifyContent: "center", opacity: isSubmitting ? 0.65 : 1 }}
+                    >
+                      {isSubmitting ? (
+                        <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <span
+                            style={{
+                              width: 16,
+                              height: 16,
+                              border: "2px solid rgba(255,255,255,.3)",
+                              borderTopColor: "#fff",
+                              borderRadius: "50%",
+                              animation: "spin 0.7s linear infinite",
+                              display: "inline-block",
+                            }}
+                          />
+                          Sending…
+                        </span>
+                      ) : (
+                        <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <Send style={{ width: 15, height: 15 }} aria-hidden />
+                          Request My Free Quote
+                        </span>
+                      )}
+                    </button>
+                    <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+                    <p
+                      style={{
+                        fontSize: 11,
+                        color: "rgba(255,255,255,.25)",
+                        textAlign: "center",
+                        marginTop: 14,
+                      }}
+                    >
+                      Your details are kept private. ICO registered:{" "}
+                      <a
+                        href="https://ico.org.uk/ESDWebPages/Entry/ZC026034"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "rgba(255,255,255,.35)" }}
+                      >
+                        ZC026034
+                      </a>
+                    </p>
+                  </form>
+                )}
+
+                {!submitSuccess && (
+                  <div
+                    style={{
+                      marginTop: 28,
+                      paddingTop: 24,
+                      borderTop: "1px solid rgba(255,255,255,.07)",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 12,
+                      alignItems: "center",
+                    }}
+                  >
+                    <p style={{ fontSize: 13, color: "rgba(255,255,255,.35)", margin: 0 }}>
+                      Prefer to talk first?
+                    </p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center" }}>
+                      <a
+                        href="tel:+447464485026"
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                          padding: "9px 16px",
+                          border: "1px solid rgba(255,255,255,.12)",
+                          borderRadius: 10,
+                          color: "rgba(255,255,255,.7)",
+                          fontSize: 13,
+                          fontWeight: 600,
+                          textDecoration: "none",
+                          transition: "border-color .2s",
+                          background: "transparent",
+                        }}
+                      >
+                        <Phone style={{ width: 13, height: 13 }} aria-hidden /> Call us
+                      </a>
+                      <a
+                        href="https://wa.me/447464485026?text=Hi%20Viorix"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                          padding: "9px 16px",
+                          border: "1px solid rgba(37,211,102,.25)",
+                          borderRadius: 10,
+                          color: "#25d366",
+                          fontSize: 13,
+                          fontWeight: 600,
+                          textDecoration: "none",
+                          background: "transparent",
+                        }}
+                      >
+                        <FaWhatsapp style={{ width: 13, height: 13 }} aria-hidden /> WhatsApp
+                      </a>
+                      <a
+                        href="mailto:info@viorix.co.uk"
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                          padding: "9px 16px",
+                          border: "1px solid rgba(255,255,255,.1)",
+                          borderRadius: 10,
+                          color: "rgba(255,255,255,.6)",
+                          fontSize: 13,
+                          fontWeight: 600,
+                          textDecoration: "none",
+                          background: "transparent",
+                        }}
+                      >
+                        <Mail style={{ width: 13, height: 13 }} aria-hidden /> Email
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <section style={{ padding: "80px 0", borderTop: "1px solid rgba(0,191,255,.07)" }}>
+          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "flex-end",
+                justifyContent: "space-between",
+                gap: 24,
+                marginBottom: 40,
+              }}
+            >
+              <div>
+                <h2
+                  style={{
+                    fontSize: "clamp(24px,3vw,38px)",
+                    fontWeight: 800,
+                    letterSpacing: "-.025em",
+                    margin: "0 0 8px",
+                  }}
+                >
+                  Recent Work
+                </h2>
+                <p style={{ fontSize: 15, color: "rgba(255,255,255,.45)", margin: 0 }}>
+                  Projects that delivered measurable results for real businesses.
+                </p>
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {categories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setPortfolioFilter(cat)}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
-                      portfolioFilter === cat
-                        ? "bg-[#00BFFF] text-white"
-                        : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"
-                    }`}
+                    style={{
+                      padding: "7px 14px",
+                      borderRadius: 999,
+                      border: `1px solid ${portfolioFilter === cat ? "var(--blue)" : "var(--border)"}`,
+                      background: portfolioFilter === cat ? "rgba(0,191,255,.12)" : "transparent",
+                      color: portfolioFilter === cat ? "var(--blue)" : "rgba(255,255,255,.55)",
+                      fontSize: 12,
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      transition: "all .2s",
+                    }}
                   >
                     {cat}
                   </button>
                 ))}
               </div>
-
-              <div className="flex items-center bg-white border border-gray-200 rounded-full px-3 py-1 w-full sm:w-auto">
-                <input
-                  value={portfolioQuery}
-                  onChange={(e) => setPortfolioQuery(e.target.value)}
-                  placeholder="Search projects..."
-                  className="outline-none px-2 py-1 text-sm w-full"
-                  aria-label="Search projects"
-                />
-                <button
-                  onClick={() => setPortfolioQuery("")}
-                  className="text-gray-400 hover:text-gray-600 ml-2 text-sm"
-                  aria-label="Clear search"
-                >
-                  Clear
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Portfolio Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPortfolio.map((item, index) => (
-              <motion.div
-                key={item.title + index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all group flex flex-col"
-              >
-                {/* Image */}
-                <div className="relative w-full h-48 sm:h-56 bg-gray-100">
-                  <Image
-                    src={item.imageSrc}
-                    alt={item.alt}
-                    fill
-                    className="object-cover transition-transform group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                    <div>
-                      <div className="text-white font-bold text-lg">
-                        {item.title}
-                      </div>
-                      <div className="text-xs text-white/80">
-                        {item.category}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-5 flex flex-col flex-grow justify-between">
-                  <div>
-                    <h3 className="font-bold text-[#1B365D] mb-2 text-lg">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-3">
-                      {item.description}
-                    </p>
-                  </div>
-
-                  {/* Fixed Button */}
-                  {item.link ? (
-                    <a
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white rounded-xl font-semibold hover:shadow-md transition"
-                    >
-                      View Project <ExternalLink className="w-4 h-4 ml-2" />
-                    </a>
-                  ) : (
-                    <button
-                      onClick={scrollToForm}
-                      className="inline-flex items-center justify-center px-4 py-3 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-600 transition"
-                    >
-                      Start a Similar Project
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </button>
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* CTA Button */}
-          <div className="text-center mt-12">
-            <button
-              onClick={scrollToForm}
-              className="inline-flex items-center px-6 py-3 border-2 border-[#00BFFF] text-[#00BFFF] font-semibold rounded-xl hover:bg-[#00BFFF] hover:text-white transition-all"
-            >
-              Start Your Project Today
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Reviews Section - Enhanced */}
-      <section ref={reviewsRef} className="py-12 lg:py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isReviewsInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-10"
-          >
-            <div className="inline-flex items-center px-4 py-2 bg-yellow-100 rounded-full border border-yellow-300 mb-4">
-              <Star className="w-5 h-5 text-yellow-500 mr-2 fill-yellow-500" />
-              <span className="text-yellow-900 font-semibold">
-                5.0 Rating • 50+ Reviews
-              </span>
-            </div>
-            <h2 className="text-3xl lg:text-4xl font-bold text-[#1B365D] mb-3">
-              Real Results from Real Businesses
-            </h2>
-            <p className="text-lg text-gray-600">
-              See the impact we&apos;ve made for UK companies
-            </p>
-          </motion.div>
-
-          <div className="grid sm:grid-cols-2 gap-6">
-            {reviews.map((review, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isReviewsInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-gradient-to-br from-gray-50 to-blue-50 p-6 rounded-2xl shadow-md hover:shadow-lg transition-all border border-gray-200"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center">
-                    {[...Array(review.rating)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-4 h-4 fill-yellow-500 text-yellow-500"
-                      />
-                    ))}
-                  </div>
-                  <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">
-                    {review.result}
-                  </span>
-                </div>
-                <p className="text-gray-700 mb-4 leading-relaxed">
-                  &ldquo;{review.text}&rdquo;
-                </p>
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#1B365D] to-[#00BFFF] rounded-full flex items-center justify-center text-white font-bold mr-3">
-                    {review.avatar}
-                  </div>
-                  <div>
-                    <p className="font-bold text-[#1B365D]">{review.name}</p>
-                    <p className="text-sm text-gray-600">
-                      {review.role}, {review.company}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section - Objection Handling */}
-      <section className="py-12 lg:py-16 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-[#1B365D] mb-2">
-              Common Questions
-            </h2>
-            <p className="text-gray-600">
-              Everything you need to know before getting started
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {faqs.map((faq, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200"
-              >
-                <button
-                  onClick={() => setShowFaq(showFaq === faq.q ? null : faq.q)}
-                  className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
-                >
-                  <span className="font-semibold text-[#1B365D] pr-4">
-                    {faq.q}
-                  </span>
-                  <ChevronDown
-                    className={`w-5 h-5 text-[#00BFFF] flex-shrink-0 transition-transform ${
-                      showFaq === faq.q ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                <AnimatePresence>
-                  {showFaq === faq.q && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-6 pb-4 text-gray-700 leading-relaxed">
-                        {faq.a}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="mt-8 text-center">
-            <p className="text-gray-600 mb-4">Still have questions?</p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              {/* Call Button */}
-              <a
-                href="tel:+447464485026"
-                className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-semibold rounded-xl hover:shadow-lg transition-all"
-              >
-                <Phone className="w-4 h-4 mr-2" />
-                Call Us Now
-              </a>
-
-              {/* WhatsApp Button */}
-              <a
-                href="https://wa.me/447464485026?text=Hi%20Viorix,%20I%27m%20interested%20in%20a%20website%20quote"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-6 py-3 bg-[#25D366] text-white font-semibold rounded-xl hover:shadow-lg transition-all"
-              >
-                <FaWhatsapp className="w-4 h-4 mr-2" />
-                Chat on WhatsApp
-              </a>
-
-              {/* Get Free Quote Button */}
-              <button
-                onClick={scrollToForm}
-                className="inline-flex items-center justify-center px-6 py-3 border-2 border-[#00BFFF] text-[#00BFFF] font-semibold rounded-xl hover:bg-[#00BFFF] hover:text-white transition-all"
-              >
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Get Free Quote
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Guarantee Section */}
-      <section className="py-12 bg-gradient-to-br from-green-50 to-emerald-50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-10 border-2 border-green-200">
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full mb-4">
-                <Shield className="w-8 h-8 text-white" />
-              </div>
-              <h2 className="text-3xl font-bold text-[#1B365D] mb-3">
-                Our 100% Satisfaction Guarantee
-              </h2>
-              <p className="text-gray-600 text-lg">
-                Your success is our priority. Here&apos;s our promise:
-              </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6 mb-6">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
-                </div>
-                <h3 className="font-bold text-[#1B365D] mb-2">
-                  Unlimited Revisions
-                </h3>
-                <p className="text-sm text-gray-600">
-                  We&apos;ll refine your project until it&apos;s exactly what
-                  you envisioned
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Clock className="w-6 h-6 text-green-600" />
-                </div>
-                <h3 className="font-bold text-[#1B365D] mb-2">
-                  On-Time Delivery
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Miss our deadline? Get 10% off your project cost
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <DollarSign className="w-6 h-6 text-green-600" />
-                </div>
-                <h3 className="font-bold text-[#1B365D] mb-2">
-                  Money-Back Promise
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Not satisfied? Get a full refund within 14 days
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6 border-2 border-[#00BFFF]">
-              <p className="text-center text-gray-700 font-medium mb-4">
-                <span className="font-bold text-[#1B365D]">Zero Risk.</span> If
-                we don&apos;t deliver exceptional results, you don&apos;t pay.
-              </p>
-              <div className="text-center">
-                <button
-                  onClick={scrollToForm}
-                  className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-bold rounded-xl hover:shadow-lg transition-all"
-                >
-                  Get Started Risk-Free
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Us */}
-      <section className="py-12 lg:py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-[#1B365D] mb-2">
-              Why Choose Viorix?
-            </h2>
-            <p className="text-gray-600">
-              We&apos;re different from other agencies
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: Target,
-                title: "Results-Focused",
-                description:
-                  "We don't just build websites - we create digital assets that drive real business growth and revenue.",
-              },
-              {
-                icon: Zap,
-                title: "Lightning Fast",
-                description:
-                  "2-hour response time, fast project delivery, and immediate support when you need it most.",
-              },
-              {
-                icon: Users,
-                title: "UK-Based Team",
-                description:
-                  "Work directly with local experts who understand your market and speak your language.",
-              },
-            ].map((item, index) => {
-              const Icon = item.icon;
-              return (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(320px,1fr))", gap: 22 }}>
+              {filteredPortfolio.map((item, index) => (
                 <motion.div
-                  key={index}
+                  key={item.title + index}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-6 hover:shadow-lg transition-shadow"
+                  transition={{ duration: 0.45, delay: index * 0.05 }}
+                  className="port-card"
                 >
-                  <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] rounded-xl mb-4">
-                    <Icon className="w-7 h-7 text-white" />
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "100%",
+                      paddingTop: "58%",
+                      background: "rgba(255,255,255,.04)",
+                    }}
+                  >
+                    <Image
+                      src={item.imageSrc}
+                      alt={item.alt}
+                      fill
+                      className="object-cover"
+                      style={{ transition: "transform .4s" }}
+                      sizes="(max-width:768px) 100vw, 33vw"
+                    />
                   </div>
-                  <h3 className="text-xl font-bold text-[#1B365D] mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {item.description}
-                  </p>
+                  <div style={{ padding: "22px 22px 24px" }}>
+                    <span
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 700,
+                        letterSpacing: ".1em",
+                        textTransform: "uppercase",
+                        color: "var(--blue)",
+                        marginBottom: 6,
+                        display: "block",
+                      }}
+                    >
+                      {item.category}
+                    </span>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#fff", margin: "0 0 8px" }}>
+                      {item.title}
+                    </h3>
+                    <p
+                      style={{
+                        fontSize: 13,
+                        color: "rgba(255,255,255,.45)",
+                        lineHeight: 1.6,
+                        margin: "0 0 18px",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {item.description}
+                    </p>
+                    {item.link ? (
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-primary"
+                        style={{ padding: "10px 18px", fontSize: 12 }}
+                      >
+                        View Project <ExternalLink style={{ width: 12, height: 12 }} aria-hidden />
+                      </a>
+                    ) : (
+                      <button
+                        onClick={scrollToForm}
+                        className="btn-primary"
+                        style={{
+                          padding: "10px 18px",
+                          fontSize: 12,
+                          background: "rgba(0,191,255,.12)",
+                          color: "var(--blue)",
+                        }}
+                      >
+                        Start something similar <ArrowRight style={{ width: 12, height: 12 }} aria-hidden />
+                      </button>
+                    )}
+                  </div>
                 </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-16 lg:py-20 bg-gradient-to-br from-[#1B365D] via-[#2A4A6B] to-[#00BFFF] text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <motion.div
-            animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.5, 0.2] }}
-            transition={{ duration: 10, repeat: Infinity }}
-            className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{ scale: [1.3, 1, 1.3], opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 12, repeat: Infinity, delay: 2 }}
-            className="absolute bottom-0 right-0 w-80 h-80 bg-cyan-300 rounded-full blur-3xl"
-          />
-        </div>
-
-        <div className="relative max-w-4xl mx-auto text-center px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <div className="inline-flex items-center px-4 py-2 bg-yellow-500/20 backdrop-blur-sm rounded-full border border-yellow-300/30 mb-6">
-              <Clock className="w-4 h-4 text-yellow-300 mr-2" />
-              <span className="text-yellow-300 font-medium">
-                Limited Time: £100 OFF Today
-              </span>
-            </div>
-
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-              Ready to Transform Your Business?
-            </h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Join 50+ successful UK businesses. Get your free quote in 2
-              minutes.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <motion.button
-                onClick={scrollToForm}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#1B365D] font-bold rounded-full hover:bg-blue-50 transition-all shadow-2xl text-lg"
-              >
-                <Send className="w-5 h-5 mr-2" />
-                Get Free Quote Now
-              </motion.button>
-
-              <motion.a
-                href="tel:+447464485026"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-bold rounded-full hover:bg-white/10 transition-all text-lg"
-              >
-                <Phone className="w-5 h-5 mr-2" />
-                Call +44 7464 485 026
-              </motion.a>
-            </div>
-
-            <div className="flex flex-wrap justify-center gap-6 text-sm">
-              {[
-                "✓ Free consultation included",
-                "✓ 2-hour response time",
-                "✓ No obligation",
-                "✓ Money-back guarantee",
-              ].map((item) => (
-                <span key={item} className="text-blue-100">
-                  {item}
-                </span>
               ))}
             </div>
-          </motion.div>
+          </div>
+        </section>
+
+        <section ref={reviewsRef} style={{ padding: "80px 0", borderTop: "1px solid rgba(0,191,255,.07)" }}>
+          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={isReviewsInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6 }}
+              style={{ textAlign: "center", marginBottom: 48 }}
+            >
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "6px 16px",
+                  borderRadius: 999,
+                  border: "1px solid rgba(250,204,21,.25)",
+                  background: "rgba(250,204,21,.06)",
+                  marginBottom: 16,
+                }}
+              >
+                <Star style={{ width: 14, height: 14, fill: "#facc15", color: "#facc15" }} aria-hidden />
+                <span style={{ fontSize: 12, color: "#facc15", fontWeight: 600 }}>5.0 Rating · 50+ Reviews</span>
+              </div>
+              <h2
+                style={{
+                  fontSize: "clamp(24px,3vw,38px)",
+                  fontWeight: 800,
+                  letterSpacing: "-.025em",
+                  margin: "0 0 10px",
+                }}
+              >
+                What our clients say
+              </h2>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,.45)", margin: 0 }}>Real businesses, real outcomes.</p>
+            </motion.div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2,minmax(0,1fr))", gap: 20 }}>
+              {reviews.map((r, i) => (
+                <motion.article
+                  key={i}
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={isReviewsInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: i * 0.09 }}
+                  className="review-card"
+                  style={{ position: "relative" }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+                    <div style={{ display: "flex", gap: 3 }}>
+                      {[...Array(r.rating)].map((_, j) => (
+                        <Star
+                          key={j}
+                          style={{ width: 14, height: 14, fill: "#facc15", color: "#facc15" }}
+                          aria-hidden
+                        />
+                      ))}
+                    </div>
+                    <span
+                      style={{
+                        fontSize: 10,
+                        fontWeight: 700,
+                        letterSpacing: ".1em",
+                        textTransform: "uppercase",
+                        color: "var(--blue)",
+                        border: "1px solid rgba(0,191,255,.22)",
+                        background: "rgba(0,191,255,.07)",
+                        padding: "4px 10px",
+                        borderRadius: 999,
+                      }}
+                    >
+                      {r.result}
+                    </span>
+                  </div>
+                  <p
+                    style={{
+                      fontSize: 14,
+                      lineHeight: 1.7,
+                      color: "rgba(255,255,255,.7)",
+                      margin: "0 0 22px",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    &quot;{r.text}&quot;
+                  </p>
+                  <div
+                    style={{
+                      borderTop: "1px solid rgba(255,255,255,.06)",
+                      paddingTop: 18,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 42,
+                        height: 42,
+                        borderRadius: 10,
+                        background: "linear-gradient(135deg,#00bfff,#1b365d)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        flexShrink: 0,
+                        border: "1px solid rgba(0,191,255,.3)",
+                      }}
+                    >
+                      {r.avatar}
+                    </div>
+                    <div>
+                      <p style={{ fontSize: 14, fontWeight: 700, margin: 0 }}>{r.name}</p>
+                      <p style={{ fontSize: 12, color: "rgba(255,255,255,.38)", margin: 0 }}>
+                        {r.role}, {r.company}
+                      </p>
+                    </div>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section style={{ padding: "80px 0", borderTop: "1px solid rgba(0,191,255,.07)" }}>
+          <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px" }}>
+            <div className="guar-card">
+              <div style={{ textAlign: "center", marginBottom: 36 }}>
+                <div
+                  style={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: "50%",
+                    border: "1px solid rgba(0,191,255,.25)",
+                    background: "rgba(0,191,255,.07)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "0 auto 18px",
+                  }}
+                >
+                  <Shield style={{ width: 24, height: 24, color: "var(--blue)" }} aria-hidden />
+                </div>
+                <h2
+                  style={{
+                    fontSize: "clamp(22px,3vw,34px)",
+                    fontWeight: 800,
+                    letterSpacing: "-.025em",
+                    margin: "0 0 10px",
+                  }}
+                >
+                  Our Guarantee
+                </h2>
+                <p style={{ fontSize: 15, color: "rgba(255,255,255,.5)", maxWidth: "44ch", margin: "0 auto" }}>
+                  We stand behind our work. These aren&apos;t just promises — they&apos;re our standard.
+                </p>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 18 }}>
+                {[
+                  {
+                    icon: CheckCircle,
+                    title: "Unlimited Revisions",
+                    desc: "We refine until it's exactly what you envisioned — no extra charge.",
+                  },
+                  {
+                    icon: Clock,
+                    title: "On-Time Delivery",
+                    desc: "Miss a deadline? You get 10% off, automatically.",
+                  },
+                  {
+                    icon: DollarSign,
+                    title: "14-Day Money Back",
+                    desc: "If we fall short of expectations, you receive a full refund.",
+                  },
+                ].map((g, i) => {
+                  const Icon = g.icon;
+                  return (
+                    <div
+                      key={i}
+                      style={{
+                        background: "rgba(255,255,255,.03)",
+                        border: "1px solid rgba(0,191,255,.1)",
+                        borderRadius: 14,
+                        padding: "22px 18px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 42,
+                          height: 42,
+                          borderRadius: 11,
+                          border: "1px solid rgba(0,191,255,.18)",
+                          background: "rgba(0,191,255,.07)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          margin: "0 auto 14px",
+                        }}
+                      >
+                        <Icon style={{ width: 18, height: 18, color: "var(--blue)" }} aria-hidden />
+                      </div>
+                      <h4 style={{ fontSize: 14, fontWeight: 700, margin: "0 0 8px" }}>{g.title}</h4>
+                      <p style={{ fontSize: 13, color: "rgba(255,255,255,.45)", lineHeight: 1.6, margin: 0 }}>
+                        {g.desc}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style={{ padding: "80px 0", borderTop: "1px solid rgba(0,191,255,.07)" }}>
+          <div style={{ maxWidth: 800, margin: "0 auto", padding: "0 24px" }}>
+            <div style={{ textAlign: "center", marginBottom: 40 }}>
+              <h2
+                style={{
+                  fontSize: "clamp(22px,3vw,34px)",
+                  fontWeight: 800,
+                  letterSpacing: "-.025em",
+                  margin: "0 0 10px",
+                }}
+              >
+                Common Questions
+              </h2>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,.45)", margin: 0 }}>
+                Everything you need before getting started.
+              </p>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {faqs.map((faq, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.04 }}
+                  className={`faq-item${showFaq === faq.q ? " open" : ""}`}
+                >
+                  <button
+                    onClick={() => setShowFaq(showFaq === faq.q ? null : faq.q)}
+                    style={{
+                      width: "100%",
+                      padding: "18px 22px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      background: "none",
+                      border: "none",
+                      color: "#fff",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      gap: 16,
+                    }}
+                  >
+                    <span style={{ fontSize: 14, fontWeight: 600 }}>{faq.q}</span>
+                    <ChevronDown
+                      style={{
+                        width: 18,
+                        height: 18,
+                        color: "var(--blue)",
+                        flexShrink: 0,
+                        transform: showFaq === faq.q ? "rotate(180deg)" : "none",
+                        transition: "transform .25s",
+                      }}
+                      aria-hidden
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {showFaq === faq.q && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.28 }}
+                        style={{ overflow: "hidden" }}
+                      >
+                        <p
+                          style={{
+                            padding: "0 22px 18px",
+                            fontSize: 14,
+                            color: "rgba(255,255,255,.55)",
+                            lineHeight: 1.7,
+                            margin: 0,
+                          }}
+                        >
+                          {faq.a}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ))}
+            </div>
+            <div style={{ textAlign: "center", marginTop: 36 }}>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,.38)", marginBottom: 16 }}>
+                Still have questions?
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center" }}>
+                <a href="tel:+447464485026" className="btn-ghost" style={{ fontSize: 13, padding: "10px 20px" }}>
+                  <Phone style={{ width: 13, height: 13 }} aria-hidden /> Call us
+                </a>
+                <a
+                  href="https://wa.me/447464485026"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "10px 20px",
+                    border: "1px solid rgba(37,211,102,.28)",
+                    borderRadius: 11,
+                    color: "#25d366",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    textDecoration: "none",
+                  }}
+                >
+                  <FaWhatsapp style={{ width: 13, height: 13 }} aria-hidden /> WhatsApp
+                </a>
+                <button onClick={scrollToForm} className="btn-primary" style={{ fontSize: 13, padding: "10px 20px" }}>
+                  <MessageCircle style={{ width: 13, height: 13 }} aria-hidden /> Free Quote
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style={{ padding: "80px 0", borderTop: "1px solid rgba(0,191,255,.07)" }}>
+          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
+            <div style={{ textAlign: "center", marginBottom: 44 }}>
+              <h2
+                style={{
+                  fontSize: "clamp(22px,3vw,34px)",
+                  fontWeight: 800,
+                  letterSpacing: "-.025em",
+                  margin: "0 0 10px",
+                }}
+              >
+                Why Viorix?
+              </h2>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,.45)", margin: 0 }}>
+                What makes working with us genuinely different.
+              </p>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 20 }}>
+              {[
+                {
+                  icon: Target,
+                  title: "Results-first thinking",
+                  desc: "We don't just build things — we ask what outcome you need and engineer backwards from there.",
+                },
+                {
+                  icon: Zap,
+                  title: "Fast, responsive team",
+                  desc: "2-hour response time, rapid iteration, and honest communication throughout every project.",
+                },
+                {
+                  icon: Users,
+                  title: "UK-based expertise",
+                  desc: "Work directly with a London team that understands your market, your customers, and your goals.",
+                },
+              ].map((item, i) => {
+                const Icon = item.icon;
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.09 }}
+                    className="val-card"
+                  >
+                    <div className="val-ico">
+                      <Icon style={{ width: 22, height: 22, color: "var(--blue)" }} aria-hidden />
+                    </div>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, margin: "0 0 10px" }}>{item.title}</h3>
+                    <p style={{ fontSize: 14, color: "rgba(255,255,255,.5)", lineHeight: 1.65, margin: 0 }}>
+                      {item.desc}
+                    </p>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section style={{ padding: "80px 24px", borderTop: "1px solid rgba(0,191,255,.07)" }}>
+          <div style={{ maxWidth: 900, margin: "0 auto" }}>
+            <div className="cta-block">
+              <div className="lp-grid" style={{ opacity: 0.5 }} aria-hidden />
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "radial-gradient(ellipse at 30% 50%,rgba(0,191,255,.12) 0%,transparent 58%),radial-gradient(ellipse at 70% 50%,rgba(0,80,200,.1) 0%,transparent 58%)",
+                  pointerEvents: "none",
+                }}
+                aria-hidden
+              />
+              <div className="cta-scanline" aria-hidden />
+              <div style={{ position: "relative", zIndex: 2 }}>
+                <h2
+                  style={{
+                    fontSize: "clamp(26px,3.8vw,46px)",
+                    fontWeight: 800,
+                    letterSpacing: "-.035em",
+                    margin: "0 0 14px",
+                    lineHeight: 1.05,
+                  }}
+                >
+                  Ready to build something{" "}
+                  <span
+                    style={{
+                      background: "linear-gradient(110deg,#00bfff 0%,#6ddcff 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    great
+                  </span>
+                  ?
+                </h2>
+                <p
+                  style={{
+                    fontSize: 16,
+                    color: "rgba(255,255,255,.55)",
+                    maxWidth: "48ch",
+                    margin: "0 auto 32px",
+                    lineHeight: 1.7,
+                  }}
+                >
+                  Take the first step — it&apos;s free, takes 2 minutes, and there&apos;s no obligation
+                  whatsoever.
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
+                  <button onClick={scrollToForm} className="btn-primary">
+                    <Send style={{ width: 15, height: 15 }} aria-hidden />
+                    Get a Free Quote
+                  </button>
+                  <a href="tel:+447464485026" className="btn-ghost">
+                    <Phone style={{ width: 15, height: 15 }} aria-hidden />
+                    +44 7464 485 026
+                  </a>
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 20, justifyContent: "center", marginTop: 24 }}>
+                  {["Free consultation", "2-hour response", "No obligation", "Money-back guarantee"].map((t) => (
+                    <span
+                      key={t}
+                      style={{ fontSize: 12, color: "rgba(255,255,255,.38)", display: "flex", alignItems: "center", gap: 5 }}
+                    >
+                      <CheckCircle style={{ width: 12, height: 12, color: "var(--blue)" }} aria-hidden /> {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="sticky-bar lg:hidden">
+          <div style={{ display: "flex", gap: 10 }}>
+            <button onClick={scrollToForm} className="btn-primary" style={{ flex: 1, justifyContent: "center" }}>
+              <Send style={{ width: 14, height: 14 }} aria-hidden />
+              Free Quote
+            </button>
+            <a
+              href="tel:+447464485026"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 48,
+                height: 48,
+                borderRadius: 12,
+                background: "rgba(255,255,255,.06)",
+                border: "1px solid rgba(255,255,255,.1)",
+                color: "#fff",
+                textDecoration: "none",
+              }}
+            >
+              <Phone style={{ width: 18, height: 18 }} aria-hidden />
+            </a>
+            <a
+              href="https://wa.me/447464485026"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 48,
+                height: 48,
+                borderRadius: 12,
+                background: "rgba(37,211,102,.1)",
+                border: "1px solid rgba(37,211,102,.2)",
+                color: "#25d366",
+                textDecoration: "none",
+              }}
+            >
+              <FaWhatsapp style={{ width: 18, height: 18 }} aria-hidden />
+            </a>
+          </div>
         </div>
-      </section>
 
-      {/* Sticky Mobile CTA */}
-      <motion.div
-        initial={{ y: 100 }}
-        animate={{ y: 0 }}
-        className="lg:hidden fixed bottom-0 left-0 right-0 p-3 bg-white border-t-2 border-gray-200 shadow-2xl z-50"
-      >
-        <div className="flex gap-2">
-          {/* Get Quote Button */}
-          <motion.button
-            onClick={scrollToForm}
-            whileTap={{ scale: 0.95 }}
-            className="flex-1 py-3 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-bold rounded-xl shadow-lg flex items-center justify-center"
-          >
-            <Send className="w-4 h-4 mr-2" />
-            Get Quote
-          </motion.button>
-
-          {/* Call Button */}
-          <motion.a
-            href="tel:+447464485026"
-            whileTap={{ scale: 0.95 }}
-            className="px-4 py-3 bg-green-500 text-white font-bold rounded-xl shadow-lg flex items-center justify-center"
-          >
-            <Phone className="w-5 h-5" />
-          </motion.a>
-
-          {/* WhatsApp Button */}
-         
-        </div>
-      </motion.div>
-
-      {/* Bottom Padding for Mobile */}
-      <div className="lg:hidden h-20" />
-    </div>
+        <div className="lg:hidden" style={{ height: 72 }} />
+      </div>
+    </>
   );
 };
 

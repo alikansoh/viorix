@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Star,
   Shield,
-  Bolt,
   ArrowRight,
   Globe,
   Code,
@@ -14,87 +13,91 @@ import {
   Users,
   TrendingUp,
   CheckCircle,
+  Zap,
 } from "lucide-react";
 import Link from "next/link";
 
 const WhyUs = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [visibleCards, setVisibleCards] = useState<boolean[]>([]);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
 
   const features = [
     {
       title: "Custom Web Development",
       description:
-        "Tailored solutions built from scratch to match your exact business requirements and goals.",
-      icon: <Code aria-hidden="true" className="w-8 h-8 text-[#00BFFF]" />,
+        "Bespoke solutions architected from scratch for London businesses — no templates, no shortcuts.",
+      icon: <Code aria-hidden="true" className="w-7 h-7 text-[#00BFFF]" />,
       metric: "100% Custom",
+      glow: "rgba(0,191,255,0.18)",
     },
     {
       title: "Enterprise Security",
       description:
-        "Bank-grade encryption, secure authentication, and compliance with industry standards.",
-      icon: <Shield aria-hidden="true" className="w-8 h-8 text-[#00BFFF]" />,
+        "Bank-grade encryption, secure auth flows, and full compliance with UK GDPR and industry standards.",
+      icon: <Shield aria-hidden="true" className="w-7 h-7 text-[#00BFFF]" />,
       metric: "ISO Certified",
+      glow: "rgba(0,120,255,0.18)",
     },
     {
-      title: "Performance Optimization",
+      title: "Performance Optimisation",
       description:
-        "Lightning-fast load times and optimized performance for better user experience and SEO.",
-      icon: <Bolt aria-hidden="true" className="w-8 h-8 text-[#00BFFF]" />,
+        "Sub-2s load times, Core Web Vitals optimised — because every millisecond costs conversions.",
+      icon: <Zap aria-hidden="true" className="w-7 h-7 text-[#00BFFF]" />,
       metric: "Sub-2s Load",
+      glow: "rgba(0,191,255,0.18)",
     },
     {
       title: "Data Analytics",
       description:
-        "Real-time dashboards and actionable insights to track what matters for your business.",
-      icon: (
-        <Database aria-hidden="true" className="w-8 h-8 text-[#00BFFF]" />
-      ),
-      metric: "Real-Time Data",
+        "Real-time dashboards and actionable insights so you always know what's driving your growth.",
+      icon: <Database aria-hidden="true" className="w-7 h-7 text-[#00BFFF]" />,
+      metric: "Real-Time",
+      glow: "rgba(0,80,200,0.18)",
     },
     {
       title: "Global Infrastructure",
       description:
-        "Reliable cloud hosting with 99.9% uptime guarantee and worldwide availability.",
-      icon: <Globe aria-hidden="true" className="w-8 h-8 text-[#00BFFF]" />,
+        "Cloud-hosted on edge networks with a 99.9% uptime SLA — your site is always reachable, anywhere.",
+      icon: <Globe aria-hidden="true" className="w-7 h-7 text-[#00BFFF]" />,
       metric: "99.9% Uptime",
+      glow: "rgba(0,191,255,0.18)",
     },
     {
       title: "Rapid Deployment",
       description:
-        "Agile development methodology for faster time-to-market without sacrificing quality.",
-      icon: <TrendingUp aria-hidden="true" className="w-8 h-8 text-[#00BFFF]" />,
+        "Agile sprints and CI/CD pipelines mean faster time-to-market without compromising quality.",
+      icon: <TrendingUp aria-hidden="true" className="w-7 h-7 text-[#00BFFF]" />,
       metric: "Fast Launch",
+      glow: "rgba(0,150,255,0.18)",
     },
   ];
 
   const values = [
     {
       title: "Proven Track Record",
-      description: "40+ successful projects delivered with measurable results.",
+      description: "40+ successful projects delivered with measurable ROI for London businesses.",
       icon: <CheckCircle className="w-5 h-5 text-[#00BFFF]" />,
     },
     {
       title: "Expert Team",
-      description: "Full-stack developers with 10+ years of combined experience.",
+      description: "Full-stack engineers with 10+ years of combined experience building at scale.",
       icon: <Code className="w-5 h-5 text-[#00BFFF]" />,
     },
     {
       title: "Results-Focused",
-      description: "We measure success by your business growth and ROI.",
+      description: "We measure our success by your business growth, not billable hours.",
       icon: <TrendingUp className="w-5 h-5 text-[#00BFFF]" />,
     },
     {
       title: "24/7 Support",
-      description: "Dedicated support team available when you need us most.",
+      description: "Dedicated support engineers available around the clock when you need us.",
       icon: <Users className="w-5 h-5 text-[#00BFFF]" />,
     },
     {
       title: "Scalable Solutions",
-      description: "Technology that grows with your business needs.",
+      description: "Architecture that grows with your business from startup to enterprise.",
       icon: <Target className="w-5 h-5 text-[#00BFFF]" />,
     },
   ];
@@ -105,7 +108,7 @@ const WhyUs = () => {
       role: "Owner",
       company: "Hope BTC",
       quote:
-        "viorix  built us a professional website that makes it easy for new students to register for training. His dedication and support were excellent, and through Viorix Digital Solutions we now have a strong online presence.",
+        "Viorix built us a professional website that makes it easy for new students to register for training. Their dedication and support were excellent — we now have a strong online presence.",
       metric: "300% More Registrations",
       avatar: "IA",
     },
@@ -114,8 +117,8 @@ const WhyUs = () => {
       role: "Owner",
       company: "JRS Building Company",
       quote:
-        "Ali created a modern portfolio website that showcases our projects beautifully and helps us attract new clients. Thanks to his work and the expertise of Viorix Digital Solutions, our company looks more professional online.",
-      metric: "250% More Inquiries",
+        "Ali created a modern portfolio website that showcases our projects beautifully and helps us attract new clients. Our company looks far more professional online.",
+      metric: "250% More Enquiries",
       avatar: "HH",
     },
     {
@@ -123,7 +126,7 @@ const WhyUs = () => {
       role: "Owner",
       company: "ColdFix",
       quote:
-        "viorix designed a clean, SEO-friendly website for ColdFix that represents our services perfectly. His professionalism, combined with the quality standards of Viorix Digital Solutions, has already brought us more leads.",
+        "Viorix designed a clean, SEO-friendly website for ColdFix that represents our services perfectly. Their professionalism has already brought us more leads.",
       metric: "40% More Leads",
       avatar: "AH",
     },
@@ -132,11 +135,44 @@ const WhyUs = () => {
       role: "Owner",
       company: "360 Drive Academy",
       quote:
-        "they built a sleek, user-friendly website for our driving school. Students can now book lessons effortlessly, and through Viorix Digital Solutions we've noticed a clear increase in new enrolments.",
+        "They built a sleek, user-friendly website for our driving school. Students can now book lessons effortlessly and we've seen a clear increase in new enrolments.",
       metric: "30% More Bookings",
       avatar: "BB",
     },
   ];
+
+  useEffect(() => {
+    setVisibleCards(new Array(features.length).fill(false));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute("data-index") || "0");
+            setTimeout(() => {
+              setVisibleCards((prev) => {
+                const next = [...prev];
+                next[index] = true;
+                return next;
+              });
+            }, index * 80);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll("[data-feature-card]").forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: ((e.clientX - rect.left) / rect.width - 0.5) * 2,
+      y: ((e.clientY - rect.top) / rect.height - 0.5) * 2,
+    });
+  };
 
   return (
     <>
@@ -145,200 +181,767 @@ const WhyUs = () => {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
+            "@type": "ProfessionalService",
             name: "Viorix Digital Solutions",
             description:
-              "Custom web development and digital solutions for modern businesses",
-            applicationCategory: "WebApplication",
+              "Leading web development agency in London delivering custom websites, mobile apps, e-commerce, and digital marketing solutions for UK businesses.",
+            url: "https://viorix.co.uk",
+            areaServed: [
+              { "@type": "City", name: "London" },
+              { "@type": "Country", name: "United Kingdom" },
+            ],
+            serviceType: [
+              "Web Development",
+              "Mobile App Development",
+              "E-commerce Solutions",
+              "SEO Services",
+              "Digital Marketing",
+              "UI/UX Design",
+            ],
             aggregateRating: {
               "@type": "AggregateRating",
               ratingValue: "5",
               ratingCount: "50",
+              bestRating: "5",
+            },
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "London",
+              addressCountry: "GB",
             },
           }),
         }}
       />
 
-      <section className="relative bg-white py-12 sm:py-16 md:py-20">
-        {/* Minimal background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#00BFFF]/10 to-white pointer-events-none" />
+      <style>{`
+        .wy-section {
+          --blue: #00bfff;
+          --blue2: #0099cc;
+          --bg: #050a13;
+          --bg2: #07101e;
+          --border: rgba(0,191,255,0.14);
+          --border-hover: rgba(0,191,255,0.44);
+          --glass: rgba(0,191,255,0.04);
+          --glass-hover: rgba(0,191,255,0.09);
+          --muted: rgba(255,255,255,0.55);
+          font-family: Inter, "DM Sans", system-ui, -apple-system, sans-serif;
+          background: var(--bg);
+          color: #fff;
+          position: relative;
+          overflow: hidden;
+          padding: 96px 0 80px;
+        }
 
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-          {/* Header Section */}
-          <div
-            className={`text-center mb-12 sm:mb-14 transition-all duration-700 ${
-              isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-            }`}
-          >
-            <div className="inline-block mb-6">
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 text-[#1B365D] text-sm font-semibold rounded-full border border-[#00BFFF]/20">
-                <Cpu className="w-4 h-4 text-[#00BFFF]" />
-                Why Choose Us
-              </span>
+        .wy-section * { box-sizing: border-box; }
+
+        /* Grid bg identical to hero */
+        .wy-grid-bg {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(0,191,255,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,191,255,0.05) 1px, transparent 1px);
+          background-size: 48px 48px;
+          pointer-events: none;
+          opacity: 0.32;
+        }
+
+        .wy-vignette {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background:
+            radial-gradient(ellipse at 20% 20%, rgba(0,80,170,0.18) 0%, transparent 55%),
+            radial-gradient(ellipse at 80% 80%, rgba(0,80,170,0.14) 0%, transparent 55%),
+            radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(4,8,16,0.6) 100%);
+        }
+
+        .wy-inner {
+          max-width: 1240px;
+          margin: 0 auto;
+          padding: 0 24px;
+          position: relative;
+          z-index: 2;
+        }
+
+        /* ── Header ── */
+        .wy-header {
+          text-align: center;
+          margin-bottom: 72px;
+        }
+
+        .wy-eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 7px 16px;
+          border-radius: 999px;
+          border: 1px solid var(--border);
+          background: var(--glass);
+          font-size: 11px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--blue);
+          font-weight: 600;
+          margin-bottom: 20px;
+        }
+
+        .wy-title {
+          font-size: clamp(34px, 5vw, 64px);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          line-height: 1.02;
+          margin: 0 0 16px;
+        }
+
+        .wy-title-accent {
+          background: linear-gradient(110deg, #00bfff 0%, #6ddcff 45%, #0099cc 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .wy-subtitle {
+          font-size: 16px;
+          color: var(--muted);
+          max-width: 52ch;
+          margin: 0 auto 24px;
+          line-height: 1.7;
+        }
+
+        .wy-tag-row {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 8px;
+        }
+
+        .wy-tag {
+          padding: 6px 14px;
+          border-radius: 999px;
+          border: 1px solid var(--border);
+          background: var(--glass);
+          font-size: 12px;
+          font-weight: 600;
+          color: rgba(255,255,255,0.65);
+        }
+
+        /* ── Feature Cards ── */
+        .wy-features-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 20px;
+          margin-bottom: 80px;
+          perspective: 1200px;
+        }
+
+        .wy-feat-card {
+          position: relative;
+          border: 1px solid var(--border);
+          background: linear-gradient(145deg, rgba(7,16,30,0.9) 0%, rgba(4,8,16,0.95) 100%);
+          border-radius: 18px;
+          padding: 32px 28px;
+          cursor: default;
+          transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
+          transform-style: preserve-3d;
+          will-change: transform;
+          opacity: 0;
+          transform: translateY(24px);
+        }
+
+        .wy-feat-card.visible {
+          opacity: 1;
+          transform: translateY(0);
+          transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .wy-feat-card:hover {
+          border-color: var(--border-hover);
+        }
+
+        .wy-feat-card-inner {
+          position: relative;
+          z-index: 2;
+        }
+
+        .wy-feat-card-shine {
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          pointer-events: none;
+          background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(0,191,255,0.08) 0%, transparent 65%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          z-index: 1;
+        }
+
+        .wy-feat-card:hover .wy-feat-card-shine {
+          opacity: 1;
+        }
+
+        .wy-feat-corner-accent {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 80px;
+          height: 80px;
+          border-top-right-radius: 18px;
+          background: radial-gradient(ellipse at top right, rgba(0,191,255,0.1) 0%, transparent 70%);
+          pointer-events: none;
+        }
+
+        .wy-feat-icon-wrap {
+          width: 52px;
+          height: 52px;
+          border-radius: 14px;
+          border: 1px solid rgba(0,191,255,0.2);
+          background: rgba(0,191,255,0.07);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 20px;
+          position: relative;
+        }
+
+        .wy-feat-icon-wrap::after {
+          content: '';
+          position: absolute;
+          inset: -1px;
+          border-radius: inherit;
+          background: linear-gradient(135deg, rgba(0,191,255,0.3) 0%, transparent 60%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          z-index: -1;
+        }
+
+        .wy-feat-card:hover .wy-feat-icon-wrap::after {
+          opacity: 1;
+        }
+
+        .wy-feat-metric {
+          position: absolute;
+          top: 28px;
+          right: 24px;
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: var(--blue);
+          border: 1px solid rgba(0,191,255,0.22);
+          background: rgba(0,191,255,0.06);
+          padding: 4px 10px;
+          border-radius: 999px;
+        }
+
+        .wy-feat-title {
+          font-size: 16px;
+          font-weight: 700;
+          color: #fff;
+          margin: 0 0 10px;
+          letter-spacing: -0.01em;
+        }
+
+        .wy-feat-desc {
+          font-size: 13.5px;
+          color: var(--muted);
+          line-height: 1.65;
+          margin: 0;
+        }
+
+        /* 3D depth line at bottom of card */
+        .wy-feat-card::before {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 10%;
+          right: 10%;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(0,191,255,0.3), transparent);
+          border-radius: 999px;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .wy-feat-card:hover::before {
+          opacity: 1;
+        }
+
+        /* ── Values ── */
+        .wy-values-wrap {
+          margin-bottom: 80px;
+        }
+
+        .wy-section-label {
+          text-align: center;
+          margin-bottom: 40px;
+        }
+
+        .wy-section-label h3 {
+          font-size: clamp(24px, 3vw, 38px);
+          font-weight: 800;
+          letter-spacing: -0.025em;
+          margin: 0 0 10px;
+        }
+
+        .wy-section-label p {
+          font-size: 15px;
+          color: var(--muted);
+          max-width: 44ch;
+          margin: 0 auto;
+          line-height: 1.6;
+        }
+
+        .wy-values-grid {
+          display: grid;
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 14px;
+        }
+
+        .wy-val-card {
+          border: 1px solid var(--border);
+          background: linear-gradient(160deg, rgba(7,16,30,0.88) 0%, rgba(4,8,16,0.93) 100%);
+          border-radius: 14px;
+          padding: 22px 18px;
+          transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .wy-val-card:hover {
+          border-color: rgba(0,191,255,0.36);
+          transform: translateY(-3px);
+          box-shadow: 0 12px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,191,255,0.1);
+        }
+
+        .wy-val-card::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, rgba(0,191,255,0.4), transparent);
+          opacity: 0;
+          transition: opacity 0.25s;
+        }
+
+        .wy-val-card:hover::after {
+          opacity: 1;
+        }
+
+        .wy-val-icon {
+          width: 36px;
+          height: 36px;
+          border-radius: 9px;
+          border: 1px solid rgba(0,191,255,0.18);
+          background: rgba(0,191,255,0.07);
+          display: grid;
+          place-items: center;
+          margin-bottom: 14px;
+        }
+
+        .wy-val-title {
+          font-size: 12px;
+          font-weight: 700;
+          color: #fff;
+          margin: 0 0 6px;
+          letter-spacing: -0.01em;
+        }
+
+        .wy-val-desc {
+          font-size: 12px;
+          color: var(--muted);
+          line-height: 1.55;
+          margin: 0;
+        }
+
+        /* ── Testimonials ── */
+        .wy-testi-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 20px;
+          margin-bottom: 80px;
+        }
+
+        .wy-testi-card {
+          border: 1px solid var(--border);
+          background: linear-gradient(145deg, rgba(7,16,30,0.9) 0%, rgba(4,8,16,0.95) 100%);
+          border-radius: 18px;
+          padding: 32px;
+          transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .wy-testi-card:hover {
+          border-color: rgba(0,191,255,0.36);
+          transform: translateY(-4px);
+          box-shadow: 0 20px 48px rgba(0,0,0,0.6), 0 0 60px rgba(0,191,255,0.06);
+        }
+
+        /* Subtle quote mark */
+        .wy-testi-card::before {
+          content: '"';
+          position: absolute;
+          top: 12px;
+          right: 24px;
+          font-size: 96px;
+          line-height: 1;
+          color: rgba(0,191,255,0.06);
+          font-family: Georgia, serif;
+          pointer-events: none;
+        }
+
+        .wy-testi-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 20px;
+        }
+
+        .wy-stars {
+          display: flex;
+          gap: 3px;
+        }
+
+        .wy-testi-metric {
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: var(--blue);
+          border: 1px solid rgba(0,191,255,0.22);
+          background: rgba(0,191,255,0.06);
+          padding: 4px 10px;
+          border-radius: 999px;
+        }
+
+        .wy-testi-quote {
+          font-size: 14px;
+          line-height: 1.7;
+          color: rgba(255,255,255,0.75);
+          margin: 0 0 24px;
+          font-style: italic;
+        }
+
+        .wy-testi-author {
+          border-top: 1px solid rgba(255,255,255,0.06);
+          padding-top: 20px;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+
+        .wy-testi-avatar {
+          width: 44px;
+          height: 44px;
+          border-radius: 10px;
+          background: linear-gradient(135deg, #00bfff, #1b365d);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 13px;
+          font-weight: 700;
+          color: #fff;
+          flex-shrink: 0;
+          border: 1px solid rgba(0,191,255,0.3);
+        }
+
+        .wy-testi-name {
+          font-size: 14px;
+          font-weight: 700;
+          color: #fff;
+          margin: 0 0 2px;
+        }
+
+        .wy-testi-role {
+          font-size: 12px;
+          color: var(--blue);
+          font-weight: 600;
+          margin: 0 0 1px;
+        }
+
+        .wy-testi-company {
+          font-size: 12px;
+          color: rgba(255,255,255,0.35);
+          margin: 0;
+        }
+
+        /* ── CTA ── */
+        .wy-cta-block {
+          position: relative;
+          border-radius: 24px;
+          padding: 64px;
+          text-align: center;
+          overflow: hidden;
+          border: 1px solid rgba(0,191,255,0.2);
+          background: linear-gradient(135deg, rgba(0,80,170,0.22) 0%, rgba(0,40,100,0.18) 50%, rgba(0,191,255,0.08) 100%);
+        }
+
+        .wy-cta-block::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(ellipse at 30% 50%, rgba(0,191,255,0.14) 0%, transparent 60%),
+            radial-gradient(ellipse at 70% 50%, rgba(0,80,200,0.12) 0%, transparent 60%);
+          pointer-events: none;
+        }
+
+        /* Grid inside CTA */
+        .wy-cta-block::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(0,191,255,0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,191,255,0.06) 1px, transparent 1px);
+          background-size: 32px 32px;
+          border-radius: inherit;
+          opacity: 0.5;
+          pointer-events: none;
+        }
+
+        .wy-cta-inner {
+          position: relative;
+          z-index: 2;
+        }
+
+        .wy-cta-title {
+          font-size: clamp(26px, 3.5vw, 44px);
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          margin: 0 0 14px;
+          line-height: 1.05;
+        }
+
+        .wy-cta-sub {
+          font-size: 15px;
+          color: rgba(255,255,255,0.65);
+          max-width: 48ch;
+          margin: 0 auto 32px;
+          line-height: 1.65;
+        }
+
+        .wy-cta-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          background: #00bfff;
+          color: #050a13;
+          font-size: 13px;
+          font-weight: 800;
+          letter-spacing: 0.07em;
+          text-transform: uppercase;
+          padding: 15px 28px;
+          border-radius: 12px;
+          text-decoration: none;
+          box-shadow: 0 0 32px rgba(0,191,255,0.35), 0 4px 16px rgba(0,0,0,0.4);
+          transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .wy-cta-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 0 48px rgba(0,191,255,0.5), 0 8px 24px rgba(0,0,0,0.5);
+          background: #33ccff;
+        }
+
+        /* SEO hidden strip */
+        .wy-seo-strip {
+          margin-top: 56px;
+          border: 1px solid rgba(255,255,255,0.05);
+          border-radius: 10px;
+          background: rgba(255,255,255,0.012);
+          padding: 14px 18px;
+          color: rgba(255,255,255,0.22);
+          font-size: 12px;
+          line-height: 1.8;
+        }
+
+        @media (max-width: 1024px) {
+          .wy-features-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+          .wy-values-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+        }
+
+        @media (max-width: 768px) {
+          .wy-section { padding: 64px 0 60px; }
+          .wy-features-grid { grid-template-columns: 1fr; }
+          .wy-values-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+          .wy-testi-grid { grid-template-columns: 1fr; }
+          .wy-cta-block { padding: 40px 24px; }
+          .wy-header { margin-bottom: 48px; }
+        }
+
+        @media (max-width: 520px) {
+          .wy-values-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .wy-feat-card,
+          .wy-val-card,
+          .wy-testi-card,
+          .wy-cta-btn { transition: none !important; }
+        }
+      `}</style>
+
+      <section
+        ref={sectionRef}
+        className="wy-section"
+        aria-labelledby="why-us-heading"
+        itemScope
+        itemType="https://schema.org/Service"
+      >
+        <div className="wy-grid-bg" aria-hidden />
+        <div className="wy-vignette" aria-hidden />
+
+        <div className="wy-inner">
+
+          {/* ── Header ── */}
+          <header className="wy-header">
+            <div className="wy-eyebrow" aria-hidden="true">
+              <Cpu className="w-3.5 h-3.5" />
+              Web Development London
             </div>
 
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Trusted by Growing Businesses
+            <h2 id="why-us-heading" className="wy-title" itemProp="name">
+              Why London Businesses{" "}
+              <span className="wy-title-accent">Choose Viorix</span>
             </h2>
 
-            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-              We deliver high-performance web solutions that drive real business
-              results. Our proven methodology and expert team turn your vision
-              into measurable success.
+            <p className="wy-subtitle" itemProp="description">
+              We build high-performance digital products for growing companies across London and the UK — engineered for speed, designed for conversion, built to scale.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-4 text-sm font-medium">
-              <div className="flex items-center gap-2 text-gray-700 bg-white px-4 py-2 rounded-lg border border-gray-200">
-                ✓ Custom Solutions
-              </div>
-              <div className="flex items-center gap-2 text-gray-700 bg-white px-4 py-2 rounded-lg border border-gray-200">
-                ✓ Proven Results
-              </div>
-              <div className="flex items-center gap-2 text-gray-700 bg-white px-4 py-2 rounded-lg border border-gray-200">
-                ✓ Expert Support
-              </div>
+            <div className="wy-tag-row" role="list" aria-label="Service highlights">
+              {["Custom Solutions", "London-Based Team", "Proven ROI", "24/7 Support", "UK GDPR Compliant"].map((t) => (
+                <span key={t} className="wy-tag" role="listitem">✓ {t}</span>
+              ))}
             </div>
-          </div>
+          </header>
 
-          {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {/* ── Feature Cards ── */}
+          <div
+            className="wy-features-grid"
+            onMouseMove={handleMouseMove}
+            role="list"
+            aria-label="Our services"
+          >
             {features.map((feature, index) => (
-              <div
+              <article
                 key={index}
-                className={`bg-white border border-gray-200 rounded-2xl p-8 hover:border-[#00BFFF] hover:shadow-lg transition-all duration-300 ${
-                  isVisible
-                    ? "translate-y-0 opacity-100"
-                    : "translate-y-8 opacity-0"
-                }`}
-                style={{
-                  transitionDelay: isVisible ? `${index * 50}ms` : "0ms",
-                }}
+                data-index={index}
+                data-feature-card
+                className={`wy-feat-card${visibleCards[index] ? " visible" : ""}`}
+                role="listitem"
+                onMouseEnter={() => setHoveredFeature(index)}
+                onMouseLeave={() => setHoveredFeature(null)}
+                style={
+                  hoveredFeature === index
+                    ? {
+                        transform: `translateY(0) rotateX(${-mousePos.y * 5}deg) rotateY(${mousePos.x * 5}deg)`,
+                        boxShadow: `0 20px 48px rgba(0,0,0,0.6), 0 0 48px ${feature.glow}`,
+                      }
+                    : undefined
+                }
               >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 rounded-xl border border-[#00BFFF]/20">
-                    {feature.icon}
-                  </div>
-                  <span className="text-xs font-bold text-[#1B365D] bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 px-3 py-1 rounded-full">
-                    {feature.metric}
-                  </span>
+                <div
+                  className="wy-feat-card-shine"
+                  style={{
+                    "--mx": `${(mousePos.x + 1) * 50}%`,
+                    "--my": `${(mousePos.y + 1) * 50}%`,
+                  } as React.CSSProperties}
+                />
+                <div className="wy-feat-corner-accent" />
+
+                <div className="wy-feat-card-inner">
+                  <div className="wy-feat-icon-wrap">{feature.icon}</div>
+                  <span className="wy-feat-metric" aria-label={`Metric: ${feature.metric}`}>{feature.metric}</span>
+                  <h3 className="wy-feat-title">{feature.title}</h3>
+                  <p className="wy-feat-desc">{feature.description}</p>
                 </div>
-
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
-                  {feature.title}
-                </h3>
-
-                <p className="text-gray-600 leading-relaxed">
-                  {feature.description}
-                </p>
-              </div>
+              </article>
             ))}
           </div>
 
-          {/* Values Section */}
-          <div className="mb-16">
-            <div className="text-center mb-12">
-              <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                Our Core Values
-              </h3>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                The principles that guide our work and ensure exceptional
-                results
-              </p>
+          {/* ── Core Values ── */}
+          <div className="wy-values-wrap">
+            <div className="wy-section-label">
+              <h3>Our Core Values</h3>
+              <p>The principles behind every project we ship for London businesses.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            <div className="wy-values-grid" role="list" aria-label="Core values">
               {values.map((value, index) => (
-                <div
-                  key={index}
-                  className="bg-white border border-gray-200 rounded-xl p-6 hover:border-[#00BFFF] hover:shadow-md transition-all duration-300"
-                >
-                  <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 rounded-lg mb-4">
-                    {value.icon}
-                  </div>
-                  <h4 className="font-bold text-gray-900 mb-2 text-sm">
-                    {value.title}
-                  </h4>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    {value.description}
-                  </p>
+                <div key={index} className="wy-val-card" role="listitem">
+                  <div className="wy-val-icon">{value.icon}</div>
+                  <p className="wy-val-title">{value.title}</p>
+                  <p className="wy-val-desc">{value.description}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Testimonials Section */}
-          <div className="mb-16">
-            <div className="text-center mb-12">
-              <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-                Client Success Stories
-              </h3>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Real businesses. Real results. Real growth.
-              </p>
+          {/* ── Testimonials ── */}
+          <div aria-labelledby="testimonials-heading">
+            <div className="wy-section-label">
+              <h3 id="testimonials-heading">Client Success Stories</h3>
+              <p>Real businesses. Measurable results. Real growth.</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {testimonials.map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="bg-white border border-gray-200 rounded-2xl p-8 hover:border-[#00BFFF] hover:shadow-lg transition-all duration-300"
-                >
-                  {/* Stars */}
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex gap-1">
+            <div className="wy-testi-grid" role="list" aria-label="Client testimonials">
+              {testimonials.map((t, index) => (
+                <article key={index} className="wy-testi-card" role="listitem" itemScope itemType="https://schema.org/Review">
+                  <div className="wy-testi-top">
+                    <div className="wy-stars" aria-label="5 star rating">
                       {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className="w-5 h-5 fill-yellow-400 text-yellow-400"
-                        />
+                        <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" aria-hidden />
                       ))}
                     </div>
-                    <span className="text-xs font-bold text-[#1B365D] bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 px-3 py-1 rounded-full">
-                      {testimonial.metric}
-                    </span>
+                    <span className="wy-testi-metric">{t.metric}</span>
                   </div>
 
-                  {/* Quote */}
-                  <p className="text-gray-700 mb-8 leading-relaxed font-medium">
-                    &quot;{testimonial.quote}&quot;
-                  </p>
+                  <p className="wy-testi-quote" itemProp="reviewBody">&quot;{t.quote}&quot;</p>
 
-                  {/* Author */}
-                  <div className="border-t border-gray-200 pt-6 flex items-center gap-4">
-                    <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-[#00BFFF] to-[#1B365D] rounded-lg text-white font-bold text-sm">
-                      {testimonial.avatar}
-                    </div>
+                  <div className="wy-testi-author" itemProp="author" itemScope itemType="https://schema.org/Person">
+                    <div className="wy-testi-avatar" aria-hidden>{t.avatar}</div>
                     <div>
-                      <p className="font-bold text-gray-900">
-                        {testimonial.name}
-                      </p>
-                      <p className="text-sm text-[#00BFFF] font-semibold">
-                        {testimonial.role}
-                      </p>
-                      <p className="text-sm text-gray-500">{testimonial.company}</p>
+                      <p className="wy-testi-name" itemProp="name">{t.name}</p>
+                      <p className="wy-testi-role">{t.role}</p>
+                      <p className="wy-testi-company">{t.company}</p>
                     </div>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           </div>
 
-          {/* CTA Section */}
-          <div className="bg-gradient-to-r from-[#00BFFF] to-[#1B365D] rounded-3xl p-12 sm:p-16 text-center">
-            <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Ready to Grow Your Business?
-            </h3>
-            <p className="text-lg text-gray-100 mb-8 max-w-2xl mx-auto">
-              Let&apos;s discuss how we can help you achieve your goals with
-              innovative digital solutions.
-            </p>
-            <Link href="/web-quote">
-              <button className="inline-flex items-center gap-2 bg-white text-[#1B365D] font-bold px-8 py-4 rounded-xl hover:bg-gray-100 transition-colors duration-300">
+          {/* ── CTA ── */}
+          <div className="wy-cta-block">
+            <div className="wy-cta-inner">
+              <h3 className="wy-cta-title">
+                Ready to Grow Your<br />
+                <span style={{ background: "linear-gradient(110deg,#00bfff 0%,#6ddcff 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+                  London Business?
+                </span>
+              </h3>
+              <p className="wy-cta-sub">
+                Let&apos;s discuss how Viorix can build the digital product your business needs — from concept to launch and beyond.
+              </p>
+              <Link href="/web-quote" className="wy-cta-btn" aria-label="Start your web project with Viorix London">
                 Start Your Project
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </Link>
+                <ArrowRight className="w-4 h-4" aria-hidden />
+              </Link>
+            </div>
           </div>
+
+          {/* Hidden SEO enrichment */}
+          <aside className="wy-seo-strip" aria-labelledby="seo-services">
+            <h4 id="seo-services" className="sr-only">Web Development Services in London</h4>
+            <p style={{ margin: 0 }}>
+              <strong style={{ color: "rgba(255,255,255,0.38)" }}>Viorix Digital Solutions</strong> — London&apos;s trusted web development agency offering bespoke website design, React &amp; Next.js development, e-commerce platforms (Shopify, WooCommerce), mobile app development, SEO, digital marketing, API integration, cloud infrastructure, and UI/UX design. Serving businesses across London, the City, Canary Wharf, Shoreditch, and across the UK.
+            </p>
+          </aside>
+
         </div>
       </section>
     </>
