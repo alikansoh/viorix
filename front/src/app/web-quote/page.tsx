@@ -21,9 +21,14 @@ import {
   MessageCircle,
   DollarSign,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   ExternalLink,
   LineChart,
   Users,
+  User,
+  Layers,
+  ShoppingCart,
   type LucideIcon,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
@@ -36,7 +41,7 @@ interface Service {
   title: string;
   icon: LucideIcon;
   description: string;
-  price: string;
+  tagline: string;
   features: string[];
 }
 
@@ -56,6 +61,34 @@ interface PortfolioItem {
   description?: string;
   link?: string;
 }
+
+interface Review {
+  name: string;
+  role: string;
+  company: string;
+  rating: number;
+  text: string;
+  avatar: string;
+  result: string;
+}
+
+interface PricingTier {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  icon: LucideIcon;
+  budgetMatch: string;
+  features: string[];
+  featured?: boolean;
+}
+
+// TODO: replace this with your real Google Business Profile review link
+// (Google Business Profile → Get more reviews → copy the short link, or use
+// https://g.page/r/XXXXXXXXXXXXXXXX/review once you have your Place ID).
+// The search URL below works right away and will surface your profile in
+// Google's results, but a direct GBP link is a smoother experience.
+const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=Viorix+reviews";
 
 /* ─── tiny animated number ─── */
 function AnimNum({
@@ -98,6 +131,183 @@ function AnimNum({
   );
 }
 
+/* ─── reviews slider ─── */
+function ReviewsSlider({ reviews }: { reviews: Review[] }) {
+  const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const clearTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
+  const startTimer = useCallback(() => {
+    clearTimer();
+    timerRef.current = setInterval(() => {
+      setDirection(1);
+      setIndex((i) => (i + 1) % reviews.length);
+    }, 6500);
+  }, [clearTimer, reviews.length]);
+
+  useEffect(() => {
+    startTimer();
+    return clearTimer;
+  }, [startTimer, clearTimer]);
+
+  const go = (newIndex: number, dir: number) => {
+    setDirection(dir);
+    setIndex((newIndex + reviews.length) % reviews.length);
+    startTimer();
+  };
+
+  const next = () => go(index + 1, 1);
+  const prev = () => go(index - 1, -1);
+
+  const variants = {
+    enter: (dir: number) => ({ x: dir > 0 ? 48 : -48, opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (dir: number) => ({ x: dir > 0 ? -48 : 48, opacity: 0 }),
+  };
+
+  const r = reviews[index];
+
+  return (
+    <div className="slider-wrap">
+      <div className="slider-track">
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.article
+            key={index}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.18}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -70) next();
+              else if (info.offset.x > 70) prev();
+            }}
+            className="review-card"
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+              <div style={{ display: "flex", gap: 3 }}>
+                {[...Array(r.rating)].map((_, j) => (
+                  <Star key={j} style={{ width: 14, height: 14, fill: "#facc15", color: "#facc15" }} aria-hidden />
+                ))}
+              </div>
+              <span
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: ".1em",
+                  textTransform: "uppercase",
+                  color: "var(--blue)",
+                  border: "1px solid rgba(0,191,255,.22)",
+                  background: "rgba(0,191,255,.07)",
+                  padding: "4px 10px",
+                  borderRadius: 999,
+                }}
+              >
+                {r.result}
+              </span>
+            </div>
+            <p
+              style={{
+                fontSize: 15,
+                lineHeight: 1.7,
+                color: "rgba(255,255,255,.75)",
+                margin: "0 0 22px",
+                fontStyle: "italic",
+                minHeight: 84,
+              }}
+            >
+              &quot;{r.text}&quot;
+            </p>
+            <div
+              style={{
+                borderTop: "1px solid rgba(255,255,255,.06)",
+                paddingTop: 18,
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+              }}
+            >
+              <div
+                style={{
+                  width: 42,
+                  height: 42,
+                  borderRadius: 10,
+                  background: "linear-gradient(135deg,#00bfff,#1b365d)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 13,
+                  fontWeight: 700,
+                  flexShrink: 0,
+                  border: "1px solid rgba(0,191,255,.3)",
+                }}
+              >
+                {r.avatar}
+              </div>
+              <div>
+                <p style={{ fontSize: 14, fontWeight: 700, margin: 0 }}>{r.name}</p>
+                <p style={{ fontSize: 12, color: "rgba(255,255,255,.38)", margin: 0 }}>
+                  {r.role}, {r.company}
+                </p>
+              </div>
+            </div>
+          </motion.article>
+        </AnimatePresence>
+      </div>
+
+      <div className="slider-controls">
+        <button aria-label="Previous review" onClick={prev} className="slider-arrow">
+          <ChevronLeft style={{ width: 18, height: 18 }} aria-hidden />
+        </button>
+        <div className="slider-dots">
+          {reviews.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Go to review ${i + 1}`}
+              className={`slider-dot${i === index ? " active" : ""}`}
+              onClick={() => go(i, i > index ? 1 : -1)}
+            />
+          ))}
+        </div>
+        <button aria-label="Next review" onClick={next} className="slider-arrow">
+          <ChevronRight style={{ width: 18, height: 18 }} aria-hidden />
+        </button>
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: 18 }}>
+        <a
+          href={GOOGLE_REVIEWS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            fontSize: 12,
+            fontWeight: 600,
+            color: "rgba(255,255,255,.5)",
+            textDecoration: "none",
+          }}
+        >
+          See all our reviews on Google
+          <ExternalLink style={{ width: 12, height: 12 }} aria-hidden />
+        </a>
+      </div>
+    </div>
+  );
+}
+
 const OptimizedLandingPage: React.FC = () => {
   const [selectedService, setSelectedService] = useState<string>("web");
   const [formData, setFormData] = useState<FormData>({
@@ -119,10 +329,17 @@ const OptimizedLandingPage: React.FC = () => {
   const formRef = useRef<HTMLDivElement | null>(null);
   const reviewsRef = useRef<HTMLDivElement | null>(null);
   const statsRef = useRef<HTMLDivElement | null>(null);
+  const portfolioRef = useRef<HTMLElement | null>(null);
+  const pricingRef = useRef<HTMLElement | null>(null);
 
   const isFormInView = useInView(formRef, { once: true });
   const isReviewsInView = useInView(reviewsRef, { once: true });
   const isStatsInView = useInView(statsRef, { once: true, amount: 0.3 });
+
+  const currentMonthLabel = useMemo(
+    () => new Date().toLocaleString("en-GB", { month: "long" }),
+    [],
+  );
 
   useEffect(() => {
     if (isStatsInView) setStatsRun(true);
@@ -142,14 +359,14 @@ const OptimizedLandingPage: React.FC = () => {
       title: "Website Development",
       icon: Code,
       description: "Professional business websites that convert visitors to customers",
-      price: "From £500",
+      tagline: "Custom Design · Fast Delivery",
       features: [
-        "Mobile-Responsive Design",
+        "Custom Design",
+        "Fast Delivery",
         "SEO Optimisation",
-        "Fast Loading Speed",
-        "Secure Hosting Included",
-        "Easy Content Updates",
-        "24/7 Support",
+        "Secure Hosting",
+        "Professional Support",
+        "Easy Content Management",
       ],
     },
     {
@@ -157,13 +374,13 @@ const OptimizedLandingPage: React.FC = () => {
       title: "Mobile Apps",
       icon: Smartphone,
       description: "iOS & Android apps that engage users and drive revenue",
-      price: "From £1,500",
+      tagline: "Native Performance · Fast Delivery",
       features: [
-        "iOS & Android",
         "Native Performance",
+        "Fast Delivery",
+        "iOS & Android",
         "Push Notifications",
-        "Offline Functionality",
-        "App Store Launch",
+        "Professional Support",
         "Cloud Backend",
       ],
     },
@@ -172,13 +389,13 @@ const OptimizedLandingPage: React.FC = () => {
       title: "UI/UX Design",
       icon: Palette,
       description: "Beautiful, user-friendly designs that boost conversions",
-      price: "From £800",
+      tagline: "Custom Design · User-Focused",
       features: [
-        "User Research",
-        "Wireframes & Mockups",
+        "Custom Design",
+        "User-Focused Research",
         "Interactive Prototypes",
         "Brand Identity",
-        "User Testing",
+        "Professional Support",
         "Design System",
       ],
     },
@@ -187,19 +404,19 @@ const OptimizedLandingPage: React.FC = () => {
       title: "Digital Marketing",
       icon: LineChart,
       description: "Growth-focused campaigns that drive leads and sales",
-      price: "From £100 /mo",
+      tagline: "Data-Driven · Fast Results",
       features: [
+        "Data-Driven Strategy",
+        "Fast Results",
         "SEO & Local SEO",
         "Google & Meta Ads",
-        "Content Strategy",
-        "Conversion Optimisation",
+        "Professional Support",
         "Monthly Reporting",
-        "Lead Generation",
       ],
     },
   ];
 
-  const reviews = [
+  const reviews: Review[] = [
     {
       name: "Imad Al Soudani",
       role: "Owner",
@@ -259,6 +476,69 @@ const OptimizedLandingPage: React.FC = () => {
       q: "Do you handle hosting and maintenance?",
       a: "Yes. All packages include secure hosting for the first year. Affordable maintenance plans are available to keep everything running smoothly.",
     },
+  ];
+
+  const pricingTiers: PricingTier[] = [
+    {
+      id: "basic",
+      name: "Basic",
+      description:
+        "Ideal for small businesses or personal projects. Get a professional online presence with a clean, responsive website.",
+      price: "£500",
+      icon: Code,
+      budgetMatch: "£500 - £1,000",
+      features: [
+        "1–5 Page Website",
+        "Custom Design Tailored to Your Brand",
+        "Responsive Layout for Mobile & Desktop",
+        "Basic SEO to Boost Visibility",
+        "Fast Loading & Optimised Performance",
+      ],
+    },
+    {
+      id: "professional",
+      name: "Professional",
+      description:
+        "Perfect for growing businesses. Includes advanced design, SEO, and CMS integration for easy content management.",
+      price: "£1,500",
+      icon: Zap,
+      budgetMatch: "£1,000 - £2,500",
+      featured: true,
+      features: [
+        "5–10 Page Website",
+        "Custom Design with Modern UI/UX",
+        "Responsive Layout for All Devices",
+        "SEO Optimisation for Better Search Ranking",
+        "CMS Integration for Easy Content Management",
+        "Contact Forms & Lead Capture",
+      ],
+    },
+    {
+      id: "ecommerce",
+      name: "E-commerce & CMS",
+      description:
+        "Comprehensive e-commerce solution with full CMS integration. Perfect for businesses looking to sell products online effectively.",
+      price: "£2,500",
+      icon: ShoppingCart,
+      budgetMatch: "£2,500 - £5,000",
+      features: [
+        "Unlimited Pages",
+        "Custom Design with Professional Branding",
+        "Responsive Layout for All Devices",
+        "CMS & E-commerce Setup",
+        "Payment Gateway Integration",
+        "Product Catalog & Inventory Management",
+        "Advanced SEO & Marketing Tools",
+      ],
+    },
+  ];
+
+  const budgetOptions = [
+    "£500 - £1,000",
+    "£1,000 - £2,500",
+    "£2,500 - £5,000",
+    "£5,000 - £10,000",
+    "£10,000+",
   ];
 
   const portfolioItems: PortfolioItem[] = useMemo(() => {
@@ -367,13 +647,28 @@ const OptimizedLandingPage: React.FC = () => {
   const scrollToForm = () =>
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 
+  const scrollToPortfolio = () =>
+    portfolioRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const scrollToPricing = () =>
+    pricingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const selectPackage = (tier: PricingTier) => {
+    setFormData((prev) => ({
+      ...prev,
+      budget: tier.budgetMatch,
+      message: prev.message || `I'm interested in the ${tier.name} package.`,
+    }));
+    scrollToForm();
+  };
+
   const selectedServiceData = services.find((s) => s.id === selectedService);
 
   return (
     <>
       <style>{`
         .lp {
-          --bg: #050a13;
+          --bg: #0d1c30;
           --blue: #00bfff;
           --navy: #1b365d;
           --border: rgba(0,191,255,.13);
@@ -382,72 +677,160 @@ const OptimizedLandingPage: React.FC = () => {
           --muted: rgba(255,255,255,.55);
           font-family: Inter, "DM Sans", system-ui, -apple-system, sans-serif;
         }
-        .lp-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,191,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,191,255,.05) 1px,transparent 1px);background-size:48px 48px;opacity:.28;pointer-events:none;}
-        .lp-vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 70% 30%,rgba(0,80,170,.2) 0%,transparent 55%),radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(4,8,16,.65) 100%);}
+        .lp-hero{background:linear-gradient(180deg,#1a3559 0%,var(--bg) 100%);}
+        .lp-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,191,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(0,191,255,.07) 1px,transparent 1px);background-size:48px 48px;opacity:.3;pointer-events:none;}
+        .lp-vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 70% 20%,rgba(30,130,230,.28) 0%,transparent 55%),radial-gradient(ellipse at 50% 60%,transparent 45%,rgba(8,14,26,.32) 100%);}
         .lp-orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px);}
-        .lp-orb-a{width:480px;height:480px;top:-80px;right:-120px;background:rgba(0,100,220,.14);animation:orbA 20s ease-in-out infinite alternate;}
-        .lp-orb-b{width:360px;height:360px;bottom:-60px;left:-80px;background:rgba(0,191,255,.09);animation:orbB 25s ease-in-out infinite alternate;}
+        .lp-orb-a{width:520px;height:520px;top:-100px;right:-120px;background:rgba(30,150,255,.22);animation:orbA 20s ease-in-out infinite alternate;}
+        .lp-orb-b{width:380px;height:380px;bottom:-60px;left:-80px;background:rgba(0,191,255,.13);animation:orbB 25s ease-in-out infinite alternate;}
         @keyframes orbA{0%{transform:translate(0,0) scale(1);}100%{transform:translate(-40px,40px) scale(1.1);}}
         @keyframes orbB{0%{transform:translate(0,0) scale(1);}100%{transform:translate(50px,-30px) scale(1.08);}}
         .svc-tab{border:1px solid var(--border);background:rgba(255,255,255,.04);color:rgba(255,255,255,.6);border-radius:10px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:border-color .22s,background .22s,color .22s;display:flex;align-items:center;gap:7px;}
         .svc-tab.active{border-color:var(--blue);background:rgba(0,191,255,.1);color:#fff;}
         .svc-tab:hover:not(.active){border-color:rgba(0,191,255,.3);background:rgba(0,191,255,.06);color:#fff;}
         .feat-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;color:rgba(255,255,255,.8);}
-        .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--blue);color:#050a13;font-size:14px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:14px 26px;border-radius:12px;text-decoration:none;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s,background .2s;border:none;cursor:pointer;}
-        .btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.28),transparent);transition:left .4s ease;}
-        .btn-primary:hover::before{left:100%;}
-        .btn-primary:hover{transform:translateY(-2px);background:#33ccff;}
-        .btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid rgba(255,255,255,.3);color:rgba(255,255,255,.85);font-size:14px;font-weight:700;padding:14px 26px;border-radius:12px;text-decoration:none;transition:border-color .22s,background .22s,color .22s;background:transparent;}
+        .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--blue);color:#050a13;font-size:14px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:14px 26px;border-radius:12px;text-decoration:none;position:relative;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,background .18s ease;border:none;cursor:pointer;box-shadow:0 8px 20px -8px rgba(0,191,255,.55);}
+        .btn-primary:hover{transform:translateY(-2px);background:#33ccff;box-shadow:0 12px 26px -8px rgba(0,191,255,.65);}
+        .btn-primary:active{transform:translateY(0);}
+        .btn-primary-pulse{animation:ctaPulse 2.6s ease-in-out infinite;}
+        @keyframes ctaPulse{0%,100%{box-shadow:0 8px 20px -8px rgba(0,191,255,.55),0 0 0 0 rgba(0,191,255,.35);}50%{box-shadow:0 8px 20px -8px rgba(0,191,255,.55),0 0 0 8px rgba(0,191,255,0);}}
+        .btn-ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid rgba(255,255,255,.3);color:rgba(255,255,255,.85);font-size:14px;font-weight:700;padding:14px 26px;border-radius:12px;text-decoration:none;transition:border-color .2s ease,background .2s ease,color .2s ease;background:transparent;}
         .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08);color:#fff;}
-        .stat-card{border:1px solid var(--border);background:linear-gradient(145deg,rgba(7,16,30,.9),rgba(4,8,16,.95));border-radius:14px;padding:22px 18px;text-align:center;transition:border-color .25s,transform .28s cubic-bezier(.22,1,.36,1);}
+        .btn-primary:focus-visible,.btn-ghost:focus-visible,.svc-tab:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #6ddcff;outline-offset:2px;}
+        .stat-card{border:1px solid var(--border);background:linear-gradient(145deg,rgba(12,22,38,.9),rgba(8,14,26,.95));border-radius:14px;padding:18px 12px;text-align:center;transition:border-color .25s,transform .28s cubic-bezier(.22,1,.36,1);}
         .stat-card:hover{border-color:var(--bh);transform:translateY(-3px);}
-        .stat-num{font-size:clamp(30px,4vw,44px);font-weight:800;letter-spacing:-.03em;background:linear-gradient(110deg,#fff,rgba(255,255,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+        .stat-num{font-size:clamp(24px,4vw,44px);font-weight:800;letter-spacing:-.03em;background:linear-gradient(110deg,#fff,rgba(255,255,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
         .stat-suf{background:linear-gradient(110deg,var(--blue),#6ddcff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-        .form-card{background:linear-gradient(145deg,rgba(7,16,30,.96),rgba(4,8,16,.98));border:1px solid var(--border);border-radius:22px;padding:44px;}
-        .form-input{width:100%;padding:13px 16px;border:1px solid rgba(255,255,255,.1);border-radius:11px;background:rgba(255,255,255,.04);color:#fff;font-size:14px;transition:border-color .22s,background .22s;outline:none;font-family:inherit;}
-        .form-input:focus{border-color:var(--blue);background:rgba(0,191,255,.06);}
-        .form-input::placeholder{color:rgba(255,255,255,.28);}
-        .form-label{display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.55);margin-bottom:7px;letter-spacing:.07em;text-transform:uppercase;}
-        select.form-input option{background:#0a1525;color:#fff;}
-        .port-card{background:linear-gradient(145deg,rgba(7,16,30,.9),rgba(4,8,16,.95));border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:border-color .25s,transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s;}
+
+        /* ─── form: stronger border + white copy ─── */
+        .form-card{background:linear-gradient(145deg,rgba(14,26,44,.98),rgba(8,14,26,1));border:2px solid rgba(0,191,255,.55);border-radius:18px;padding:24px 18px;box-shadow:0 0 0 1px rgba(0,191,255,.1),inset 0 1px 0 rgba(255,255,255,.05),0 30px 60px -30px rgba(0,0,0,.7);}
+        .form-input{width:100%;padding:13px 16px;border:1.5px solid rgba(255,255,255,.28);border-radius:11px;background:rgba(255,255,255,.06);color:#fff;font-size:16px;transition:border-color .22s,background .22s,box-shadow .22s;outline:none;font-family:inherit;}
+        .form-input:hover{border-color:rgba(255,255,255,.4);}
+        .form-input:focus{border-color:var(--blue);background:rgba(0,191,255,.08);box-shadow:0 0 0 3px rgba(0,191,255,.18);}
+        .form-input::placeholder{color:rgba(255,255,255,.42);}
+        .form-label{display:block;font-size:12.5px;font-weight:700;color:#fff;margin-bottom:7px;letter-spacing:.06em;text-transform:uppercase;}
+        select.form-input option{background:#0f1c30;color:#fff;}
+        .form-section-label{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:16px;}
+        .form-section-label:not(:first-child){margin-top:6px;padding-top:22px;border-top:1px solid rgba(255,255,255,.1);}
+        .input-icon-wrap{position:relative;}
+        .input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:rgba(255,255,255,.5);pointer-events:none;transition:color .2s;}
+        .input-icon-wrap:focus-within .input-icon{color:var(--blue);}
+        .form-input.has-icon{padding-left:42px;}
+        .budget-pills{display:flex;flex-wrap:wrap;gap:8px;}
+        .budget-pill{border:1.5px solid rgba(255,255,255,.22);background:rgba(255,255,255,.05);color:#fff;border-radius:999px;padding:8px 15px;font-size:12.5px;font-weight:600;cursor:pointer;transition:border-color .2s,background .2s,color .2s;}
+        .budget-pill:hover{border-color:rgba(0,191,255,.5);background:rgba(0,191,255,.1);}
+        .budget-pill.active{border-color:var(--blue);background:rgba(0,191,255,.2);color:#fff;}
+        .form-helper{font-size:12px;color:rgba(255,255,255,.55);}
+
+        .port-card{background:linear-gradient(145deg,rgba(12,22,38,.9),rgba(8,14,26,.95));border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:border-color .25s,transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s;}
         .port-card:hover{border-color:var(--bh);transform:translateY(-5px);box-shadow:0 20px 48px rgba(0,0,0,.6);}
-        .review-card{background:linear-gradient(145deg,rgba(7,16,30,.9),rgba(4,8,16,.95));border:1px solid var(--border);border-radius:18px;padding:28px;transition:border-color .25s,transform .3s cubic-bezier(.22,1,.36,1);}
+        .review-card{background:linear-gradient(145deg,rgba(12,22,38,.9),rgba(8,14,26,.95));border:1px solid var(--border);border-radius:18px;padding:28px;transition:border-color .25s,transform .3s cubic-bezier(.22,1,.36,1);}
         .review-card:hover{border-color:var(--bh);transform:translateY(-4px);}
+        .google-rev-card{transition:border-color .22s,background .22s,transform .22s;}
+        .google-rev-card:hover{border-color:var(--bh);background:rgba(0,191,255,.06);transform:translateY(-2px);}
         .review-card::before{content:'"';position:absolute;top:8px;right:20px;font-size:88px;line-height:1;color:rgba(0,191,255,.05);font-family:Georgia,serif;pointer-events:none;}
-        .faq-item{background:linear-gradient(145deg,rgba(7,16,30,.9),rgba(4,8,16,.95));border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .22s;}
+        .faq-item{background:linear-gradient(145deg,rgba(12,22,38,.9),rgba(8,14,26,.95));border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .22s;}
         .faq-item:hover{border-color:rgba(0,191,255,.28);}
         .faq-item.open{border-color:rgba(0,191,255,.35);}
-        .val-card{background:linear-gradient(145deg,rgba(7,16,30,.9),rgba(4,8,16,.95));border:1px solid var(--border);border-radius:18px;padding:28px;transition:border-color .25s,transform .3s cubic-bezier(.22,1,.36,1);}
+        .val-card{background:linear-gradient(145deg,rgba(12,22,38,.9),rgba(8,14,26,.95));border:1px solid var(--border);border-radius:18px;padding:28px;transition:border-color .25s,transform .3s cubic-bezier(.22,1,.36,1);}
         .val-card:hover{border-color:var(--bh);transform:translateY(-4px);}
         .val-ico{width:52px;height:52px;border-radius:14px;border:1px solid rgba(0,191,255,.2);background:rgba(0,191,255,.08);display:flex;align-items:center;justify-content:center;margin-bottom:18px;transition:background .25s;}
         .val-card:hover .val-ico{background:rgba(0,191,255,.15);}
-        .guar-card{background:linear-gradient(145deg,rgba(7,16,30,.95),rgba(4,8,16,.98));border:1px solid rgba(0,191,255,.18);border-radius:22px;padding:48px;}
-        .cta-block{position:relative;border-radius:24px;padding:72px 48px;text-align:center;overflow:hidden;border:1px solid rgba(0,191,255,.2);background:linear-gradient(135deg,rgba(0,80,170,.18) 0%,rgba(0,40,100,.14) 50%,rgba(0,191,255,.07) 100%);}
+        .guar-card{background:linear-gradient(145deg,rgba(12,22,38,.95),rgba(8,14,26,.98));border:1px solid rgba(0,191,255,.18);border-radius:20px;padding:26px 20px;}
+
+        /* ─── pricing: simplified, cleaner cards ─── */
+        .price-card{position:relative;display:flex;flex-direction:column;background:rgba(13,24,41,.92);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px 24px 24px;transition:border-color .22s ease,transform .22s ease;}
+        .price-card:hover{border-color:rgba(0,191,255,.45);transform:translateY(-3px);}
+        .price-card.featured{border-color:rgba(0,191,255,.6);background:rgba(15,32,54,.96);}
+        .price-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--blue);color:#04101d;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:6px 16px;border-radius:999px;white-space:nowrap;z-index:2;}
+        .price-icon-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+        .price-name{font-size:19px;font-weight:800;margin:0 0 8px;color:#fff;}
+        .price-desc{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin:0 0 22px;}
+        .price-amount-row{display:flex;align-items:baseline;gap:6px;margin-bottom:24px;padding-bottom:22px;border-bottom:1px solid rgba(255,255,255,.1);}
+        .price-from{font-size:12px;color:rgba(255,255,255,.45);}
+        .price-amount{font-size:32px;font-weight:800;letter-spacing:-.02em;color:#fff;}
+        .price-feature{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:rgba(255,255,255,.8);line-height:1.5;}
+        .pricing-grid{display:grid;grid-template-columns:1fr;gap:20px;}
+        @media(min-width:900px){
+          .pricing-grid{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;}
+        }
+        .cta-block{position:relative;border-radius:24px;padding:40px 20px;text-align:center;overflow:hidden;border:1px solid rgba(0,191,255,.2);background:linear-gradient(135deg,rgba(0,80,170,.18) 0%,rgba(0,40,100,.14) 50%,rgba(0,191,255,.07) 100%);}
         .cta-scanline{position:absolute;top:-2px;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,191,255,.6),transparent);animation:scan 4s linear infinite;pointer-events:none;}
         @keyframes scan{0%{top:-2px;opacity:0;}5%{opacity:1;}95%{opacity:1;}100%{top:100%;opacity:0;}}
-        .sticky-bar{position:fixed;bottom:0;left:0;right:0;padding:10px 16px;background:rgba(5,10,19,.96);border-top:1px solid var(--border);backdrop-filter:blur(12px);z-index:50;}
-        @media(max-width:768px){
-          .form-card{padding:24px 18px;}
-          .guar-card{padding:28px 20px;}
-          .cta-block{padding:40px 20px;}
+        .sticky-bar{position:fixed;bottom:0;left:0;right:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(10,20,36,.96);border-top:1px solid var(--border);backdrop-filter:blur(12px);z-index:50;}
+
+        /* ─── layout: mobile-first, progressively enhanced ─── */
+        .hero-inner{padding:44px 20px 48px;}
+        .hero-layout{display:grid;grid-template-columns:1fr;gap:28px;align-items:start;}
+        .hero-sidebar{display:none;}
+        .hero-mobile-trust{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:rgba(0,191,255,.05);}
+        .hero-cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+        .lp-section{padding:52px 0;}
+        .lp-section-cta{padding:52px 20px;}
+        .stats-section{padding:28px 0;}
+        .stats-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+        .form-grid-2{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px;}
+        .slider-wrap{max-width:640px;margin:0 auto;}
+        .slider-track{position:relative;}
+        .review-card{position:relative;}
+        .slider-controls{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:22px;}
+        .slider-arrow{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,background .2s,color .2s,transform .2s;flex-shrink:0;}
+        .slider-arrow:hover{border-color:var(--bh);background:rgba(0,191,255,.1);color:#fff;transform:translateY(-1px);}
+        .slider-dots{display:flex;align-items:center;gap:7px;}
+        .slider-dot{width:7px;height:7px;border-radius:50%;border:none;padding:0;background:rgba(255,255,255,.18);cursor:pointer;transition:background .2s,width .2s,border-radius .2s;}
+        .slider-dot.active{width:20px;border-radius:4px;background:var(--blue);}
+        .guar-grid{display:grid;grid-template-columns:1fr;gap:14px;}
+        .values-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+
+        @media(min-width:480px){
+          .hero-cta-row{flex-wrap:wrap;}
+        }
+        @media(max-width:480px){
+          .hero-cta-row{flex-direction:column;align-items:stretch;}
+          .hero-cta-row .btn-primary,.hero-cta-row .btn-ghost{width:100%;}
+        }
+        @media(max-width:640px){
+          .lp-orb{display:none;}
+        }
+        @media(min-width:560px){
+          .form-grid-2{grid-template-columns:1fr 1fr;}
+        }
+        @media(min-width:640px){
+          .guar-card{padding:40px;}
+          .cta-block{padding:64px 44px;}
+          .stats-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;}
+          .guar-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
+          .values-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;}
+        }
+        @media(min-width:768px){
+          .form-card{padding:44px;}
+          .lp-section{padding:80px 0;}
+          .lp-section-cta{padding:80px 24px;}
+          .stats-section{padding:52px 0;}
+        }
+        @media(min-width:1024px){
+          .hero-inner{padding:64px 24px 72px;}
+          .hero-layout{grid-template-columns:1fr 300px;gap:48px 64px;}
+          .hero-sidebar{display:block;}
+          .hero-mobile-trust{display:none;}
         }
         @media(prefers-reduced-motion:reduce){.lp *{animation:none!important;transition:none!important;}}
       `}</style>
 
       <div className="lp min-h-screen" style={{ background: "var(--bg)", color: "#fff" }}>
-        <header style={{ position: "relative", overflow: "hidden", paddingBottom: "0" }}>
+        <header className="lp-hero" style={{ position: "relative", overflow: "hidden", paddingBottom: "0" }}>
           <div className="lp-grid" aria-hidden />
           <div className="lp-vig" aria-hidden />
           <div className="lp-orb lp-orb-a" aria-hidden />
           <div className="lp-orb lp-orb-b" aria-hidden />
 
           <div
+            className="hero-inner"
             style={{
               position: "relative",
               zIndex: 2,
               maxWidth: 1240,
               margin: "0 auto",
-              padding: "64px 24px 72px",
             }}
           >
             <motion.div
@@ -475,14 +858,7 @@ const OptimizedLandingPage: React.FC = () => {
                 London Web Agency · UK
               </div>
 
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr auto",
-                  gap: "48px 64px",
-                  alignItems: "start",
-                }}
-              >
+              <div className="hero-layout">
                 <div>
                   <h1
                     style={{
@@ -501,23 +877,28 @@ const OptimizedLandingPage: React.FC = () => {
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                         backgroundClip: "text",
+                        fontSize: "clamp(16px,2vw,24px)",
+                        fontWeight: 700,
+                        letterSpacing: "-.01em",
+                        marginTop: 8,
                       }}
                     >
-                      {selectedServiceData?.price}
+                      {selectedServiceData?.tagline}
                     </span>
                   </h1>
 
                   <p
                     style={{
                       fontSize: 17,
-                      color: "rgba(255,255,255,.62)",
+                      color: "rgba(255,255,255,.86)",
                       lineHeight: 1.7,
                       maxWidth: "56ch",
                       marginBottom: 28,
+                      textShadow: "0 2px 16px rgba(4,10,20,.55)",
                     }}
                   >
-                    {selectedServiceData?.description} — trusted by 50+ UK businesses, with every
-                    project backed by a satisfaction guarantee.
+                    {selectedServiceData?.description} — trusted by growing UK businesses, with
+                    every project backed by a satisfaction guarantee.
                   </p>
 
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 36 }}>
@@ -532,10 +913,14 @@ const OptimizedLandingPage: React.FC = () => {
                     ))}
                   </div>
 
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
-                    <button onClick={scrollToForm} className="btn-primary">
+                  <div className="hero-cta-row">
+                    <button onClick={scrollToForm} className="btn-primary btn-primary-pulse">
                       Get a Free Quote
                       <ArrowRight style={{ width: 15, height: 15 }} aria-hidden />
+                    </button>
+                    <button onClick={scrollToPortfolio} className="btn-ghost">
+                      <Layers style={{ width: 15, height: 15 }} aria-hidden />
+                      Discover Our Projects
                     </button>
                     <a href="tel:+447464485026" className="btn-ghost">
                       <Phone style={{ width: 15, height: 15 }} aria-hidden />
@@ -546,92 +931,120 @@ const OptimizedLandingPage: React.FC = () => {
                   <p style={{ fontSize: 12, color: "rgba(255,255,255,.3)", marginTop: 16 }}>
                     No commitment · Response within 2 hours · Free consultation included
                   </p>
+
+                  <button
+                    onClick={scrollToPricing}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 6,
+                      marginTop: 12,
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: 13,
+                      fontWeight: 700,
+                      color: "var(--blue)",
+                      textDecoration: "underline",
+                      textUnderlineOffset: "3px",
+                    }}
+                  >
+                    <DollarSign style={{ width: 14, height: 14 }} aria-hidden />
+                    View pricing &amp; packages
+                  </button>
+
+                  <div className="hero-mobile-trust">
+                    <div style={{ display: "flex", gap: 2 }}>
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          style={{ width: 13, height: 13, fill: "#facc15", color: "#facc15" }}
+                          aria-hidden
+                        />
+                      ))}
+                    </div>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>5.0</span>
+                    <span style={{ fontSize: 12, color: "rgba(255,255,255,.5)" }}>
+                      · Verified reviews · 2-hour response
+                    </span>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 7,
+                      marginTop: 14,
+                      padding: "8px 14px",
+                      borderRadius: 999,
+                      border: "1px solid rgba(0,191,255,.25)",
+                      background: "rgba(0,191,255,.07)",
+                    }}
+                  >
+                    <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#4ade80", flexShrink: 0 }} />
+                    <span style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,.75)" }}>
+                      Now booking new projects for {currentMonthLabel}
+                    </span>
+                  </div>
                 </div>
 
                 <div
-                  className="hidden lg:block"
+                  className="hero-sidebar"
                   style={{
-                    width: 300,
                     border: "1px solid rgba(0,191,255,.15)",
-                    background: "rgba(7,16,30,.85)",
+                    background: "rgba(12,22,38,.85)",
                     borderRadius: 18,
                     padding: 24,
                     backdropFilter: "blur(12px)",
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-                    <div style={{ display: "flex", gap: 2 }}>
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          style={{ width: 14, height: 14, fill: "#facc15", color: "#facc15" }}
-                          aria-hidden
-                        />
-                      ))}
-                    </div>
-                    <span style={{ fontSize: 13, fontWeight: 700 }}>5.0</span>
-                    <span style={{ fontSize: 12, color: "rgba(255,255,255,.4)" }}>· 50+ reviews</span>
-                  </div>
-                  {reviews.slice(0, 2).map((r, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        background: "rgba(255,255,255,.04)",
-                        borderRadius: 12,
-                        padding: "12px 14px",
-                        marginBottom: 10,
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                        <div
-                          style={{
-                            width: 30,
-                            height: 30,
-                            borderRadius: 8,
-                            background: "linear-gradient(135deg,#00bfff,#1b365d)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: 11,
-                            fontWeight: 700,
-                            flexShrink: 0,
-                          }}
-                        >
-                          {r.avatar}
-                        </div>
-                        <div>
-                          <p style={{ fontSize: 12, fontWeight: 700, margin: 0 }}>{r.name}</p>
-                          <p style={{ fontSize: 11, color: "rgba(255,255,255,.4)", margin: 0 }}>
-                            {r.company}
-                          </p>
-                        </div>
-                        <span
-                          style={{
-                            marginLeft: "auto",
-                            fontSize: 10,
-                            background: "rgba(0,191,255,.12)",
-                            color: "var(--blue)",
-                            padding: "3px 8px",
-                            borderRadius: 999,
-                            fontWeight: 700,
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {r.result}
-                        </span>
-                      </div>
-                      <p
+                  <a
+                    href={GOOGLE_REVIEWS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="google-rev-card"
+                    style={{
+                      display: "block",
+                      background: "rgba(255,255,255,.04)",
+                      border: "1px solid rgba(255,255,255,.09)",
+                      borderRadius: 14,
+                      padding: "16px 16px 15px",
+                      marginBottom: 14,
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                      <span
                         style={{
-                          fontSize: 12,
-                          color: "rgba(255,255,255,.55)",
-                          margin: 0,
-                          lineHeight: 1.55,
+                          fontSize: 11,
+                          fontWeight: 700,
+                          letterSpacing: ".1em",
+                          textTransform: "uppercase",
+                          color: "rgba(255,255,255,.5)",
                         }}
                       >
-                        {r.text.slice(0, 90)}…
-                      </p>
+                        Google Reviews
+                      </span>
+                      <ExternalLink style={{ width: 13, height: 13, color: "rgba(255,255,255,.4)" }} aria-hidden />
                     </div>
-                  ))}
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                      <span style={{ fontSize: 26, fontWeight: 800, lineHeight: 1 }}>5.0</span>
+                      <div style={{ display: "flex", gap: 2 }}>
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            style={{ width: 16, height: 16, fill: "#facc15", color: "#facc15" }}
+                            aria-hidden
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <p style={{ fontSize: 12, color: "rgba(255,255,255,.5)", margin: 0, lineHeight: 1.5 }}>
+                      Read verified client reviews on our Google Business Profile.
+                    </p>
+                  </a>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 14 }}>
                     {[
                       ["2 hours", "Response time"],
@@ -687,20 +1100,20 @@ const OptimizedLandingPage: React.FC = () => {
 
         <section
           ref={statsRef}
+          className="stats-section"
           style={{
             position: "relative",
-            padding: "52px 0",
             borderTop: "1px solid rgba(0,191,255,.08)",
             borderBottom: "1px solid rgba(0,191,255,.08)",
           }}
         >
           <div className="lp-grid" style={{ opacity: 0.15 }} aria-hidden />
           <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4,minmax(0,1fr))", gap: 16 }}>
+            <div className="stats-grid">
               {[
                 { n: 40, suf: "+", label: "Projects Delivered", sub: "London & UK" },
                 { n: 99, suf: "%", label: "On-Time Delivery", sub: "Every project" },
-                { n: 50, suf: "+", label: "Happy Clients", sub: "Across industries" },
+                { n: 100, suf: "%", label: "Client Satisfaction", sub: "Would recommend us" },
                 { n: 5, suf: ".0 ★", label: "Average Rating", sub: "Verified reviews" },
               ].map((s, i) => (
                 <motion.div
@@ -731,7 +1144,76 @@ const OptimizedLandingPage: React.FC = () => {
           </div>
         </section>
 
-        <section style={{ padding: "80px 0" }}>
+        <section ref={pricingRef} className="lp-section" style={{ borderTop: "1px solid rgba(0,191,255,.07)" }}>
+          <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
+            <div style={{ textAlign: "center", marginBottom: 40 }}>
+              <h2
+                style={{
+                  fontSize: "clamp(24px,3vw,38px)",
+                  fontWeight: 800,
+                  letterSpacing: "-.025em",
+                  margin: "0 0 10px",
+                }}
+              >
+                Choose Your Website Package
+              </h2>
+              <p style={{ fontSize: 15, color: "rgba(255,255,255,.45)", maxWidth: "56ch", margin: "0 auto" }}>
+                Transparent pricing with all-inclusive website design, development, and hosting.
+              </p>
+            </div>
+
+            <div className="pricing-grid">
+              {pricingTiers.map((tier, i) => {
+                const Icon = tier.icon;
+                return (
+                  <motion.div
+                    key={tier.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.08 }}
+                    className={`price-card${tier.featured ? " featured" : ""}`}
+                  >
+                    {tier.featured && <span className="price-badge">Most Popular</span>}
+                    <div className="price-icon-row">
+                      <div className="val-ico" style={{ margin: 0 }}>
+                        <Icon style={{ width: 20, height: 20, color: "var(--blue)" }} aria-hidden />
+                      </div>
+                    </div>
+                    <h3 className="price-name">{tier.name}</h3>
+                    <p className="price-desc">{tier.description}</p>
+                    <div className="price-amount-row">
+                      <span className="price-from">Starting from</span>
+                      <span className="price-amount">{tier.price}</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 26, flex: 1 }}>
+                      {tier.features.map((f) => (
+                        <div key={f} className="price-feature">
+                          <CheckCircle style={{ width: 14, height: 14, color: "var(--blue)", flexShrink: 0, marginTop: 2 }} aria-hidden />
+                          <span>{f}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => selectPackage(tier)}
+                      className={tier.featured ? "btn-primary" : "btn-ghost"}
+                      style={{ width: "100%", justifyContent: "center" }}
+                    >
+                      Get Started
+                      <ArrowRight style={{ width: 14, height: 14 }} aria-hidden />
+                    </button>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <p style={{ textAlign: "center", fontSize: 12, color: "rgba(255,255,255,.32)", marginTop: 28 }}>
+              Not sure which package fits? Pick any option — we&apos;ll confirm the right scope during your free consultation.
+            </p>
+          </div>
+        </section>
+
+        <section className="lp-section">
           <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 24px" }}>
             <div ref={formRef} style={{ textAlign: "center", marginBottom: 40 }}>
               <h2
@@ -780,14 +1262,14 @@ const OptimizedLandingPage: React.FC = () => {
                     <h3 style={{ fontSize: 24, fontWeight: 800, margin: "0 0 8px" }}>
                       We&apos;ve got your request
                     </h3>
-                    <p style={{ color: "rgba(255,255,255,.55)", marginBottom: 28 }}>
+                    <p style={{ color: "rgba(255,255,255,.65)", marginBottom: 28 }}>
                       Expect a reply within 2 hours. In the meantime, feel free to explore our work
                       below.
                     </p>
                     <div
                       style={{
-                        background: "rgba(255,255,255,.04)",
-                        border: "1px solid var(--border)",
+                        background: "rgba(255,255,255,.05)",
+                        border: "1px solid rgba(255,255,255,.14)",
                         borderRadius: 14,
                         padding: 20,
                         textAlign: "left",
@@ -819,7 +1301,7 @@ const OptimizedLandingPage: React.FC = () => {
                           >
                             {i + 1}
                           </div>
-                          <p style={{ fontSize: 13, color: "rgba(255,255,255,.65)", margin: 0 }}>
+                          <p style={{ fontSize: 13, color: "rgba(255,255,255,.75)", margin: 0 }}>
                             {step}
                           </p>
                         </div>
@@ -833,13 +1315,13 @@ const OptimizedLandingPage: React.FC = () => {
                       <Phone style={{ width: 15, height: 15 }} aria-hidden />
                       Call +44 7464 485 026
                     </a>
-                    <p style={{ fontSize: 11, color: "rgba(255,255,255,.25)", marginTop: 16 }}>
+                    <p className="form-helper" style={{ marginTop: 16, textAlign: "center" }}>
                       ICO registered:{" "}
                       <a
                         href="https://ico.org.uk/ESDWebPages/Entry/ZC026034"
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ color: "rgba(255,255,255,.4)" }}
+                        style={{ color: "rgba(255,255,255,.75)" }}
                       >
                         ZC026034
                       </a>
@@ -847,73 +1329,84 @@ const OptimizedLandingPage: React.FC = () => {
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit}>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                        gap: 16,
-                        marginBottom: 16,
-                      }}
-                    >
+                    <div className="form-section-label">
+                      <User style={{ width: 13, height: 13 }} aria-hidden />
+                      Your Details
+                    </div>
+                    <div className="form-grid-2">
                       <div>
                         <label className="form-label">Your Name *</label>
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          required
-                          className="form-input"
-                          placeholder="John Smith"
-                        />
+                        <div className="input-icon-wrap">
+                          <User className="input-icon" aria-hidden />
+                          <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            required
+                            autoComplete="name"
+                            className="form-input has-icon"
+                            placeholder="John Smith"
+                          />
+                        </div>
                       </div>
                       <div>
                         <label className="form-label">Email Address *</label>
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          required
-                          className="form-input"
-                          placeholder="john@example.com"
-                        />
+                        <div className="input-icon-wrap">
+                          <Mail className="input-icon" aria-hidden />
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                            autoComplete="email"
+                            inputMode="email"
+                            className="form-input has-icon"
+                            placeholder="john@example.com"
+                          />
+                        </div>
                       </div>
                     </div>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                        gap: 16,
-                        marginBottom: 16,
-                      }}
-                    >
-                      <div>
-                        <label className="form-label">Phone (optional)</label>
+                    <div style={{ marginBottom: 16 }}>
+                      <label className="form-label">Phone (optional)</label>
+                      <div className="input-icon-wrap">
+                        <Phone className="input-icon" aria-hidden />
                         <input
                           type="tel"
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
-                          className="form-input"
+                          autoComplete="tel"
+                          inputMode="tel"
+                          className="form-input has-icon"
                           placeholder="+44 7464 485 026"
                         />
                       </div>
-                      <div>
-                        <label className="form-label">Budget range (optional)</label>
-                        <select
-                          name="budget"
-                          value={formData.budget}
-                          onChange={handleInputChange}
-                          className="form-input"
-                        >
-                          <option value="">Select a range</option>
-                          <option value="£500 - £1,000">£500 – £1,000</option>
-                          <option value="£1,000 - £2,500">£1,000 – £2,500</option>
-                          <option value="£2,500 - £5,000">£2,500 – £5,000</option>
-                          <option value="£5,000 - £10,000">£5,000 – £10,000</option>
-                          <option value="£10,000+">£10,000+</option>
-                        </select>
+                    </div>
+
+                    <div className="form-section-label">
+                      <DollarSign style={{ width: 13, height: 13 }} aria-hidden />
+                      Project Details
+                    </div>
+                    <div style={{ marginBottom: 18 }}>
+                      <label className="form-label">Budget range (optional)</label>
+                      <div className="budget-pills">
+                        {budgetOptions.map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                budget: prev.budget === opt ? "" : opt,
+                              }))
+                            }
+                            className={`budget-pill${formData.budget === opt ? " active" : ""}`}
+                          >
+                            {opt}
+                          </button>
+                        ))}
                       </div>
                     </div>
                     <div style={{ marginBottom: 22 }}>
@@ -958,9 +1451,8 @@ const OptimizedLandingPage: React.FC = () => {
                     </button>
                     <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
                     <p
+                      className="form-helper"
                       style={{
-                        fontSize: 11,
-                        color: "rgba(255,255,255,.25)",
                         textAlign: "center",
                         marginTop: 14,
                       }}
@@ -970,7 +1462,7 @@ const OptimizedLandingPage: React.FC = () => {
                         href="https://ico.org.uk/ESDWebPages/Entry/ZC026034"
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ color: "rgba(255,255,255,.35)" }}
+                        style={{ color: "rgba(255,255,255,.75)" }}
                       >
                         ZC026034
                       </a>
@@ -983,14 +1475,14 @@ const OptimizedLandingPage: React.FC = () => {
                     style={{
                       marginTop: 28,
                       paddingTop: 24,
-                      borderTop: "1px solid rgba(255,255,255,.07)",
+                      borderTop: "1px solid rgba(255,255,255,.12)",
                       display: "flex",
                       flexDirection: "column",
                       gap: 12,
                       alignItems: "center",
                     }}
                   >
-                    <p style={{ fontSize: 13, color: "rgba(255,255,255,.35)", margin: 0 }}>
+                    <p style={{ fontSize: 13, color: "rgba(255,255,255,.6)", margin: 0 }}>
                       Prefer to talk first?
                     </p>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center" }}>
@@ -1001,9 +1493,9 @@ const OptimizedLandingPage: React.FC = () => {
                           alignItems: "center",
                           gap: 6,
                           padding: "9px 16px",
-                          border: "1px solid rgba(255,255,255,.12)",
+                          border: "1.5px solid rgba(255,255,255,.25)",
                           borderRadius: 10,
-                          color: "rgba(255,255,255,.7)",
+                          color: "#fff",
                           fontSize: 13,
                           fontWeight: 600,
                           textDecoration: "none",
@@ -1022,7 +1514,7 @@ const OptimizedLandingPage: React.FC = () => {
                           alignItems: "center",
                           gap: 6,
                           padding: "9px 16px",
-                          border: "1px solid rgba(37,211,102,.25)",
+                          border: "1.5px solid rgba(37,211,102,.4)",
                           borderRadius: 10,
                           color: "#25d366",
                           fontSize: 13,
@@ -1040,9 +1532,9 @@ const OptimizedLandingPage: React.FC = () => {
                           alignItems: "center",
                           gap: 6,
                           padding: "9px 16px",
-                          border: "1px solid rgba(255,255,255,.1)",
+                          border: "1.5px solid rgba(255,255,255,.25)",
                           borderRadius: 10,
-                          color: "rgba(255,255,255,.6)",
+                          color: "#fff",
                           fontSize: 13,
                           fontWeight: 600,
                           textDecoration: "none",
@@ -1059,7 +1551,7 @@ const OptimizedLandingPage: React.FC = () => {
           </div>
         </section>
 
-        <section style={{ padding: "80px 0", borderTop: "1px solid rgba(0,191,255,.07)" }}>
+        <section ref={portfolioRef} className="lp-section" style={{ borderTop: "1px solid rgba(0,191,255,.07)" }}>
           <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
             <div
               style={{
@@ -1068,7 +1560,7 @@ const OptimizedLandingPage: React.FC = () => {
                 alignItems: "flex-end",
                 justifyContent: "space-between",
                 gap: 24,
-                marginBottom: 40,
+                marginBottom: 32,
               }}
             >
               <div>
@@ -1109,7 +1601,7 @@ const OptimizedLandingPage: React.FC = () => {
               </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(320px,1fr))", gap: 22 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(min(280px,100%),1fr))", gap: 20 }}>
               {filteredPortfolio.map((item, index) => (
                 <motion.div
                   key={item.title + index}
@@ -1198,7 +1690,7 @@ const OptimizedLandingPage: React.FC = () => {
           </div>
         </section>
 
-        <section ref={reviewsRef} style={{ padding: "80px 0", borderTop: "1px solid rgba(0,191,255,.07)" }}>
+        <section ref={reviewsRef} className="lp-section" style={{ borderTop: "1px solid rgba(0,191,255,.07)" }}>
           <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
             <motion.div
               initial={{ opacity: 0, y: 24 }}
@@ -1219,7 +1711,7 @@ const OptimizedLandingPage: React.FC = () => {
                 }}
               >
                 <Star style={{ width: 14, height: 14, fill: "#facc15", color: "#facc15" }} aria-hidden />
-                <span style={{ fontSize: 12, color: "#facc15", fontWeight: 600 }}>5.0 Rating · 50+ Reviews</span>
+                <span style={{ fontSize: 12, color: "#facc15", fontWeight: 600 }}>5.0 Rating · Verified Reviews</span>
               </div>
               <h2
                 style={{
@@ -1234,93 +1726,17 @@ const OptimizedLandingPage: React.FC = () => {
               <p style={{ fontSize: 15, color: "rgba(255,255,255,.45)", margin: 0 }}>Real businesses, real outcomes.</p>
             </motion.div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(2,minmax(0,1fr))", gap: 20 }}>
-              {reviews.map((r, i) => (
-                <motion.article
-                  key={i}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={isReviewsInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: i * 0.09 }}
-                  className="review-card"
-                  style={{ position: "relative" }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-                    <div style={{ display: "flex", gap: 3 }}>
-                      {[...Array(r.rating)].map((_, j) => (
-                        <Star
-                          key={j}
-                          style={{ width: 14, height: 14, fill: "#facc15", color: "#facc15" }}
-                          aria-hidden
-                        />
-                      ))}
-                    </div>
-                    <span
-                      style={{
-                        fontSize: 10,
-                        fontWeight: 700,
-                        letterSpacing: ".1em",
-                        textTransform: "uppercase",
-                        color: "var(--blue)",
-                        border: "1px solid rgba(0,191,255,.22)",
-                        background: "rgba(0,191,255,.07)",
-                        padding: "4px 10px",
-                        borderRadius: 999,
-                      }}
-                    >
-                      {r.result}
-                    </span>
-                  </div>
-                  <p
-                    style={{
-                      fontSize: 14,
-                      lineHeight: 1.7,
-                      color: "rgba(255,255,255,.7)",
-                      margin: "0 0 22px",
-                      fontStyle: "italic",
-                    }}
-                  >
-                    &quot;{r.text}&quot;
-                  </p>
-                  <div
-                    style={{
-                      borderTop: "1px solid rgba(255,255,255,.06)",
-                      paddingTop: 18,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 12,
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: 42,
-                        height: 42,
-                        borderRadius: 10,
-                        background: "linear-gradient(135deg,#00bfff,#1b365d)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 13,
-                        fontWeight: 700,
-                        flexShrink: 0,
-                        border: "1px solid rgba(0,191,255,.3)",
-                      }}
-                    >
-                      {r.avatar}
-                    </div>
-                    <div>
-                      <p style={{ fontSize: 14, fontWeight: 700, margin: 0 }}>{r.name}</p>
-                      <p style={{ fontSize: 12, color: "rgba(255,255,255,.38)", margin: 0 }}>
-                        {r.role}, {r.company}
-                      </p>
-                    </div>
-                  </div>
-                </motion.article>
-              ))}
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={isReviewsInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <ReviewsSlider reviews={reviews} />
+            </motion.div>
           </div>
         </section>
 
-        <section style={{ padding: "80px 0", borderTop: "1px solid rgba(0,191,255,.07)" }}>
+        <section className="lp-section" style={{ borderTop: "1px solid rgba(0,191,255,.07)" }}>
           <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px" }}>
             <div className="guar-card">
               <div style={{ textAlign: "center", marginBottom: 36 }}>
@@ -1353,7 +1769,7 @@ const OptimizedLandingPage: React.FC = () => {
                   We stand behind our work. These aren&apos;t just promises — they&apos;re our standard.
                 </p>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 18 }}>
+              <div className="guar-grid">
                 {[
                   {
                     icon: CheckCircle,
@@ -1410,7 +1826,7 @@ const OptimizedLandingPage: React.FC = () => {
           </div>
         </section>
 
-        <section style={{ padding: "80px 0", borderTop: "1px solid rgba(0,191,255,.07)" }}>
+        <section className="lp-section" style={{ borderTop: "1px solid rgba(0,191,255,.07)" }}>
           <div style={{ maxWidth: 800, margin: "0 auto", padding: "0 24px" }}>
             <div style={{ textAlign: "center", marginBottom: 40 }}>
               <h2
@@ -1527,9 +1943,9 @@ const OptimizedLandingPage: React.FC = () => {
           </div>
         </section>
 
-        <section style={{ padding: "80px 0", borderTop: "1px solid rgba(0,191,255,.07)" }}>
+        <section className="lp-section" style={{ borderTop: "1px solid rgba(0,191,255,.07)" }}>
           <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
-            <div style={{ textAlign: "center", marginBottom: 44 }}>
+            <div style={{ textAlign: "center", marginBottom: 36 }}>
               <h2
                 style={{
                   fontSize: "clamp(22px,3vw,34px)",
@@ -1544,7 +1960,7 @@ const OptimizedLandingPage: React.FC = () => {
                 What makes working with us genuinely different.
               </p>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,minmax(0,1fr))", gap: 20 }}>
+            <div className="values-grid">
               {[
                 {
                   icon: Target,
@@ -1586,7 +2002,7 @@ const OptimizedLandingPage: React.FC = () => {
           </div>
         </section>
 
-        <section style={{ padding: "80px 24px", borderTop: "1px solid rgba(0,191,255,.07)" }}>
+        <section className="lp-section-cta" style={{ borderTop: "1px solid rgba(0,191,255,.07)" }}>
           <div style={{ maxWidth: 900, margin: "0 auto" }}>
             <div className="cta-block">
               <div className="lp-grid" style={{ opacity: 0.5 }} aria-hidden />
@@ -1669,6 +2085,7 @@ const OptimizedLandingPage: React.FC = () => {
             </button>
             <a
               href="tel:+447464485026"
+              aria-label="Call us"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -1680,6 +2097,7 @@ const OptimizedLandingPage: React.FC = () => {
                 border: "1px solid rgba(255,255,255,.1)",
                 color: "#fff",
                 textDecoration: "none",
+                flexShrink: 0,
               }}
             >
               <Phone style={{ width: 18, height: 18 }} aria-hidden />
@@ -1688,6 +2106,7 @@ const OptimizedLandingPage: React.FC = () => {
               href="https://wa.me/447464485026"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Chat on WhatsApp"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -1699,6 +2118,7 @@ const OptimizedLandingPage: React.FC = () => {
                 border: "1px solid rgba(37,211,102,.2)",
                 color: "#25d366",
                 textDecoration: "none",
+                flexShrink: 0,
               }}
             >
               <FaWhatsapp style={{ width: 18, height: 18 }} aria-hidden />
@@ -1706,7 +2126,7 @@ const OptimizedLandingPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="lg:hidden" style={{ height: 72 }} />
+        <div className="lg:hidden" style={{ height: 84 }} />
       </div>
     </>
   );

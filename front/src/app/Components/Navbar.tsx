@@ -365,7 +365,7 @@ export default function EnhancedNavbar(): JSX.Element {
                     boxShadow: "0 0 20px rgba(0,191,255,0.3)",
                   }}
                 >
-                  <span>Get Quote</span>
+                  <span>Get Free Quote</span>
                   <ArrowRight size={16} />
                 </Link>
 

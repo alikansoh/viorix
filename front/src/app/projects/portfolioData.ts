@@ -197,7 +197,7 @@ If you're a startup or growing business looking for a fast, search-driven websit
   },
   {
     id: 5,
-    title: "ColdFix",
+    title: "Freeze fix",
     subtitle: "Refrigeration & Cooling Services Website",
     description: "A responsive website with a clean UI for a UK service provider.",
     longDescription:
@@ -212,7 +212,7 @@ If you're a startup or growing business looking for a fast, search-driven websit
     technologies: ["Next.js", "Tailwind CSS", "TypeScript"],
     status: "Live",
     featured: true,
-    liveUrl: "https://coldfix.co.uk"
+    liveUrl: "https://freezfix.co.uk"
   },
   {
     id: 6,
