@@ -130,33 +130,48 @@ export const projects: Project[] = [
   {
     id: 3,
     title: "ILK Technology",
-    subtitle: "B2B Technology Solutions Platform",
-    description: "A comprehensive B2B platform for technology consulting and IT solutions.",
+    subtitle: "Commercial Refrigeration & Retail Solutions Platform",
+    description: "A professional B2B website for ILK Technology, showcasing commercial refrigeration systems, retail solutions, and Arneg partnership services.",
     longDescription: `
-ILK Technology needed a platform that positioned them as enterprise-grade IT consultants.
-
-We delivered:
-
-✔ Professional B2B website with case studies
-✔ Service showcase with detailed descriptions
-✔ Client success stories & testimonials
-✔ Inquiry & project request system
-✔ Blog integration for thought leadership
-✔ Advanced analytics dashboard
-✔ SEO-optimized architecture for organic visibility
-
-Built with Next.js and Node.js for scalability and performance.
-
-The platform helps ILK attract enterprise clients and establish authority in the B2B technology space.
-`,
+  ILK Technology needed a modern B2B platform to showcase their commercial refrigeration expertise and position themselves as a trusted retail solutions partner.
+  
+  We delivered:
+  
+  ✔ Professional corporate website for B2B customers
+  ✔ Product and solution showcase for refrigeration systems
+  ✔ Service presentation for retail and supermarket projects
+  ✔ Company information and brand positioning
+  ✔ Quote request and customer enquiry system
+  ✔ SEO-friendly architecture for better search visibility
+  ✔ Responsive design optimized across all devices
+  
+  Built with modern web technologies to provide a fast, scalable, and professional online presence.
+  
+  The platform helps ILK Technology attract retail businesses, showcase their expertise, and strengthen their position as a reliable refrigeration solutions provider.
+  `,
     image: "/ilktechnology.png",
-    images: ["/ilktechnology.png"],
+    images: [
+      "/ilktechnology.png"
+    ],
     client: "ILK Technology",
     duration: "8 weeks",
     year: "2025",
     category: "Websites",
-    tags: ["Next.js", "Node.js", "TypeScript", "Tailwind CSS", "CMS", "Analytics"],
-    technologies: ["Next.js", "Node.js", "TypeScript", "Tailwind CSS", "MongoDB"],
+    tags: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "CMS",
+      "SEO",
+      "Responsive Design"
+    ],
+    technologies: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "CMS",
+      "MongoDB"
+    ],
     status: "Live",
     featured: true,
     liveUrl: "https://ilktechnology.com"
@@ -208,7 +223,7 @@ If you're a startup or growing business looking for a fast, search-driven websit
     duration: "1 month",
     year: "2025",
     category: "Websites",
-    tags: ["Next.js", "Tailwind CSS", "TypeScript"],
+    tags: ["Next.js", "Tailwind CSS", "TypeScript"],  
     technologies: ["Next.js", "Tailwind CSS", "TypeScript"],
     status: "Live",
     featured: true,
