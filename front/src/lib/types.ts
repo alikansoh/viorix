@@ -10,7 +10,7 @@ export interface InvoiceItem {
     addressLines: string[]; // e.g. ["124 City Road", "London EC1V 2NX", "United Kingdom"]
     phone?: string;
     email?: string;
-  }
+  } 
   
   export interface InvoicePayload {
     invoiceNumber: string;
