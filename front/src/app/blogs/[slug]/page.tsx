@@ -2,7 +2,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { POSTS } from "../posts";
 import Image from "next/image";
+import Script from "next/script";
 import { Metadata } from "next";
+
+const BASE_URL = "https://viorix.co.uk";
 
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
@@ -14,9 +17,40 @@ export async function generateMetadata(
     return { title: "Blog Not Found" };
   }
 
+  const url = `${BASE_URL}/blogs/${post.slug}`;
+
   return {
     title: `${post.title} | Viorix Blogs`,
     description: post.description,
+    keywords: post.tags,
+    authors: [{ name: post.author }],
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.description,
+      url,
+      siteName: "Viorix Digital Solutions",
+      publishedTime: post.date,
+      authors: [post.author],
+      tags: post.tags,
+      images: [
+        {
+          url: `${BASE_URL}${post.image}`,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: [`${BASE_URL}${post.image}`],
+    },
   };
 }
 
@@ -36,8 +70,63 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   // Get related posts (excluding current post)
   const relatedPosts = POSTS.filter(p => p.slug !== post.slug).slice(0, 3);
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${BASE_URL}/blogs/${post.slug}#article`,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${BASE_URL}/blogs/${post.slug}`,
+    },
+    headline: post.title,
+    description: post.description,
+    image: `${BASE_URL}${post.image}`,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      "@type": "Organization",
+      name: post.author,
+      url: BASE_URL,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Viorix Digital Solutions",
+      logo: {
+        "@type": "ImageObject",
+        url: `${BASE_URL}/logo.png`,
+      },
+    },
+    keywords: post.tags.join(", "),
+    articleSection: post.category,
+    inLanguage: "en-GB",
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: BASE_URL },
+      { "@type": "ListItem", position: 2, name: "Blogs", item: `${BASE_URL}/blogs` },
+      { "@type": "ListItem", position: 3, name: post.title, item: `${BASE_URL}/blogs/${post.slug}` },
+    ],
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white to-indigo-50/20 relative overflow-hidden">
+      {/* BlogPosting Schema - JSON-LD */}
+      <Script
+        id="ld-json-article"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      {/* Breadcrumb Schema - JSON-LD */}
+      <Script
+        id="ld-json-breadcrumb"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {/* Enhanced Dynamic Background */}
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
         {/* Gradient mesh background */}
@@ -115,7 +204,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span className="text-sm font-medium">5 min read</span>
+                    <span className="text-sm font-medium">{post.readTime} min read</span>
                   </div>
                 </div>
               </div>
@@ -139,7 +228,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     <svg className="w-4 h-4 text-[#00BFFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
-                    <span>Viorix Team</span>
+                    <span>{post.author}</span>
                   </div>
                 </div>
 
@@ -176,7 +265,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <div className="mt-12 pt-8 border-t border-blue-100/50">
                 <h3 className="text-lg font-bold text-[#1B365D] mb-4">Related Topics</h3>
                 <div className="flex flex-wrap gap-3">
-                  {['Web Development', 'Digital Marketing', 'Technology', 'Business Growth'].map((tag, ) => (
+                  {post.tags.map((tag) => (
                     <span
                       key={tag}
                       className="px-4 py-2 bg-gradient-to-r from-[#00BFFF]/10 to-[#1B365D]/10 text-[#1B365D] font-medium rounded-full border border-blue-200/50 hover:from-[#00BFFF]/20 hover:to-[#1B365D]/20 transition-all duration-300 cursor-pointer"
