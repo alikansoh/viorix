@@ -124,7 +124,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white to-indigo-50/20 relative overflow-hidden">
+    <main className="min-h-screen bg-white relative">
       {/* BlogPosting Schema - JSON-LD */}
       <Script
         id="ld-json-article"
@@ -139,25 +139,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      {/* Enhanced Dynamic Background */}
-      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-        {/* Gradient mesh background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white to-indigo-50/20"></div>
-
-        {/* Animated geometric shapes */}
-        <div className="absolute top-0 left-0 w-full h-full opacity-[0.02]">
-          <div className="absolute top-32 right-20 w-24 h-24 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-40 left-20 w-32 h-32 bg-gradient-to-l from-[#1B365D] to-[#00BFFF] rounded-full blur-2xl animate-bounce" />
-        </div>
-
-        {/* Grid pattern overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.01]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
-        />
-      </div>
 
       <div className="relative">
         {/* Breadcrumb Navigation */}

@@ -148,27 +148,7 @@ const AboutUs = () => {
       aria-labelledby="about-heading"
       role="main"
     >
-      {/* Decorative background */}
-      <div className="absolute inset-0 pointer-events-none -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white to-indigo-50/20"></div>
-        <div className="absolute top-16 left-16 w-44 h-44 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] rounded-full blur-2xl opacity-10"></div>
-        <div className="absolute bottom-24 right-32 w-24 h-24 bg-gradient-to-l from-[#1B365D] to-[#00BFFF] rounded-full blur-3xl opacity-15"></div>
-        <motion.div
-          className="absolute top-10 right-40 w-10 h-10 bg-gradient-to-br from-[#00BFFF] to-[#0099CC] rounded-full blur-md opacity-20"
-          animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.3, 0.2] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-14 left-44 w-7 h-7 bg-gradient-to-br from-[#1B365D] to-[#00BFFF] rounded-full blur-md opacity-20"
-          animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.3, 0.2] }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
-        />
-      </div>
+      <div className="absolute inset-0 -z-10 bg-white" />
 
       <div className="relative w-full">
         {/* Heading & Intro */}

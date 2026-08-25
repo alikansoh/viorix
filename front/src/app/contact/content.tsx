@@ -178,32 +178,6 @@ const ContactUs = () => {
       itemScope
       itemType="https://schema.org/ContactPage"
     >
-      {/* Animated Decorative Background */}
-      <div className="absolute inset-0 pointer-events-none -z-10">
-        <motion.div
-          className="absolute top-10 left-10 w-56 h-56 bg-gradient-to-tr from-[#00BFFF] to-[#1B365D] rounded-full blur-3xl opacity-20"
-          animate={{ scale: [1, 1.1, 1], x: [0, 20, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-16 right-32 w-40 h-40 bg-gradient-to-bl from-[#1B365D] to-[#00BFFF] rounded-full blur-2xl opacity-10"
-          animate={{ scale: [1, 1.15, 1], y: [0, -15, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-2/3 w-16 h-16 bg-gradient-to-br from-[#0099CC] to-[#1B365D] rounded-full blur-xl opacity-20"
-          animate={{ scale: [1, 1.08, 1], opacity: [0.1, 0.18, 0.1] }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
-        />
-        {/* Sparkle foreground */}
-        <Sparkle className="absolute bottom-24 left-1/2 w-8 h-8 text-[#00BFFF]/40 blur-sm opacity-80 animate-spin-slow" />
-      </div>
-
       {/* Page Title & Introduction */}
       <header className="text-center mb-10">
         <motion.h1
@@ -332,11 +306,7 @@ const ContactUs = () => {
       </section>
 
       {/* Contact Form & Slogan */}
-      <section className="w-full max-w-3xl mx-auto bg-white/90 rounded-3xl shadow-2xl p-10 border border-blue-100 backdrop-blur-md z-10 mb-16 relative overflow-hidden">
-        {/* Floating icons */}
-        <Sparkle className="absolute top-5 right-6 w-6 h-6 text-[#00BFFF]/40 animate-spin-slow" />
-        <div className="absolute left-0 bottom-0 w-24 h-24 bg-gradient-to-tr from-[#00BFFF]/20 to-[#1B365D]/15 rounded-full blur-2xl opacity-30"></div>
-        
+      <section className="w-full max-w-3xl mx-auto bg-white rounded-3xl shadow-xl p-10 border border-blue-100 z-10 mb-16 relative">
         <form
           className="grid grid-cols-1 gap-6"
           onSubmit={handleSubmit}

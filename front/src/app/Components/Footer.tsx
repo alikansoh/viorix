@@ -3,16 +3,7 @@ import Link from "next/link";
 
 export default function WonderfulFooter() {
   return (
-    <footer className="bg-gradient-to-br from-[#001732] via-[#003366] to-[#0077AA] mt-20 text-[#F5F5F5] relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0" aria-hidden="true">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0077AA]/10 via-[#003366]/20 to-[#001732]/30"></div>
-        <div className="absolute top-20 left-10 w-40 h-40 bg-gradient-to-br from-[#1AD1FF]/10 to-[#003366]/8 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-56 h-56 bg-gradient-to-tl from-[#001732]/20 via-[#003366]/10 to-[#0077AA]/15 rounded-full blur-3xl animate-pulse delay-300"></div>
-        <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-gradient-to-r from-[#1AD1FF]/10 to-[#001732]/10 rounded-full blur-xl animate-pulse delay-700"></div>
-        <div className="absolute top-10 right-1/4 w-24 h-24 bg-[#003366]/10 rounded-full blur-2xl animate-pulse delay-1000"></div>
-      </div>
-
+    <footer className="bg-[#001732] mt-20 text-[#F5F5F5] relative">
       <div className="relative z-10">
         {/* Newsletter */}
         <div className="border-b border-[#F5F5F5]/20 py-16">

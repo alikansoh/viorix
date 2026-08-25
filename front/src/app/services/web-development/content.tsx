@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import Head from "next/head";
 import Image from "next/image";
@@ -92,8 +92,6 @@ const WebDevelopmentPage: React.FC = () => {
   const isProcessInView = useInView(processRef, { once: true });
   const isTechInView = useInView(techRef, { once: true });
 
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
   const services: Service[] = [
     {
@@ -460,40 +458,6 @@ const WebDevelopmentPage: React.FC = () => {
       <div className="min-h-screen bg-white">
         {/* SEO Optimized Header */}
         <header className="bg-gradient-to-br from-[#1B365D] via-[#2A4A6B] to-[#00BFFF] text-white relative overflow-hidden">
-          {/* Background Animation */}
-          <div className="absolute inset-0 opacity-10" aria-hidden="true">
-            <motion.div
-              style={{ y }}
-              className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent"
-            />
-            <div className="absolute top-0 left-0 w-full h-full">
-              <motion.div
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.3, 0.6, 0.3],
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-white to-cyan-200 rounded-full blur-3xl"
-              />
-              <motion.div
-                animate={{
-                  scale: [1.2, 1, 1.2],
-                  opacity: [0.4, 0.7, 0.4],
-                }}
-                transition={{
-                  duration: 10,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 2,
-                }}
-                className="absolute bottom-32 right-16 w-24 h-24 bg-gradient-to-l from-white to-blue-200 rounded-full blur-2xl"
-              />
-            </div>
-          </div>
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
             <motion.div
@@ -656,12 +620,6 @@ const WebDevelopmentPage: React.FC = () => {
           ref={techRef}
           className="py-16 lg:py-24 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 relative overflow-hidden"
         >
-          {/* Background Elements */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full blur-3xl animate-pulse" />
-            <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-l from-indigo-400 to-purple-500 rounded-full blur-3xl animate-pulse" />
-          </div>
-
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
