@@ -3,7 +3,7 @@ import Script from "next/script";
 import Content from "./content";
 
 export const metadata: Metadata = {
-  title: "Contact Us | Viorix Digital Solutions",
+  title: "Contact Us | London Web Development Agency | Viorix",
   description:
     "Get in touch with Viorix Digital Solutions. We're here to help you with web development, mobile apps, digital marketing, and custom website projects in the UK.",
   keywords: [

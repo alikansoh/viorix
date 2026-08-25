@@ -3,15 +3,23 @@ import Script from "next/script";
 import WebDevContent from "./content"; // ensure this path is correct
 
 export const metadata: Metadata = {
-  title: "Web Development Services | Viorix Digital Solutions – UK Experts",
+  title: "Web Development Services London | Custom Websites & Web Apps | Viorix",
   description:
     "Professional web development services in the UK. Viorix Digital Solutions delivers custom websites, responsive design, and modern web apps tailored to your business.",
   keywords: [
+    "web development london",
     "web development uk",
-    "web development services",
+    "web development services london",
     "web development company london",
-    "custom web apps",
-    "responsive web design",
+    "web development agency london",
+    "custom website development london",
+    "bespoke web development london",
+    "ecommerce development london",
+    "next.js developers london",
+    "react developers london",
+    "custom web apps london",
+    "responsive web design london",
+    "website development services",
   ],
   openGraph: {
     title: "Web Development by Viorix Digital Solutions",

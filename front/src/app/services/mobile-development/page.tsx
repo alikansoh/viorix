@@ -3,15 +3,20 @@ import Script from "next/script";
 import MobileDevContent from "./content"; // your component showing mobile development services
 
 export const metadata: Metadata = {
-  title: "Mobile App Development | Viorix Digital Solutions – UK Experts",
+  title: "Mobile App Development London | iOS & Android Apps | Viorix",
   description:
     "Professional mobile app development services in the UK. Viorix Digital Solutions creates custom Android and iOS apps with stunning UI/UX and seamless performance.",
   keywords: [
+    "mobile app development london",
     "mobile app development uk",
+    "app developers london",
     "ios app development london",
-    "android app development uk",
-    "mobile applications uk",
-    "custom mobile apps",
+    "android app development london",
+    "mobile app development agency london",
+    "cross platform app development london",
+    "react native developers london",
+    "flutter developers london",
+    "custom mobile apps london",
   ],
   openGraph: {
     title: "Mobile App Development by Viorix Digital Solutions",

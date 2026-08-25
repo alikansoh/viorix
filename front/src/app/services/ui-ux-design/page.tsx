@@ -2,9 +2,21 @@ import type { Metadata } from "next";
 import UIUXContent from "./content"; // Your component showcasing UI/UX design services
 
 export const metadata: Metadata = {
-  title: "UI/UX Design Services | Viorix Digital Solutions – UK Experts",
+  title: "UI/UX Design Services London | Viorix Digital Solutions",
   description:
-    "Enhance user engagement with Viorix Digital Solutions' professional UI/UX design services. We create intuitive interfaces and seamless experiences for your digital products.",
+    "London-based UI/UX design agency. Viorix Digital Solutions creates intuitive interfaces, user research and seamless digital experiences for websites and apps.",
+  keywords: [
+    "ui ux design london",
+    "ux design agency london",
+    "ui design services london",
+    "product design london",
+    "user experience design london",
+    "website design london",
+    "app design london",
+    "wireframing services london",
+    "user research london",
+    "figma designers london",
+  ],
   openGraph: {
     title: "UI/UX Design by Viorix Digital Solutions",
     description:

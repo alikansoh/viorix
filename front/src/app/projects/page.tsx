@@ -3,14 +3,17 @@ import Script from "next/script";
 import ProjectsContent from "./content"; // your component showing projects
 
 export const metadata: Metadata = {
-  title: "Our Projects | Viorix Digital Solutions – UK Web & Digital Experts",
+  title: "Our Projects | London Web Development Portfolio | Viorix",
   description:
     "Explore our portfolio of web development, mobile apps, and digital solutions. See how Viorix Digital Solutions delivers innovative projects in the UK.",
   keywords: [
     "Viorix projects",
+    "london web development portfolio",
+    "web design portfolio london",
     "UK web development portfolio",
     "digital solutions portfolio",
-    "mobile app projects",
+    "mobile app projects london",
+    "website case studies london",
   ],
   openGraph: {
     title: "Viorix Digital Solutions Projects",
