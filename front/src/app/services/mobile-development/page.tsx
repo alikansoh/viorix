@@ -68,8 +68,8 @@ const serviceStructuredData = {
     logo: "https://viorix.co.uk/og-image.png", // using the OG image as logo for structured data
   },
   areaServed: {
-    "@type": "Country",
-    name: "United Kingdom",
+    "@type": "City",
+    name: "London",
   },
   url: "https://viorix.co.uk/services/mobile-development",
   aggregateRating: {
@@ -104,6 +104,47 @@ const breadcrumbSchema = {
   ],
 };
 
+// Mirrors the visible FAQ content in ./content.tsx — keep in sync so the
+// schema always matches what's on the page (required for FAQ rich results).
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Should I choose native or cross-platform development?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Native development offers the best performance and platform-specific features, while cross-platform saves time and cost. We recommend native for complex, performance-critical apps and cross-platform for MVPs or simpler applications.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How much does mobile app development cost?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Costs vary based on complexity, features, and platform choice. Simple apps start around £15,000, while complex enterprise apps can range from £50,000+. We provide detailed quotes after understanding your requirements.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How long does it take to develop a mobile app?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Development time depends on app complexity. Simple apps take 3-4 months, while feature-rich applications can take 6-12 months. We provide realistic timelines during the planning phase.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Do you help with app store submission and marketing?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes, we handle the complete app store submission process for both iOS App Store and Google Play Store, including app store optimization (ASO) and launch marketing strategies.",
+      },
+    },
+  ],
+};
+
 export default function MobileDevelopmentPage() {
   return (
     <>
@@ -121,6 +162,14 @@ export default function MobileDevelopmentPage() {
         type="application/ld+json"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
+      {/* FAQ JSON-LD */}
+      <Script
+        id="mobile-development-faq-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Page content */}

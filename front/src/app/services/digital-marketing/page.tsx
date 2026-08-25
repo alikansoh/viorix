@@ -32,7 +32,7 @@ export const metadata: Metadata = {
       "Top digital marketing agency in London. Data-driven SEO, PPC, social media & content marketing to grow your UK business. Results guaranteed.",
     images: [
       {
-        url: "https://viorix.co.uk/og-image-digital-marketing.jpg",
+        url: "https://viorix.co.uk/og-image.png",
         width: 1200,
         height: 630,
         alt: "Digital Marketing Services by Viorix Digital Solutions London",
@@ -72,8 +72,8 @@ const serviceSchema = {
     },
   },
   areaServed: {
-    "@type": "Country",
-    name: "United Kingdom",
+    "@type": "City",
+    name: "London",
   },
   url: "https://viorix.co.uk/services/digital-marketing",
   aggregateRating: {

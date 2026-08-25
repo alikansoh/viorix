@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     title: "Web Development Services | Viorix Digital Solutions",
     description:
       "Custom web development services in the UK — responsive, performant, and secure.",
-    images: ["https://viorix.co.uk/og-web-development.png"],
+    images: ["https://viorix.co.uk/og-image.png"],
   },
   alternates: {
     canonical: "https://viorix.co.uk/services/web-development",
@@ -71,8 +71,8 @@ const serviceStructuredData = {
     logo: "https://viorix.co.uk/logo.png",
   },
   areaServed: {
-    "@type": "Country",
-    name: "United Kingdom",
+    "@type": "City",
+    name: "London",
   },
   url: "https://viorix.co.uk/services/web-development",
   aggregateRating: {
@@ -107,6 +107,47 @@ const breadcrumbSchema = {
   ],
 };
 
+// Mirrors the visible FAQ content in ./content.tsx — keep in sync so the
+// schema always matches what's on the page (required for FAQ rich results).
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How long does it take to develop a website?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Project timelines vary based on complexity. A simple business website takes 2-4 weeks, while complex web applications can take 8-16 weeks. We provide detailed timelines during the planning phase.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Do you provide ongoing support after launch?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes, we offer comprehensive post-launch support including hosting, maintenance, security updates, and feature enhancements to ensure your website continues to perform optimally.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Will my website be mobile-friendly and SEO optimized?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Absolutely. All our websites are built with a mobile-first approach and include technical SEO optimization, fast loading times, proper meta structures, and schema markup for better search engine visibility.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What technologies do you use for web development?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "We use modern technologies including React, Next.js, Node.js, Python, and cloud platforms like AWS. Our tech stack is chosen based on your project requirements for optimal performance and scalability.",
+      },
+    },
+  ],
+};
+
 export default function WebDevelopmentPage() {
   return (
     <>
@@ -124,6 +165,14 @@ export default function WebDevelopmentPage() {
         type="application/ld+json"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
+      {/* FAQ JSON-LD */}
+      <Script
+        id="web-development-faq-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       {/* Page content */}

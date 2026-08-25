@@ -1139,7 +1139,7 @@ const WebDevelopmentPage: React.FC = () => {
       },
       "serviceType": "Web Development",
       "description": "Professional web development services including custom web applications, responsive design, e-commerce development, and SEO optimization.",
-      "areaServed": "United Kingdom",
+      "areaServed": "London",
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Web Development Services",

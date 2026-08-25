@@ -632,6 +632,58 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* FAQ Section — mirrors the FAQPage schema in page.tsx */}
+      <section id="faq" className="py-24 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-gray-900">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Common questions about our digital marketing services in London
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            {[
+              {
+                question: "What digital marketing services does Viorix offer?",
+                answer:
+                  "Viorix offers comprehensive digital marketing services including SEO optimization, PPC campaign management, social media marketing, content strategy, and conversion rate optimization tailored to your business goals.",
+              },
+              {
+                question: "How long does SEO take to show results?",
+                answer:
+                  "SEO typically shows initial results in 3-6 months, with significant improvements visible within 6-12 months. Results depend on competition, website authority, and content quality.",
+              },
+              {
+                question: "What is your average ROI for digital marketing campaigns?",
+                answer:
+                  "Our clients typically see 200-400% ROI within the first 12 months through optimized PPC campaigns, improved organic rankings, and enhanced conversion rates. Results vary based on industry and initial conditions.",
+              },
+              {
+                question: "Do you offer digital marketing for small businesses?",
+                answer:
+                  "Yes, we specialize in digital marketing for businesses of all sizes, from startups to enterprises. We create customized strategies that fit your budget and business goals.",
+              },
+              {
+                question: "How do you measure digital marketing success?",
+                answer:
+                  "We measure success through KPIs including organic traffic growth, conversion rates, ROI, engagement metrics, and lead quality. We provide monthly reports and transparent analytics.",
+              },
+            ].map((faq) => (
+              <div
+                key={faq.question}
+                className="bg-gray-50 rounded-2xl p-6 border border-gray-100"
+              >
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{faq.question}</h3>
+                <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
       <script
   type="application/ld+json"
   dangerouslySetInnerHTML={{

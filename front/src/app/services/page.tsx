@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "Viorix Digital Solutions",
     images: [
       {
-        url: "https://viorix.co.uk/og-image.jpg",
+        url: "https://viorix.co.uk/og-image.png",
         width: 1200,
         height: 630,
         alt: "Viorix Digital Solutions Services",

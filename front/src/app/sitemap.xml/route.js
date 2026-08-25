@@ -19,10 +19,13 @@ const staticPages = [
 ];
 
 function generateSiteMap(posts) {
+  const today = new Date().toISOString().split('T')[0];
+
   const urls = staticPages
     .map(page => `
   <url>
     <loc>${BASE_URL}/${page.url}</loc>
+    <lastmod>${today}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
   </url>

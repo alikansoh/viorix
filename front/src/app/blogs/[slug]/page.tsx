@@ -7,6 +7,18 @@ import { Metadata } from "next";
 
 const BASE_URL = "https://viorix.co.uk";
 
+// Maps each blog category to the most relevant service page, so every post
+// links internally to the service it supports (helps both SEO authority
+// flow and gives readers/AI crawlers a clear next step).
+const CATEGORY_TO_SERVICE: Record<string, { href: string; label: string }> = {
+  "Web Development": { href: "/services/web-development", label: "Web Development" },
+  "Web & App Development": { href: "/services/web-development", label: "Web Development" },
+  "E-commerce": { href: "/services/web-development", label: "Web Development" },
+  "Technology Trends": { href: "/services/web-development", label: "Web Development" },
+  "AI & Development": { href: "/services/web-development", label: "Web Development" },
+  "Digital Marketing": { href: "/services/digital-marketing", label: "Digital Marketing" },
+};
+
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
@@ -275,6 +287,21 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   ))}
                 </div>
               </div>
+
+              {/* Related Service Link */}
+              {CATEGORY_TO_SERVICE[post.category] && (
+                <div className="mt-8 pt-8 border-t border-blue-100/50">
+                  <Link
+                    href={CATEGORY_TO_SERVICE[post.category].href}
+                    className="group inline-flex items-center gap-2 text-[#1B365D] font-semibold hover:text-[#00BFFF] transition-colors duration-300"
+                  >
+                    Explore our {CATEGORY_TO_SERVICE[post.category].label} services
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                </div>
+              )}
             </div>
           </article>
 

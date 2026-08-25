@@ -76,7 +76,7 @@ export const metadata: Metadata = {
       "London's trusted web development agency. 50+ successful projects. Custom websites, web apps & digital solutions built with Next.js & React.",
     images: [
       {
-        url: "https://viorix.co.uk/og-image.jpg",
+        url: "https://viorix.co.uk/og-image.png",
         width: 1200,
         height: 630,
         alt: "Viorix Digital Solutions - Web Development Agency London",
@@ -94,9 +94,6 @@ export const metadata: Metadata = {
     "max-image-preview": "large",
     "max-snippet": -1,
     "max-video-preview": -1,
-  },
-  verification: {
-    google: "your-google-verification-code", // Replace with actual code
   },
 };
 
@@ -124,7 +121,7 @@ const structuredData = {
     width: 250,
     height: 60,
   },
-  image: "https://viorix.co.uk/og-image.jpg",
+  image: "https://viorix.co.uk/og-image.png",
   contactPoint: [
     {
       "@type": "ContactPoint",
@@ -136,8 +133,8 @@ const structuredData = {
     },
   ],
   areaServed: {
-    "@type": "Country",
-    name: "United Kingdom",
+    "@type": "City",
+    name: "London",
   },
   openingHoursSpecification: [
     {
@@ -179,10 +176,20 @@ const localBusinessSchema = {
   telephone: "+447464485026",
   email: "hello@viorix.co.uk",
   url: "https://viorix.co.uk",
-  areaServed: {
-    "@type": "Country",
-    name: "United Kingdom",
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 51.5273,
+    longitude: -0.0888,
   },
+  areaServed: [
+    { "@type": "City", name: "London" },
+    { "@type": "Place", name: "City of London" },
+    { "@type": "Place", name: "Shoreditch" },
+    { "@type": "Place", name: "Islington" },
+    { "@type": "Place", name: "Canary Wharf" },
+    { "@type": "Place", name: "Central London" },
+    { "@type": "Place", name: "East London" },
+  ],
   knowsAbout: ["Web Development", "Digital Solutions", "Web Apps", "Custom Websites", "Next.js"],
 };
 

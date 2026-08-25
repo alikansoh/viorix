@@ -903,7 +903,7 @@ const MobileApplicationsPage: React.FC = () => {
       },
       "serviceType": "Mobile Application Development",
       "description": "Professional mobile app development services for iOS and Android including native apps, cross-platform solutions, and mobile backend services.",
-      "areaServed": "United Kingdom",
+      "areaServed": "London",
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Mobile App Development Services",

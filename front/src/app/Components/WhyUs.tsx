@@ -186,10 +186,7 @@ const WhyUs = () => {
             description:
               "Leading web development agency in London delivering custom websites, mobile apps, e-commerce, and digital marketing solutions for UK businesses.",
             url: "https://viorix.co.uk",
-            areaServed: [
-              { "@type": "City", name: "London" },
-              { "@type": "Country", name: "United Kingdom" },
-            ],
+            areaServed: { "@type": "City", name: "London" },
             serviceType: [
               "Web Development",
               "Mobile App Development",

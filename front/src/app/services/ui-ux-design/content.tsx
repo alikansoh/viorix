@@ -987,7 +987,7 @@ const UIUXDesignPage: React.FC = () => {
       },
       "serviceType": "UI/UX Design",
       "description": "Professional UI/UX design services including user experience research, interface design, mobile app design, and user testing for optimal conversion rates.",
-      "areaServed": "United Kingdom",
+      "areaServed": "London",
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "UI/UX Design Services",
