@@ -21,19 +21,19 @@ export default function FloatingButtons() {
   return (
     <>
       <div className="fixed bottom-4 right-4 flex flex-col gap-2 z-50 floating-btn-group">
-        {/* Get Free Quote Button */}
+        {/* Get Free Quote Button — links to the Start Your Project page */}
         <div className="floating-btn-wrapper relative group">
           <Link href="/web-quote">
             <button
               className="relative inline-flex items-center gap-2 bg-gradient-to-r cursor-pointer from-[#00BFFF] via-[#0EA5E9] to-[#1B365D] text-white font-semibold px-3 py-2 rounded-full shadow-[0_6px_20px_rgba(0,191,255,0.2)] hover:shadow-[0_10px_28px_rgba(0,191,255,0.3)] transition-all duration-200 hover:scale-103 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[#00BFFF]/25 overflow-hidden border border-white/15 backdrop-blur-sm gradient-animate group"
-              aria-label="Get a free quote"
+              aria-label="Start your project"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-[#00BFFF] via-[#0EA5E9] to-[#1B365D] opacity-0 group-hover:opacity-70 blur-lg transition-all duration-200" />
               <div className="shimmer-effect" aria-hidden />
               <div className="relative flex items-center justify-center w-7 h-7 bg-white/12 rounded-full backdrop-blur-sm group-hover:bg-white/20 transition-all duration-150 group-hover:rotate-4">
                 <FileText className="w-3.5 h-3.5 drop-shadow-sm" />
               </div>
-              
+
               <div className="absolute top-0 right-0 w-1.5 h-1.5 bg-white rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping" />
             </button>
           </Link>
@@ -42,7 +42,7 @@ export default function FloatingButtons() {
             <div className="relative bg-gradient-to-r from-gray-900 to-gray-800 text-white text-xs font-medium px-2.5 py-1.5 rounded-md shadow-lg border border-white/10">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                Request a custom quote
+                Start your project
               </div>
               <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 rotate-45 w-3 h-3 bg-gradient-to-br from-gray-900 to-gray-800 border-r border-t border-white/10" />
             </div>
