@@ -820,4 +820,33 @@ export const POSTS = [
         </p>
       `,
     },
+    {
+      slug: "optimise-user-experience-microsoft-clarity-guide",
+      title: "How to Optimise User Experience: A Quick Guide to Microsoft Clarity",
+      description: "Understanding how visitors interact with your website is essential for making informed improvements. Learn how Viorix uses Microsoft Clarity — session recordings and heatmaps — to remove friction and lift conversion rates.",
+      date: "2026-08-30",
+      image: "/clarity.jpeg",
+      readTime: 4,
+      category: "UX & Analytics",
+      tags: ["Microsoft Clarity", "User Experience", "Heatmaps", "Conversion Optimisation"],
+      author: "Viorix Tech Strategy Team",
+      content: `
+        <h2>Why Understanding User Behaviour Matters</h2>
+        <p>
+          Understanding how visitors interact with your website is essential for making informed improvements.
+        </p>
+
+        <p>
+          That's why we use <strong>Microsoft Clarity</strong> to gain deeper insights into user behavior. From session recordings to heatmaps, Clarity helps identify friction points, understand visitor journeys, and uncover opportunities to improve the overall user experience.
+        </p>
+
+        <p>
+          Data-driven decisions lead to better-performing websites, stronger engagement, and improved conversion rates.
+        </p>
+
+        <p>
+          For businesses looking to get more value from their online presence, understanding user behavior is no longer optional — it's a competitive advantage.
+        </p>
+      `,
+    },
   ];
