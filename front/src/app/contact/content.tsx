@@ -305,6 +305,22 @@ const ContactUs = () => {
         </aside>
       </section>
 
+      {/* Map */}
+      <section className="w-full max-w-5xl mx-auto px-4 mb-16 z-10 relative">
+        <div className="rounded-3xl overflow-hidden shadow-xl border border-blue-100">
+          <iframe
+            title="Viorix office location - 124 City Road, London, EC1V 2NX"
+            src="https://www.google.com/maps?q=124+City+Road,+London,+EC1V+2NX,+United+Kingdom&output=embed"
+            width="100%"
+            height="400"
+            style={{ border: 0 }}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+        </div>
+      </section>
+
       {/* Contact Form & Slogan */}
       <section className="w-full max-w-3xl mx-auto bg-white rounded-3xl shadow-xl p-10 border border-blue-100 z-10 mb-16 relative">
         <form
