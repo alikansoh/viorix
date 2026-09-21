@@ -3,9 +3,9 @@ import Script from "next/script";
 import DigitalMarketingContent from "./content";
 
 export const metadata: Metadata = {
-  title: "Digital Marketing Services London | SEO, PPC & Social Media | Viorix",
+  title: "Digital Marketing Services London | SEO & PPC",
   description:
-    "Expert digital marketing agency in London. SEO services, PPC campaigns, social media marketing & content strategy. Boost conversions & ROI. Free strategy session.",
+    "Expert digital marketing agency in London. SEO, PPC, social media marketing & content strategy that boosts conversions and ROI. Free strategy session.",
   keywords: [
     "digital marketing london",
     "seo services london",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
       "Top digital marketing agency in London. Data-driven SEO, PPC, social media & content marketing to grow your UK business. Results guaranteed.",
     images: [
       {
-        url: "https://viorix.co.uk/og-image.png",
+        url: "https://viorix.co.uk/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Digital Marketing Services by Viorix Digital Solutions London",

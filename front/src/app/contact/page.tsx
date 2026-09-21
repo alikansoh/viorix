@@ -3,15 +3,19 @@ import Script from "next/script";
 import Content from "./content";
 
 export const metadata: Metadata = {
-  title: "Contact Us | London Web Development Agency | Viorix",
+  title: "Contact Us | London Web Development Agency",
   description:
-    "Get in touch with Viorix Digital Solutions. We're here to help you with web development, mobile apps, digital marketing, and custom website projects in the UK.",
+    "Get in touch with Viorix for web development, mobile apps, digital marketing, and custom website projects in London and across the UK.",
   keywords: [
-    "contact Viorix Digital Solutions",
-    "London web development contact",
-    "UK digital services contact",
+    "contact viorix digital solutions",
+    "london web development contact",
+    "uk digital services contact",
+    "get a web development quote london",
+    "book a free consultation web agency",
+    "web development enquiry london",
   ],
   openGraph: {
+    type: "website",
     title: "Contact Viorix Digital Solutions",
     description:
       "Reach out to Viorix Digital Solutions for modern web development, mobile, and digital services in the UK.",
@@ -19,7 +23,7 @@ export const metadata: Metadata = {
     siteName: "Viorix Digital Solutions",
     images: [
       {
-        url: "https://viorix.co.uk/og-image.png", // same OG image for consistency
+        url: "https://viorix.co.uk/og-image.jpg", // same OG image for consistency
         width: 1200,
         height: 630,
         alt: "Viorix Digital Solutions",
@@ -31,7 +35,7 @@ export const metadata: Metadata = {
     title: "Contact Viorix Digital Solutions",
     description:
       "Reach out to Viorix Digital Solutions for web development, mobile apps, and digital marketing services in the UK.",
-    images: ["https://viorix.co.uk/og-image.png"],
+    images: ["https://viorix.co.uk/og-image.jpg"],
   },
   alternates: {
     canonical: "https://viorix.co.uk/contact",
@@ -63,7 +67,7 @@ const organizationStructuredData = {
     "https://www.linkedin.com/company/viorix-digital-solutions",
     "https://www.instagram.com/viorix_digital_solutions",
   ],
-  logo: "https://viorix.co.uk/og-image.png",
+  logo: "https://viorix.co.uk/og-image.jpg",
 };
 
 export default function ContactPage() {

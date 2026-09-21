@@ -3,9 +3,9 @@ import Script from "next/script";
 import MobileDevContent from "./content"; // your component showing mobile development services
 
 export const metadata: Metadata = {
-  title: "Mobile App Development London | iOS & Android Apps | Viorix",
+  title: "Mobile App Development London | iOS & Android",
   description:
-    "Professional mobile app development services in the UK. Viorix Digital Solutions creates custom Android and iOS apps with stunning UI/UX and seamless performance.",
+    "Professional mobile app development services in the UK. Viorix creates custom Android and iOS apps with great UI/UX and seamless performance.",
   keywords: [
     "mobile app development london",
     "mobile app development uk",
@@ -17,8 +17,10 @@ export const metadata: Metadata = {
     "react native developers london",
     "flutter developers london",
     "custom mobile apps london",
+    "hire app developers london",
   ],
   openGraph: {
+    type: "website",
     title: "Mobile App Development by Viorix Digital Solutions",
     description:
       "Build custom Android and iOS apps with Viorix Digital Solutions. High-performance, responsive mobile solutions tailored to your business needs.",
@@ -26,7 +28,7 @@ export const metadata: Metadata = {
     siteName: "Viorix Digital Solutions",
     images: [
       {
-        url: "https://viorix.co.uk/og-image.png", // using the same OG image for branding
+        url: "https://viorix.co.uk/og-image.jpg", // using the same OG image for branding
         width: 1200,
         height: 630,
         alt: "Viorix Digital Solutions Services",
@@ -38,7 +40,7 @@ export const metadata: Metadata = {
     title: "Mobile App Development | Viorix Digital Solutions",
     description:
       "Custom Android and iOS app development services in the UK — responsive, performant, and user-friendly.",
-    images: ["https://viorix.co.uk/og-image.png"], // same OG image
+    images: ["https://viorix.co.uk/og-image.jpg"], // same OG image
   },
   alternates: {
     canonical: "https://viorix.co.uk/services/mobile-development",
@@ -65,7 +67,7 @@ const serviceStructuredData = {
     "@type": "Organization",
     name: "Viorix Digital Solutions",
     url: "https://viorix.co.uk",
-    logo: "https://viorix.co.uk/og-image.png", // using the OG image as logo for structured data
+    logo: "https://viorix.co.uk/og-image.jpg", // using the OG image as logo for structured data
   },
   areaServed: {
     "@type": "City",

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Web Development Blog | London Web Design & Dev Insights | Viorix",
+  title: "London Web Development Blog & Insights",
   description:
-    "Insights, guides and tips on web development, web design, and digital marketing from Viorix Digital Solutions — a London web development agency.",
+    "Web development, design and digital marketing insights from Viorix, a London web development agency helping UK businesses grow online.",
   keywords: [
     "web development blog london",
     "web design blog london",

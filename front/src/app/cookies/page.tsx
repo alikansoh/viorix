@@ -1,58 +1,37 @@
-"use client";
-import React from "react";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
+import Content from "./content";
 
-const CookiesPage = () => {
-  return (
-    <main className="min-h-screen bg-gradient-to-b from-[#f0f8ff] to-white mt-10 px-6 sm:px-12 md:px-24 py-12">
-      <div className="max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-lg border border-[#00BFFF]/30">
-        <h1 className="text-4xl font-bold text-[#1B365D] mb-6">Cookies Policy</h1>
+const BASE_URL = "https://viorix.co.uk";
 
-        <p className="text-gray-700 mb-4">
-          <strong>Viorix Digital Solutions Ltd</strong> uses cookies to enhance your browsing experience and provide personalized content. This policy explains how we use cookies and your choices regarding them.
-        </p>
-
-        <section className="mb-4">
-          <h2 className="text-2xl font-semibold text-[#00BFFF] mb-2">1. What Are Cookies?</h2>
-          <p className="text-gray-700">
-            Cookies are small text files stored on your device that help websites remember your preferences, login details, and track site usage.
-          </p>
-        </section>
-
-        <section className="mb-4">
-          <h2 className="text-2xl font-semibold text-[#00BFFF] mb-2">2. How We Use Cookies</h2>
-          <p className="text-gray-700">
-            We use cookies to enhance site functionality, analyze traffic, remember your preferences, and deliver relevant marketing messages.
-          </p>
-        </section>
-
-        <section className="mb-4">
-          <h2 className="text-2xl font-semibold text-[#00BFFF] mb-2">3. Third-Party Cookies</h2>
-          <p className="text-gray-700">
-            Some cookies are set by third-party services such as analytics providers and social media platforms. These are used to improve user experience and website performance.
-          </p>
-        </section>
-
-        <section className="mb-4">
-          <h2 className="text-2xl font-semibold text-[#00BFFF] mb-2">4. Managing Cookies</h2>
-          <p className="text-gray-700">
-            You can manage or disable cookies through your browser settings. Note that some website features may not function properly if cookies are disabled.
-          </p>
-        </section>
-
-        <div className="mt-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#00BFFF] to-[#1B365D] text-white font-semibold rounded-full shadow hover:shadow-lg transition-all duration-300"
-          >
-            Back to Home
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </div>
-    </main>
-  );
+export const metadata: Metadata = {
+  title: "Cookies Policy",
+  description:
+    "How Viorix Digital Solutions uses cookies to improve your browsing experience and the choices you have about them.",
+  alternates: {
+    canonical: `${BASE_URL}/cookies`,
+  },
+  openGraph: {
+    type: "website",
+    title: "Cookies Policy | Viorix Digital Solutions",
+    description:
+      "How Viorix Digital Solutions uses cookies to improve your browsing experience and the choices you have about them.",
+    url: `${BASE_URL}/cookies`,
+    siteName: "Viorix Digital Solutions",
+    images: [
+      {
+        url: `${BASE_URL}/og-image.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "Viorix Digital Solutions",
+      },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
-export default CookiesPage;
+export default function CookiesPageRoute() {
+  return <Content />;
+}

@@ -3,9 +3,9 @@ import Script from "next/script";
 import WebDevContent from "./content"; // ensure this path is correct
 
 export const metadata: Metadata = {
-  title: "Web Development Services London | Custom Websites & Web Apps | Viorix",
+  title: "Web Development Services London | Custom Websites",
   description:
-    "Professional web development services in the UK. Viorix Digital Solutions delivers custom websites, responsive design, and modern web apps tailored to your business.",
+    "Professional web development services in the UK. Viorix delivers custom websites, responsive design, and modern web apps for growing businesses.",
   keywords: [
     "web development london",
     "web development uk",
@@ -20,8 +20,10 @@ export const metadata: Metadata = {
     "custom web apps london",
     "responsive web design london",
     "website development services",
+    "hire a web developer london",
   ],
   openGraph: {
+    type: "website",
     title: "Web Development by Viorix Digital Solutions",
     description:
       "Custom web development services in the UK. Build responsive, high-performance websites and web apps with Viorix Digital Solutions.",
@@ -29,7 +31,7 @@ export const metadata: Metadata = {
     siteName: "Viorix Digital Solutions",
     images: [
       {
-        url: "https://viorix.co.uk/og-image.png",
+        url: "https://viorix.co.uk/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Viorix Digital Solutions Web Development Services",
@@ -41,7 +43,7 @@ export const metadata: Metadata = {
     title: "Web Development Services | Viorix Digital Solutions",
     description:
       "Custom web development services in the UK — responsive, performant, and secure.",
-    images: ["https://viorix.co.uk/og-image.png"],
+    images: ["https://viorix.co.uk/og-image.jpg"],
   },
   alternates: {
     canonical: "https://viorix.co.uk/services/web-development",

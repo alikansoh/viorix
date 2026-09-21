@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/invoice/"],
+        disallow: ["/api/", "/invoice/", "/admin/"],
       },
       // Explicitly welcome AI crawlers/answer engines so Viorix content
       // can be indexed and cited by AI search (ChatGPT, Perplexity, etc.)

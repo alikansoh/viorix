@@ -25,7 +25,7 @@ function generateSiteMap(posts) {
   const urls = staticPages
     .map(page => `
   <url>
-    <loc>${BASE_URL}/${page.url}</loc>
+    <loc>${page.url ? `${BASE_URL}/${page.url}` : BASE_URL}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>

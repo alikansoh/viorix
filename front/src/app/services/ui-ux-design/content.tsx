@@ -3,7 +3,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, useInView,  } from 'framer-motion';
 import Link from 'next/link';
-import Head from 'next/head';
 import Image from 'next/image';
 import {
   Palette,
@@ -310,14 +309,6 @@ const UIUXDesignPage: React.FC = () => {
 
   return (
     <>
-      <Head>
-        <title>Professional UI/UX Design Services | User Experience & Interface Design</title>
-        <meta name="description" content="Expert UI/UX design services for web and mobile applications. User-centered design, conversion optimization, and beautiful interfaces that drive business results." />
-        <meta name="keywords" content="UI design, UX design, user experience, interface design, mobile app design, web design, user research, prototyping" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="canonical" href="https://viorixdigital.com/services/ui-ux-design" />
-      </Head>
-      
       <div className="min-h-screen bg-white">
         {/* Hero Section with Blue Color Scheme */}
         <header className="bg-gradient-to-br from-[#1B365D] via-blue-800 to-[#00BFFF] text-white relative overflow-hidden min-h-screen flex items-center">

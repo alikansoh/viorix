@@ -3,7 +3,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
-import Head from 'next/head';
 import Image from 'next/image';
 import {
   Smartphone,
@@ -321,14 +320,6 @@ const MobileApplicationsPage: React.FC = () => {
 
   return (
     <>
-      <Head>
-        <title>Professional Mobile App Development Services | iOS & Android Apps</title>
-        <meta name="description" content="Expert mobile app development services for iOS and Android. Native and cross-platform solutions with React Native, Flutter, Swift, and Kotlin. Custom mobile applications that drive business growth." />
-        <meta name="keywords" content="mobile app development, iOS apps, Android apps, React Native, Flutter, Swift, Kotlin, cross-platform development" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="canonical" href="https://viorixdigital.com/services/mobile-applications" />
-      </Head>
-      
       <div className="min-h-screen bg-white">
         {/* SEO Optimized Header */}
         <header className="bg-gradient-to-br from-[#1B365D] via-[#2A4A6B] to-[#00BFFF] text-white relative overflow-hidden">

@@ -3,17 +3,22 @@ import Content from "./content";
 
 // ✅ Metadata
 export const metadata: Metadata = {
-  title: "About Us | London Web Development Agency | Viorix Digital Solutions",
+  title: "About Us | London Web Development Agency",
   description:
-    "Meet Viorix Digital Solutions — a London web development agency delivering custom websites, web apps, and digital solutions for UK startups and businesses.",
+    "Meet Viorix — a London web development agency delivering custom websites, web apps and digital solutions for UK startups and businesses.",
   keywords: [
     "about viorix digital solutions",
     "london web development agency",
     "web development company london",
     "web design team london",
     "UK web development company",
+    "who is viorix digital solutions",
+    "web development agency near me",
+    "trusted web developers london",
+    "meet the viorix team",
   ],
   openGraph: {
+    type: "website",
     title: "About Viorix Digital Solutions",
     description:
       "Discover how Viorix Digital Solutions provides innovative web development, digital solutions, and custom projects for businesses across the UK.",
@@ -21,7 +26,7 @@ export const metadata: Metadata = {
     siteName: "Viorix Digital Solutions",
     images: [
       {
-        url: "https://viorix.co.uk/og-image.png",
+        url: "https://viorix.co.uk/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Viorix Digital Solutions",

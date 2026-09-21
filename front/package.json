@@ -16,6 +16,7 @@
     "framer-motion": "^12.23.12",
     "gsap": "^3.15.0",
     "lucide-react": "^0.513.0",
+    "mongodb": "^7.6.0",
     "next": "^16.1.6",
     "nextjs": "^0.0.3",
     "pdf-lib": "^1.17.1",

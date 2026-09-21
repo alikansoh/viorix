@@ -4,7 +4,10 @@ import Link from "next/link";
 import { useState, useMemo } from "react";
 import { POSTS } from "./posts";
 import Image from "next/image";
-const POSTS_PER_PAGE = 6;
+// Keep every post server-rendered with a real link on this one page (only a
+// handful of posts today) so crawlers can always reach them — pagination only
+// kicks in once the blog grows past this count.
+const POSTS_PER_PAGE = 24;
 
 export default function BlogsPage() {
   const [currentPage, setCurrentPage] = useState(1);

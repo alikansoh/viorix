@@ -4,9 +4,9 @@ import Script from "next/script";
 import { Code2, Smartphone, Palette, TrendingUp, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Web Development Services London | Viorix Digital Solutions",
+  title: "Web Development Services in London",
   description:
-    "London web development agency services: custom web development, mobile app development, UI/UX design, and digital marketing. Get a free consultation today.",
+    "London web development agency services: custom web development, mobile app development, UI/UX design, and digital marketing. Free consultation.",
   keywords: [
     "web development services london",
     "web design agency london",
@@ -15,8 +15,10 @@ export const metadata: Metadata = {
     "digital marketing services london",
     "london digital agency services",
     "website development company london",
+    "full service digital agency london",
   ],
   openGraph: {
+    type: "website",
     title: "Our Services | Viorix Digital Solutions",
     description:
       "Explore Viorix Digital Solutions' web development, mobile app, UI/UX design and digital marketing services for London and UK businesses.",
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
     siteName: "Viorix Digital Solutions",
     images: [
       {
-        url: "https://viorix.co.uk/og-image.png",
+        url: "https://viorix.co.uk/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Viorix Digital Solutions Services",

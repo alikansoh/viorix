@@ -2,6 +2,7 @@ import "./globals.css";
 import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 import FloatingButtons from "./Components/FloatingButtons";
+import ChromeGate from "./Components/ChromeGate";
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import Script from "next/script";
@@ -17,11 +18,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Web Development London | Award-Winning Websites & Apps | Viorix",
-    template: "%s | Viorix Digital Solutions",
+    default: "Web Development London | Award-Winning Websites & Apps",
+    template: "%s | Viorix",
   },
   description:
-    "Top-rated web development agency in London. Custom websites, web apps & digital solutions for UK startups & enterprises. Expert Next.js developers. Free consultation today.",
+    "Top-rated web development agency in London. Custom websites, web apps & digital solutions for UK startups & enterprises. Free consultation today.",
   keywords: [
     "web development london",
     "web design london",
@@ -76,7 +77,7 @@ export const metadata: Metadata = {
       "London's trusted web development agency. 50+ successful projects. Custom websites, web apps & digital solutions built with Next.js & React.",
     images: [
       {
-        url: "https://viorix.co.uk/og-image.png",
+        url: "https://viorix.co.uk/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Viorix Digital Solutions - Web Development Agency London",
@@ -121,7 +122,7 @@ const structuredData = {
     width: 250,
     height: 60,
   },
-  image: "https://viorix.co.uk/og-image.png",
+  image: "https://viorix.co.uk/og-image.jpg",
   contactPoint: [
     {
       "@type": "ContactPoint",
@@ -290,10 +291,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
 
-        <Navbar />
-        <main className="">{children}</main>
-        <Footer />
-        <FloatingButtons />
+        <ChromeGate
+          navbar={<Navbar />}
+          footer={
+            <>
+              <Footer />
+              <FloatingButtons />
+            </>
+          }
+        >
+          {children}
+        </ChromeGate>
 
         {/* Performance & Analytics */}
         <SpeedInsights />

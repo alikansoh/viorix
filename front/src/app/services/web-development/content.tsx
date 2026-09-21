@@ -3,7 +3,6 @@
 import React, { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
-import Head from "next/head";
 import Image from "next/image";
 import {
   Code2,
@@ -436,26 +435,7 @@ const WebDevelopmentPage: React.FC = () => {
 
   return (
     <>
-      <Head>
-        <title>
-          Professional Web Development Services | Custom Web Applications
-        </title>
-        <meta
-          name="description"
-          content="Expert web development services including custom web applications, responsive design, e-commerce solutions, and SEO optimization. Mobile-first approach with modern frameworks."
-        />
-        <meta
-          name="keywords"
-          content="web development, custom websites, React development, Next.js, responsive design, e-commerce development"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link
-          rel="canonical"
-          href="https://viorix.co.uk/services/web-development"
-        />
-      </Head>
-
-      <div className="min-h-screen bg-white">
+<div className="min-h-screen bg-white">
         {/* SEO Optimized Header */}
         <header className="bg-gradient-to-br from-[#1B365D] via-[#2A4A6B] to-[#00BFFF] text-white relative overflow-hidden">
 

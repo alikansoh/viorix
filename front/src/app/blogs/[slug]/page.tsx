@@ -30,10 +30,12 @@ export async function generateMetadata(
   }
 
   const url = `${BASE_URL}/blogs/${post.slug}`;
+  const seoTitle = post.metaTitle || post.title;
+  const seoDescription = post.metaDescription || post.description;
 
   return {
-    title: `${post.title} | Viorix Blogs`,
-    description: post.description,
+    title: `${seoTitle} | Viorix`,
+    description: seoDescription,
     keywords: post.tags,
     authors: [{ name: post.author }],
     alternates: {

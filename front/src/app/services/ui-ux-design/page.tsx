@@ -3,9 +3,9 @@ import Script from "next/script";
 import UIUXContent from "./content"; // Your component showcasing UI/UX design services
 
 export const metadata: Metadata = {
-  title: "UI/UX Design Services London | Viorix Digital Solutions",
+  title: "UI/UX Design Services in London",
   description:
-    "London-based UI/UX design agency. Viorix Digital Solutions creates intuitive interfaces, user research and seamless digital experiences for websites and apps.",
+    "London-based UI/UX design agency. Viorix creates intuitive interfaces, user research and seamless digital experiences for websites and apps.",
   keywords: [
     "ui ux design london",
     "ux design agency london",
@@ -17,8 +17,10 @@ export const metadata: Metadata = {
     "wireframing services london",
     "user research london",
     "figma designers london",
+    "ux design agency near me",
   ],
   openGraph: {
+    type: "website",
     title: "UI/UX Design by Viorix Digital Solutions",
     description:
       "Discover how Viorix Digital Solutions crafts user-centered UI/UX designs that elevate user satisfaction and drive business success.",
@@ -26,7 +28,7 @@ export const metadata: Metadata = {
     siteName: "Viorix Digital Solutions",
     images: [
       {
-        url: "https://viorix.co.uk/og-image.png", // Create a visually appealing OG image for this service
+        url: "https://viorix.co.uk/og-image.jpg", // Create a visually appealing OG image for this service
         width: 1200,
         height: 630,
         alt: "Viorix Digital Solutions UI/UX Design Services",
