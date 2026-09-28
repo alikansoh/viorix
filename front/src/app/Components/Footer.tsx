@@ -150,6 +150,15 @@ export default function WonderfulFooter() {
                 </div>
                 <span className="hidden sm:inline">•</span>
                 <span>All rights reserved.</span>
+                <span className="hidden sm:inline">•</span>
+                <a
+                  href="https://www.designrush.com/agency/website-design-development"
+                  target="_blank"
+                  rel="noopener"
+                  className="hover:text-white transition-colors duration-300 underline underline-offset-2"
+                >
+                  Find us on DesignRush
+                </a>
               </div>
 
               {/* Social Links */}
