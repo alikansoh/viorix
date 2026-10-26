@@ -305,6 +305,25 @@ If you're a startup or growing business looking for a fast, search-driven websit
     featured: true,
     liveUrl: "https://hermeco.co.uk"
   },
+  {
+    id: 10,
+    title: "BSL Construction",
+    subtitle: "Building, Mechanical & Commercial Services Website",
+    description: "A modern website showcasing building, M&E and commercial maintenance services for a London contractor.",
+    longDescription:
+      "We designed and built a responsive website for BSL Construction, a London-based company offering building, mechanical, electrical and commercial maintenance services. The site highlights their construction, M&E and commercial facilities work, 15+ years of experience and 150+ completed projects, with clear service pages and a simple quote request flow. Built with Next.js and Tailwind CSS for fast performance, strong SEO and mobile responsiveness.",
+    image: "/bsl-construction.png",
+    images: ["/bsl-construction.png"],
+    client: "BSL Construction",
+    duration: "1 month",
+    year: "2026",
+    category: "Websites",
+    tags: ["Next.js", "Tailwind CSS", "TypeScript"],
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
+    status: "Live",
+    featured: true,
+    liveUrl: "https://bsl-construction.co.uk"
+  },
 ];
 
 export const stats: Stat[] = [
