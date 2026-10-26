@@ -74,13 +74,66 @@ export const expandedTechStack: TechStack[] = [
 
 export const projects: Project[] = [
   {
+    id: 4,
+    title: "Coffee Genius",
+    subtitle: "E-commerce + Content Platform",
+    description:
+      "High-performance e-commerce and content platform for Coffee Genius. Built for scalability, SEO, and speed.",
+    longDescription: `
+We've just launched Coffee Genius — a high-performance e-commerce + content platform built from the ground up.
+
+This wasn't just about design.
+It was about building a scalable digital engine for growth.
+
+✔ Online shop with secure Stripe checkout
+✔ Class & training booking system
+✔ Wholesale enquiry workflow
+✔ SEO-first architecture for long-term rankings
+✔ Optimised performance & fast load speeds
+
+Built with modern technology (Next.js + TypeScript) to ensure speed, security, and scalability.
+
+If you're a startup or growing business looking for a fast, search-driven website that converts — let's talk.
+`,
+    image: "/coffeegenius.png",
+    images: ["/coffeegenius.png"],
+    client: "Coffee Genius",
+    duration: "1 month",
+    year: "2026",
+    category: "Websites",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "E-commerce", "SEO", "Performance"],
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Stripe", "SEO Optimization"],
+    status: "Live",
+    featured: true,
+    liveUrl: "https://coffeegenius.co.uk"
+  },
+  {
+    id: 10,
+    title: "BSL Construction",
+    subtitle: "Building, Mechanical & Commercial Services Website",
+    description: "A modern website showcasing building, M&E and commercial maintenance services for a London contractor.",
+    longDescription:
+      "We designed and built a responsive website for BSL Construction, a London-based company offering building, mechanical, electrical and commercial maintenance services. The site highlights their construction, M&E and commercial facilities work, 15+ years of experience and 150+ completed projects, with clear service pages and a simple quote request flow. Built with Next.js and Tailwind CSS for fast performance, strong SEO and mobile responsiveness.",
+    image: "/bsl-construction.png",
+    images: ["/bsl-construction.png"],
+    client: "BSL Construction",
+    duration: "1 month",
+    year: "2026",
+    category: "Websites",
+    tags: ["Next.js", "Tailwind CSS", "TypeScript"],
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
+    status: "Live",
+    featured: true,
+    liveUrl: "https://bsl-construction.co.uk"
+  },
+  {
     id: 1,
     title: "JRS Building Contractors",
     subtitle: "Construction & Renovation Website",
     description: "A modern website with a secure CMS to manage building projects.",
     longDescription:
       "We built a responsive website for JRS Building Contractors in the UK. My main focus was creating a secure CMS so the client can easily add and update projects. I used Next.js with MongoDB for the backend, ensuring fast performance, SEO optimisation, and a clean admin dashboard for content management.",
-    image: "/jrs.png", 
+    image: "/jrs.png",
     images: ["/jrs.png"],
     client: "JRS Building Contractors",
     duration: "1 month",
@@ -175,40 +228,6 @@ export const projects: Project[] = [
     status: "Live",
     featured: true,
     liveUrl: "https://ilktechnology.com"
-  },
-  {
-    id: 4,
-    title: "Coffee Genius",
-    subtitle: "E-commerce + Content Platform",
-    description:
-      "High-performance e-commerce and content platform for Coffee Genius. Built for scalability, SEO, and speed.",
-    longDescription: `
-We've just launched Coffee Genius — a high-performance e-commerce + content platform built from the ground up.
-
-This wasn't just about design.
-It was about building a scalable digital engine for growth.
-
-✔ Online shop with secure Stripe checkout
-✔ Class & training booking system
-✔ Wholesale enquiry workflow
-✔ SEO-first architecture for long-term rankings
-✔ Optimised performance & fast load speeds
-
-Built with modern technology (Next.js + TypeScript) to ensure speed, security, and scalability.
-
-If you're a startup or growing business looking for a fast, search-driven website that converts — let's talk.
-`,
-    image: "/coffeegenius.png",
-    images: ["/coffeegenius.png"],
-    client: "Coffee Genius",
-    duration: "1 month",
-    year: "2026",
-    category: "Websites",
-    tags: ["Next.js", "TypeScript", "Tailwind CSS", "E-commerce", "SEO", "Performance"],
-    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Stripe", "SEO Optimization"],
-    status: "Live",
-    featured: true,
-    liveUrl: "https://coffeegenius.co.uk"
   },
   {
     id: 5,
@@ -306,15 +325,15 @@ If you're a startup or growing business looking for a fast, search-driven websit
     liveUrl: "https://hermeco.co.uk"
   },
   {
-    id: 10,
-    title: "BSL Construction",
-    subtitle: "Building, Mechanical & Commercial Services Website",
-    description: "A modern website showcasing building, M&E and commercial maintenance services for a London contractor.",
+    id: 11,
+    title: "One Call HVAC",
+    subtitle: "Heating & Air Conditioning Services Website",
+    description: "A modern website for a London HVAC company offering AC installation, repair and heating services.",
     longDescription:
-      "We designed and built a responsive website for BSL Construction, a London-based company offering building, mechanical, electrical and commercial maintenance services. The site highlights their construction, M&E and commercial facilities work, 15+ years of experience and 150+ completed projects, with clear service pages and a simple quote request flow. Built with Next.js and Tailwind CSS for fast performance, strong SEO and mobile responsiveness.",
-    image: "/bsl-construction.png",
-    images: ["/bsl-construction.png"],
-    client: "BSL Construction",
+      "We designed and built a responsive website for One Call HVAC, serving homes and businesses across Greater London and the M25 boroughs. The site showcases AC installation, repair, pipework and wholesale services alongside heating and heat pump systems, with clear calls to action for same-day service and upfront pricing. Built with Next.js and Tailwind CSS for fast performance, strong SEO and mobile responsiveness.",
+    image: "/one.png",
+    images: ["/one.png"],
+    client: "One Call HVAC",
     duration: "1 month",
     year: "2026",
     category: "Websites",
@@ -322,7 +341,7 @@ If you're a startup or growing business looking for a fast, search-driven websit
     technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
     status: "Live",
     featured: true,
-    liveUrl: "https://bsl-construction.co.uk"
+    liveUrl: "https://www.onecallhvac.co.uk"
   },
 ];
 
